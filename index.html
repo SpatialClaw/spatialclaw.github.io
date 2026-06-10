@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SpatialClaw: Rethinking Action Interface for Agentic Spatial Reasoning</title>
+<link rel="icon" type="image/svg+xml" href="static/images/icon.svg" />
+<meta name="description" content="SpatialClaw is a training-free framework that uses code as the action interface for spatial reasoning, achieving 59.9% average accuracy across 20 benchmarks." />
+<meta property="og:title" content="SpatialClaw: Rethinking Action Interface for Agentic Spatial Reasoning" />
+<meta property="og:description" content="A training-free spatial reasoning agent that uses code as the action interface, with a persistent Python kernel for compositional perception." />
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+<link rel="stylesheet" href="styles.css?v=4" />
+<link rel="stylesheet" href="walkthrough.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  (function(){
+    try{
+      var t=localStorage.getItem('sc-theme');
+      if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+      document.documentElement.setAttribute('data-theme',t);
+    }catch(e){document.documentElement.setAttribute('data-theme','light');}
+  })();
+</script>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light or dark theme">
+  <span class="ico"></span><span class="lbl">Dark</span>
+</button>
+
+<!-- ============================ HERO ============================ -->
+<header class="hero" data-screen-label="Hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div class="hero-brand">
+        <img class="nvlogo" src="static/images/nvidia-logo-horz.svg" alt="NVIDIA" />
+      </div>
+      <div class="hero-meta">NVIDIA Research · 2026</div>
+    </div>
+
+    <div class="hero-grid">
+      <div class="hero-left">
+        <div class="hero-eyebrow">Training-free spatial reasoning agent</div>
+        <h1 class="hero-title">
+          <span class="nm"><svg class="title-eye" viewBox="0 0 460 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SpatialClaw logo"><path d="M 75,95 C 55,115 70,150 55,175 C 50,177 45,178 38,180 C 45,182 50,183 55,185 C 70,210 55,245 75,265" fill="none" stroke="#76B900" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><animateTransform attributeName="transform" type="translate" values="0 0; -14 0; 0 0" dur="2.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1" /></path><path d="M 375,95 C 395,115 380,150 395,175 C 400,177 405,178 412,180 C 405,182 400,183 395,185 C 380,210 395,245 375,265" fill="none" stroke="#76B900" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><animateTransform attributeName="transform" type="translate" values="0 0; 14 0; 0 0" dur="2.4s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1" /></path><g><animateTransform attributeName="transform" type="translate" values="0 0; 0 -12; 0 0" dur="3s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1; 0.45 0 0.55 1" /><polygon points="225,35 340,110 340,250 225,325 110,250 110,110" fill="none" stroke="#76B900" stroke-width="7" stroke-linejoin="round" /><line x1="225" y1="180" x2="110" y2="110" stroke="#76B900" stroke-width="7" stroke-linecap="round" /><line x1="225" y1="180" x2="340" y2="110" stroke="#76B900" stroke-width="7" stroke-linecap="round" /><line x1="225" y1="180" x2="225" y2="325" stroke="#76B900" stroke-width="7" stroke-linecap="round" /><line x1="225" y1="180" x2="225" y2="35" stroke="#76B900" stroke-width="6.5" stroke-linecap="round" stroke-dasharray="2 14"><animate attributeName="stroke-dashoffset" from="0" to="-48" dur="1.5s" repeatCount="indefinite" /></line><line x1="225" y1="180" x2="110" y2="250" stroke="#76B900" stroke-width="6.5" stroke-linecap="round" stroke-dasharray="2 14"><animate attributeName="stroke-dashoffset" from="0" to="-48" dur="1.5s" repeatCount="indefinite" /></line><line x1="225" y1="180" x2="340" y2="250" stroke="#76B900" stroke-width="6.5" stroke-linecap="round" stroke-dasharray="2 14"><animate attributeName="stroke-dashoffset" from="0" to="-48" dur="1.5s" repeatCount="indefinite" /></line><circle cx="225" cy="35" r="12" fill="#76B900"><animate attributeName="r" values="12;19;12" dur="2s" begin="0s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1" /></circle><circle cx="340" cy="110" r="12" fill="#76B900"><animate attributeName="r" values="12;19;12" dur="2s" begin="0.3s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1" /></circle><circle cx="340" cy="250" r="12" fill="#76B900"><animate attributeName="r" values="12;19;12" dur="2s" begin="0.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1" /></circle><circle cx="225" cy="325" r="12" fill="#76B900"><animate attributeName="r" values="12;19;12" dur="2s" begin="0.9s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1" /></circle><circle cx="110" cy="250" r="12" fill="#76B900"><animate attributeName="r" values="12;19;12" dur="2s" begin="1.2s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1" /></circle><circle cx="110" cy="110" r="12" fill="#76B900"><animate attributeName="r" values="12;19;12" dur="2s" begin="1.5s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1" /></circle><circle cx="225" cy="180" r="13" fill="#FFFFFF" stroke="#76B900" stroke-width="6"><animate attributeName="r" values="13;22;13" dur="1.6s" repeatCount="indefinite" calcMode="spline" keyTimes="0;0.5;1" keySplines="0.4 0 0.2 1; 0.4 0 0.2 1" /></circle></g></svg>SpatialClaw</span>
+          <span class="rest">Rethinking the action interface for agentic spatial reasoning.</span>
+        </h1>
+        <p class="hero-thesis"><strong>Code is the right action interface</strong> for spatial reasoning agents.</p>
+        <div class="authors" style="margin-top:1.8rem;">
+          <a href="https://seokju-cho.github.io/" target="_blank" rel="noopener">Seokju Cho</a><sup>&dagger;</sup>,
+          <a href="https://ryohachiuma.github.io/" target="_blank" rel="noopener">Ryo Hachiuma</a>,
+          <a href="https://abadki.github.io/" target="_blank" rel="noopener">Abhishek Badki</a>,
+          <a href="https://suhangpro.github.io/" target="_blank" rel="noopener">Hang Su</a>,
+          <a href="https://byungkwanlee.github.io/ByungKwanLee-CV/" target="_blank" rel="noopener">Byung-Kwan Lee</a>,
+          <a href="https://chanh.ee/" target="_blank" rel="noopener">Chan Hee Song</a>,
+          <a href="https://sifeiliu.net/" target="_blank" rel="noopener">Sifei Liu</a>,
+          <a href="https://subhashree-r.github.io/" target="_blank" rel="noopener">Subhashree Radhakrishnan</a>,
+          <a href="https://cvlab.kaist.ac.kr/" target="_blank" rel="noopener">Seungryong Kim</a><sup>&dagger;</sup>,
+          <a href="https://vllab.ee.ntu.edu.tw/ycwang.html" target="_blank" rel="noopener">Yu-Chiang Frank Wang</a>,
+          <a href="https://minhungchen.netlify.app/" target="_blank" rel="noopener">Min-Hung Chen</a>
+        </div>
+        <p class="affil-note"><sup>&dagger;</sup>Affiliated with KAIST. Work done during Seokju Cho's internship at NVIDIA.</p>
+        <div class="links">
+          <a class="btn" href="static/pdfs/spatialclaw.pdf" target="_blank"><span class="i"><i class="fas fa-file-pdf"></i></span><span>Paper</span></a>
+          <a class="btn ghost" aria-disabled="true" onclick="event.preventDefault();"><span class="i"><i class="fab fa-github"></i></span><span>Code (TBD)</span></a>
+          <a class="btn ghost" id="presentBtn" href="#presentEmbed" role="button" aria-expanded="false" aria-controls="presentEmbed"><span class="i"><i class="fas fa-play" id="presentBtnIcon"></i></span><span>Presentation</span></a>
+          <a class="btn ghost" href="#bibtex"><span class="i"><i class="fas fa-quote-left"></i></span><span>BibTeX</span></a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-radar">
+          <div class="radar-box">
+            <canvas id="headlineRadar" aria-label="Radar chart comparing SpatialClaw against prior spatial agents across 20 benchmarks"></canvas>
+          </div>
+          <div class="hero-radar-foot">
+            <div class="mlegend">
+              <div class="row"><span class="ln ln-ours"></span><span><b>SpatialClaw</b></span></div>
+              <div class="row"><span class="ln ln-st"></span><span>SpaceTools</span></div>
+              <div class="row"><span class="ln ln-py"></span><span>pySpatial</span></div>
+              <div class="row"><span class="ln ln-nt"></span><span>No-tool</span></div>
+            </div>
+            <div class="catlegend">
+              <span class="it"><span class="sw" style="background:var(--cat-si)"></span>Single-image</span>
+              <span class="it"><span class="sw" style="background:var(--cat-mv)"></span>Multi-view</span>
+              <span class="it"><span class="sw" style="background:var(--cat-vid)"></span>Video &amp; 4D</span>
+              <span class="it"><span class="sw" style="background:var(--cat-gs)"></span>General spatial</span>
+              <span class="it"><span class="sw" style="background:var(--cat-gv)"></span>General video</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== Inline collapsible presentation (folds open at the hero / thesis divider) ===== -->
+<div class="present-embed" id="presentEmbed">
+  <div class="present-clip">
+    <div class="present-pad">
+      <div class="wrap">
+        <div class="present-frame">
+          <div class="present-bar">
+            <span class="present-eyebrow"><span class="dot"></span>Presentation</span>
+            <div class="present-actions">
+              <a class="present-act" href="presentation.html" target="_blank" rel="noopener" title="Open in a new tab"><i class="fas fa-external-link-alt"></i><span>Open full</span></a>
+              <button class="present-act" type="button" id="presentClose" title="Collapse the presentation"><i class="fas fa-chevron-up"></i><span>Collapse</span></button>
+            </div>
+          </div>
+          <div class="present-stage">
+            <iframe id="presentIframe" title="SpatialClaw presentation" data-src="presentation.html" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================ 01 · THESIS / LEDE ============================ -->
+<section class="section lede-band" data-screen-label="Thesis">
+  <div class="wrap">
+    <div class="kicker"><span class="kn">01</span><span>The thesis</span></div>
+    <div class="lede-grid">
+      <h2 class="lede-statement">Code is the right action interface for <span class="g">spatial reasoning</span>.</h2>
+      <div>
+        <p class="lede-body">SpatialClaw lets a VLM-backed agent write Python in a <strong>persistent kernel</strong>, composing perception modules, inspecting intermediate results, and revising its strategy across steps.</p>
+        <p class="lede-body" style="margin-top:1.1rem;">It is <strong>training-free</strong>, with no benchmark- or model-specific adaptation, yet it beats a recent prior agent by <strong>+11.2 points</strong> on 20 benchmarks and improves consistently across six VLM backbones.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 02 · THE PROBLEM ============================ -->
+<section class="section bg" data-screen-label="The problem">
+  <div class="wrap">
+    <div class="kicker"><span class="kn">02</span><span>The problem</span></div>
+    <div class="sec-head split">
+      <h2 class="sec-title">Why the action interface <em>matters</em>.</h2>
+      <p class="sec-lede">The capability of a tool-augmented agent is bounded not by <strong>which</strong> tools are available, but by <strong>how</strong> they can be composed.</p>
+    </div>
+
+    <div class="figure lit">
+      <img src="static/images/teaser.png" alt="Three action interfaces for spatial reasoning agents, compared" />
+    </div>
+    <p class="figcap"><strong>Three action interfaces for spatial reasoning agents</strong>, contrasted in panels (a)–(c) and detailed below.</p>
+
+    <div class="iface-grid">
+      <div class="iface">
+        <span class="tag">(a) Single-pass code</span>
+        <h3>Commit before observing</h3>
+        <p>Writes a complete Python program in one shot. Cannot revise once execution starts, so any wrong assumption propagates straight to the answer.</p>
+      </div>
+      <div class="iface">
+        <span class="tag">(b) Structured tool-call</span>
+        <h3>Limited composition</h3>
+        <p>Dispatches typed tools through a fixed JSON interface. Cannot freely combine perception outputs with NumPy / SciPy primitives to express test-time computations.</p>
+      </div>
+      <div class="iface ours">
+        <span class="tag">(c) SpatialClaw</span>
+        <h3>Compose, inspect, revise</h3>
+        <p>Code as the action interface, backed by a persistent Python kernel. Perception outputs are ordinary variables: composable, inspectable, and reusable across steps.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 03 · WALKTHROUGH ============================ -->
+<section class="section" id="watch-solve" data-screen-label="Walkthrough">
+  <div class="wrap" style="max-width:1080px;">
+    <div class="kicker"><span class="kn">03</span><span>Live walkthrough</span></div>
+    <div class="sec-head split">
+      <h2 class="sec-title">Watch SpatialClaw solve a benchmark question.</h2>
+      <p class="sec-lede">A real agent session, start to finish: it writes code, inspects the result, and revises. Plays automatically; swipe or use the arrows for more samples.</p>
+    </div>
+
+    <div class="wt-carousel">
+      <button class="wt-nav prev" type="button" aria-label="Previous sample"><i class="fas fa-chevron-left"></i></button>
+      <div class="wt" id="wtCard">
+        <div class="wt-top" id="wtTop"></div>
+        <div class="wt-bar">
+          <button class="wt-btn wt-play" type="button" aria-label="Play or pause the walkthrough"><i class="fas fa-play"></i></button>
+          <button class="wt-btn ghost wt-restart" type="button" aria-label="Restart from the beginning"><i class="fas fa-redo"></i></button>
+          <div class="wt-meta"><span class="wt-steplabel">Ready</span><span class="wt-stepcount">0 / 0</span></div>
+          <div class="wt-prog" id="wtProg" role="progressbar" aria-label="Walkthrough progress"></div>
+        </div>
+        <div class="wt-screen" id="wtScreen"></div>
+      </div>
+      <button class="wt-nav next" type="button" aria-label="Next sample"><i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <div class="wt-cnav">
+      <div class="wt-dots" id="wtDots"></div>
+      <span class="wt-ccount" id="wtCcount"></span>
+    </div>
+    <div class="wt-bridge">
+      <a class="wt-bridge-link" href="#samples"><strong>50 more</strong> reasoning trajectories below <i class="fas fa-arrow-down"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 04 · METHOD ============================ -->
+<section class="section bg" data-screen-label="Method">
+  <div class="wrap">
+    <div class="kicker"><span class="kn">04</span><span>Method</span></div>
+    <div class="sec-head split">
+      <h2 class="sec-title">A persistent Python workspace, wrapped in a <em>code–inspect–revise</em> loop.</h2>
+      <p class="sec-lede">The agent plans, generates one cell of code, executes it in a stateful kernel, reads the feedback, and revises until it submits an answer.</p>
+    </div>
+
+    <div class="figure lit">
+      <img src="static/images/method_loop.png" alt="SpatialClaw's five-stage outer loop" />
+    </div>
+    <p class="figcap"><strong>SpatialClaw's five-stage outer loop.</strong> Plan, generate code, execute in a persistent Python kernel, assemble feedback (variable summaries, stdout, rendered images), and revise until a final answer is submitted.</p>
+
+    <div class="prim-grid">
+      <div class="prim"><span class="pn">01</span><h3>Persistent kernel</h3><p>All intermediate results (masks, depth maps, point clouds, plots) are ordinary Python variables that persist across steps for composition and reuse.</p></div>
+      <div class="prim"><span class="pn">02</span><h3>Visual inspection</h3><p><code>show(...)</code> embeds rendered images directly into the next observation, letting the agent visually verify masks and trajectories before committing.</p></div>
+      <div class="prim"><span class="pn">03</span><h3>Perception primitives</h3><p>SAM 3 for segmentation, Depth Anything 3 for reconstruction (depth, camera pose, point maps), plus a separate VLM session for grounding and commonsense.</p></div>
+      <div class="prim"><span class="pn">04</span><h3>Code as action</h3><p>One Python cell per step. Compose perception with NumPy / SciPy / Matplotlib, so a new analysis is a new composition, not a new API entry.</p></div>
+      <div class="prim"><span class="pn">05</span><h3>Revise on feedback</h3><p>The agent inspects variable summaries, tracebacks, and rendered visualizations, then revises. A wrong mask or implausible trajectory no longer ends the run.</p></div>
+      <div class="prim"><span class="pn">06</span><h3>Training-free &amp; uniform</h3><p>One system prompt, one tool set, no benchmark-specific engineering. It encodes general spatial-reasoning discipline rather than task templates.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 05 · RESULTS ============================ -->
+<section class="section" data-screen-label="Results">
+  <div class="wrap">
+    <div class="kicker"><span class="kn">05</span><span>Results</span></div>
+    <div class="sec-head split">
+      <h2 class="sec-title">Consistent gains across <em>every</em> backbone.</h2>
+      <p class="sec-lede">A <strong>+11.2 pp</strong> margin over the prior best spatial agent, and improvement on 19 of 20 benchmarks on the same backbone.</p>
+    </div>
+
+    <!-- Headline check strip -->
+    <ul class="checks results-checks">
+      <li><span class="ck">✓</span><span>Improves on <b>19 of 20</b> benchmarks</span></li>
+      <li><span class="ck">✓</span><span>Average gain of <b>+6.5 pp</b> over the no-tool baseline</span></li>
+      <li><span class="ck">✓</span><span><b>+11.2 pp</b> over a recent prior agent (SpaceTools-Toolshed)</span></li>
+    </ul>
+
+    <!-- Main table -->
+    <h3 class="tbl-title"><span class="i"><i class="fas fa-table"></i></span>Main results across 20 benchmarks &amp; 6 backbones</h3>
+    <p class="tbl-note">Per-category average accuracy. SpatialClaw consistently improves over the no-tool baseline across all six backbones, spanning two model families and 26B–397B parameters, with no benchmark- or model-specific tuning.</p>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead>
+          <tr><th class="l">Backbone</th><th>Method</th><th>Single-img</th><th>Multi-view</th><th>General</th><th>Video &amp; 4D</th><th>Video Und.</th><th>Average</th><th>Δ</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="l" rowspan="2" style="font-weight:600;">Qwen 3.5-397B-A17B</td><td>No-tool</td><td class="num">59.0</td><td class="num">53.9</td><td class="num">65.1</td><td class="num">53.3</td><td class="num">58.1</td><td class="num">57.3</td><td class="num">–</td></tr>
+          <tr class="ours"><td class="l">SpatialClaw</td><td class="num">60.8</td><td class="num">60.7</td><td class="num">64.7</td><td class="num">58.5</td><td class="num">59.7</td><td class="num">60.4</td><td class="num pos">+3.1</td></tr>
+          <tr><td class="l" rowspan="2" style="font-weight:600;">Qwen 3.5-122B-A10B</td><td>No-tool</td><td class="num">52.9</td><td class="num">48.3</td><td class="num">62.5</td><td class="num">50.5</td><td class="num">57.1</td><td class="num">53.7</td><td class="num">–</td></tr>
+          <tr class="ours"><td class="l">SpatialClaw</td><td class="num">58.8</td><td class="num">54.6</td><td class="num">62.3</td><td class="num">54.3</td><td class="num">56.5</td><td class="num">56.9</td><td class="num pos">+3.2</td></tr>
+          <tr><td class="l" rowspan="2" style="font-weight:600;">Qwen 3.6-35B-A3B</td><td>No-tool</td><td class="num">54.5</td><td class="num">43.7</td><td class="num">60.3</td><td class="num">49.8</td><td class="num">55.7</td><td class="num">52.6</td><td class="num">–</td></tr>
+          <tr class="ours"><td class="l">SpatialClaw</td><td class="num">58.8</td><td class="num">55.4</td><td class="num">62.4</td><td class="num">54.0</td><td class="num">57.8</td><td class="num">57.2</td><td class="num pos">+4.6</td></tr>
+          <tr><td class="l" rowspan="2" style="font-weight:600;">Qwen 3.6-27B</td><td>No-tool</td><td class="num">58.6</td><td class="num">49.0</td><td class="num">62.3</td><td class="num">51.3</td><td class="num">55.9</td><td class="num">55.0</td><td class="num">–</td></tr>
+          <tr class="ours"><td class="l">SpatialClaw</td><td class="num">61.7</td><td class="num">64.0</td><td class="num">67.0</td><td class="num">60.6</td><td class="num">62.7</td><td class="num">62.7</td><td class="num pos">+7.7</td></tr>
+          <tr><td class="l" rowspan="2" style="font-weight:600;">Gemma 4-31B</td><td>No-tool</td><td class="num">55.6</td><td class="num">50.2</td><td class="num">62.4</td><td class="num">47.6</td><td class="num">55.5</td><td class="num">53.4</td><td class="num">–</td></tr>
+          <tr class="ours"><td class="l">SpatialClaw</td><td class="num">61.9</td><td class="num">62.5</td><td class="num">64.8</td><td class="num">55.1</td><td class="num">59.4</td><td class="num">59.9</td><td class="num pos">+6.5</td></tr>
+          <tr><td class="l" rowspan="2" style="font-weight:600;">Gemma 4-26B-A4B</td><td>No-tool</td><td class="num">50.7</td><td class="num">42.5</td><td class="num">59.0</td><td class="num">40.5</td><td class="num">51.6</td><td class="num">48.0</td><td class="num">–</td></tr>
+          <tr class="ours"><td class="l">SpatialClaw</td><td class="num">56.0</td><td class="num">56.8</td><td class="num">62.7</td><td class="num">48.7</td><td class="num">52.8</td><td class="num">54.3</td><td class="num pos">+6.3</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tbl-foot">All values are accuracy in %. The largest per-benchmark gains include <strong>DSI-Bench +17.6 pp</strong> (4D), <strong>MindCube +15.3 pp</strong> (multi-view), and <strong>MMSI +13.4 pp</strong>, in categories that benefit most from iterative multi-step geometric computation.</p>
+
+    <!-- Two side-by-side tables -->
+    <div class="two-tbl">
+      <div>
+        <h3 class="tbl-title"><span class="i"><i class="fas fa-balance-scale"></i></span>Action interface ablation</h3>
+        <p class="tbl-note">Same toolset, same prompt. Only the action interface differs. Gemma 4-31B, 20-benchmark average.</p>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th class="l">Action interface</th><th>Avg.</th><th>Δ</th></tr></thead>
+            <tbody>
+              <tr class="base"><td class="l">No-tool baseline</td><td class="num">53.4</td><td class="num">–</td></tr>
+              <tr><td class="l">Single-pass code</td><td class="num">55.2</td><td class="num pos">+1.8</td></tr>
+              <tr><td class="l">Structured tool-call</td><td class="num">56.7</td><td class="num pos">+3.3</td></tr>
+              <tr class="ours"><td class="l">SpatialClaw (code as action)</td><td class="num">59.9</td><td class="num pos">+6.5</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <h3 class="tbl-title"><span class="i"><i class="fas fa-trophy"></i></span>Comparison with prior spatial agents</h3>
+        <p class="tbl-note">All methods use the same Gemma 4-31B backbone with official implementations.</p>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th class="l">Method</th><th class="l">Interface</th><th>Avg.</th><th>Δ</th></tr></thead>
+            <tbody>
+              <tr><td class="l">VADAR <small style="color:var(--muted);">(Marsili '25)</small></td><td class="l" style="font-size:.82rem;color:var(--muted);">Single-pass</td><td class="num">40.5<sup>*</sup></td><td class="num neg">−19.4</td></tr>
+              <tr><td class="l">pySpatial <small style="color:var(--muted);">(Luo '26)</small></td><td class="l" style="font-size:.82rem;color:var(--muted);">Single-pass</td><td class="num">47.8</td><td class="num neg">−12.1</td></tr>
+              <tr><td class="l">SpaceTools-Toolshed <small style="color:var(--muted);">(Chen '25)</small></td><td class="l" style="font-size:.82rem;color:var(--muted);">Tool-call</td><td class="num">48.7</td><td class="num neg">−11.2</td></tr>
+              <tr class="ours"><td class="l">SpatialClaw</td><td class="l" style="font-size:.82rem;color:var(--accent-ink);font-weight:600;">Code as action</td><td class="num">59.9</td><td class="num pos">best</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="tbl-foot"><sup>*</sup>VADAR does not support video / multi-image inputs; only single-image benchmarks averaged.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 06 · ANALYSIS ============================ -->
+<section class="section bg" data-screen-label="Analysis">
+  <div class="wrap">
+    <div class="kicker"><span class="kn">06</span><span>Analysis &amp; insights</span></div>
+    <div class="sec-head split">
+      <h2 class="sec-title">Four findings on <em>why</em> code works.</h2>
+      <p class="sec-lede">The gains trace to the action interface itself, not to engineered utilities or to the perception tooling.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head"><span class="finding-n">Finding 1</span><h3 class="finding-title">SpatialClaw generalizes across diverse spatial tasks even <em>without</em> pre-defined utility tools.</h3></div>
+      <p>We ablate two design choices. <strong>(I) No utility functions:</strong> remove all utility wrappers (<code>tools.Mask</code>, <code>tools.Geometry</code>, …), keeping only core perception tools (SAM 3, DA 3) and scientific libraries (NumPy, SciPy). <strong>(II) No perception tools:</strong> remove SAM 3 / DA 3 entirely, leaving only the code-as-action interface with scientific libraries.</p>
+      <p>Variant (I) matches the full configuration (56.4 vs 56.9 avg). The persistent kernel with scientific primitives largely compensates for the absent utility tools. Variant (II) still improves over the no-tool baseline by <strong>+2.7 pp</strong>, isolating the contribution of the action interface itself, <span class="mark">independent of the perception tools</span>.</p>
+      <div class="tbl-wrap" style="margin-top:1.4rem;">
+        <table class="tbl">
+          <thead><tr><th class="l">Variant</th><th>Single-image</th><th>Multi-view</th><th>General</th><th>Video &amp; 4D</th><th>Average</th><th>Δ</th></tr></thead>
+          <tbody>
+            <tr class="ours"><td class="l">SpatialClaw (Full)</td><td class="num">53.8</td><td class="num">60.0</td><td class="num">56.8</td><td class="num">54.9</td><td class="num">56.9</td><td class="num">–</td></tr>
+            <tr><td class="l">(I) No utility functions</td><td class="num">53.4</td><td class="num">59.4</td><td class="num">55.8</td><td class="num">54.4</td><td class="num">56.4</td><td class="num neg">−0.5</td></tr>
+            <tr><td class="l">(II) No perception tools</td><td class="num">53.1</td><td class="num">46.1</td><td class="num">53.3</td><td class="num">47.9</td><td class="num">51.4</td><td class="num neg">−5.5</td></tr>
+            <tr class="base"><td class="l">No-tool baseline</td><td class="num">48.1</td><td class="num">43.3</td><td class="num">53.1</td><td class="num">46.1</td><td class="num">48.7</td><td class="num neg">−8.2</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tbl-foot">Gemma 4-26B-A4B backbone, 15 benchmarks, 500 samples each.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head"><span class="finding-n">Finding 2</span><h3 class="finding-title">The agent <em>spontaneously</em> adapts its tool composition to the question type.</h3></div>
+      <div class="finding-cols v">
+        <div class="figure lit"><img src="static/images/primitive_usage_by_category.png" alt="Primitive usage by category" /><p class="figcap" style="margin-top:.7rem;">Primitive-usage frequency across 13 meta-categories.</p></div>
+        <div>
+          <p>Without any category-specific prompt or tool routing, the agent selects geometrically appropriate primitives purely from question semantics:</p>
+          <ul>
+            <li><strong>Distance</strong> questions invoke <code>KDTree</code> search and vector norms.</li>
+            <li><strong>Direction</strong> questions rely on dot products and angular operations.</li>
+            <li><strong>Camera motion</strong> draws on pose composition and transformation chains.</li>
+          </ul>
+          <p>This <span class="mark">spontaneous, task-adaptive composition</span> is precisely the behavior structured tool-call interfaces struggle to elicit, and it is what an expressive action interface unlocks.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head"><span class="finding-n">Finding 3</span><h3 class="finding-title">Gains are largest where chained geometric computation across frames and viewpoints is required.</h3></div>
+      <div class="figure lit" style="margin-top:.6rem;"><img src="static/images/pairwise_winloss_by_meta_category.png" alt="Pairwise win/loss by meta-category" /></div>
+      <p>SpatialClaw secures a net advantage in <strong>11 of 13</strong> meta-categories over both Structured tool-call and Single-pass code. The largest lifts (<strong>+6 to +9 pp</strong>) concentrate in <em>Camera motion</em>, <em>Multi-view / viewpoint reasoning</em>, and <em>Relative direction</em>, the categories that require chained geometric computation across frames and viewpoints. Where gains are smaller, the bottleneck is perception quality on tasks already near-saturated by the backbone VLM.</p>
+      <p>Together, this breakdown confirms that the <strong>expressive action interface</strong>, rather than model capacity or tool coverage, is the primary driver of performance.</p>
+    </div>
+
+    <div class="finding">
+      <div class="finding-head"><span class="finding-n">Finding 4</span><h3 class="finding-title"><em>Composition</em> is the main driver of SpatialClaw's gains over structured tool-call.</h3></div>
+      <div class="finding-cols w">
+        <div>
+          <p>For every sample where SpatialClaw is correct but structured tool-call fails, an LLM judge (Gemini 3 Pro) reads both reasoning traces and the ground-truth answer, then assigns attribution categories:</p>
+          <ul>
+            <li><strong>Code composition (52.2%).</strong> Chaining multiple tool calls into a single coherent program.</li>
+            <li><strong>Control flow (19.5%).</strong> <code>if</code> / <code>for</code> branching over intermediate results.</li>
+            <li><strong>Interface-neutral (28.3%).</strong> Wins on perceptual tasks either interface could solve.</li>
+          </ul>
+          <p>Over <strong>70% of wins</strong> trace directly to capabilities a fixed-API tool interface cannot easily provide.</p>
+        </div>
+        <div class="figure lit"><img src="static/images/win_attribution_breakdown.png" alt="Win attribution breakdown" /><p class="figcap" style="margin-top:.7rem;">LLM-as-judge attribution of wins over structured tool-call.</p></div>
+      </div>
+    </div>
+
+    <div class="takeaway">
+      <div class="lab">Key takeaway</div>
+      <p>The gains come from <strong>the action interface itself</strong>, not from engineered utilities or perception tooling. Removing utility wrappers leaves performance essentially unchanged; removing perception tools still beats the no-tool baseline. <span class="mark">Code is the right abstraction for spatial reasoning agents.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 07 · TRAJECTORIES ============================ -->
+<section class="section" id="samples" data-screen-label="Trajectories">
+  <div class="wrap" style="max-width:1240px;">
+    <div class="kicker"><span class="kn">07</span><span>Reasoning trajectories</span></div>
+    <div class="sec-head split">
+      <h2 class="sec-title">Browse real agent sessions.</h2>
+      <p class="sec-lede">Every trajectory is a real run: the question, the code the agent wrote, the images it inspected, and the answer it submitted.</p>
+    </div>
+
+    <div class="sample-grid">
+      <a class="stile" href="samples/datasets/mmsi/samples/76__gemma3vl.html" target="_blank" rel="noopener">
+        <div class="smeta"><span class="pill mv">Multi-view</span><span class="sbench">MMSI</span><span class="smodel">· Gemma 4-31B</span></div>
+        <div class="slabel">Question</div>
+        <div class="sq">Assuming the wall where the sink is located faces east, in Figure 1 what is the position of the door relative to the sink?</div>
+        <div class="sthumbs"><img loading="lazy" src="samples/assets/mmsi/gemma3vl/76/kf_input_00.jpg" alt="" /><img loading="lazy" src="samples/assets/mmsi/gemma3vl/76/kf_input_01.jpg" alt="" /><img loading="lazy" src="samples/assets/mmsi/gemma3vl/76/kf_input_02.jpg" alt="" /></div>
+        <div class="ssum">Composes 3D reconstruction with mask segmentation, decomposes via SVD. <strong>63 cross-step variable references</strong>; 7 targeted VLM queries.</div>
+        <div class="scta">Open reasoning trajectory →</div>
+      </a>
+      <a class="stile" href="samples/datasets/omni3d/samples/146__gemma3vl.html" target="_blank" rel="noopener">
+        <div class="smeta"><span class="pill si">Single-image</span><span class="sbench">Omni3D</span><span class="smodel">· Gemma 4-31B</span></div>
+        <div class="slabel">Question</div>
+        <div class="sq">If the right-most chair is 0.2 m wide, how tall is the wooden cabinet?</div>
+        <div class="sthumbs"><img loading="lazy" src="samples/assets/omni3d/gemma3vl/146/kf_input_00.jpg" alt="" /></div>
+        <div class="ssum">Composes 3D reconstruction with mask segmentation, reaches into <code>scipy.spatial</code>. <strong>76 cross-step variable references</strong>; 6 targeted VLM queries.</div>
+        <div class="scta">Open reasoning trajectory →</div>
+      </a>
+      <a class="stile" href="samples/datasets/vsibench_unbiased/samples/918__gemma3vl.html" target="_blank" rel="noopener">
+        <div class="smeta"><span class="pill vid">Video &amp; 4D</span><span class="sbench">VSI-Bench-U</span><span class="smodel">· Gemma 4-31B</span></div>
+        <div class="slabel">Question</div>
+        <div class="sq">Measuring from the closest point of each object, what is the distance between the sofa and the toilet (in meters)?</div>
+        <div class="sthumbs"><img loading="lazy" src="samples/assets/vsibench_unbiased/gemma3vl/918/kf_input_00.jpg" alt="" /><img loading="lazy" src="samples/assets/vsibench_unbiased/gemma3vl/918/kf_input_01.jpg" alt="" /><img loading="lazy" src="samples/assets/vsibench_unbiased/gemma3vl/918/kf_input_02.jpg" alt="" /></div>
+        <div class="ssum">Composes 3D reconstruction with mask segmentation, reaches into <code>scipy.spatial</code>. Iterative visual inspection: <strong>12 <code>show()</code> calls</strong>.</div>
+        <div class="scta">Open reasoning trajectory →</div>
+      </a>
+      <a class="stile" href="samples/datasets/vsibench_unbiased/samples/930__gemma3vl.html" target="_blank" rel="noopener">
+        <div class="smeta"><span class="pill vid">Video &amp; 4D</span><span class="sbench">VSI-Bench-U</span><span class="smodel">· Gemma 4-31B</span></div>
+        <div class="slabel">Question</div>
+        <div class="sq">Measuring from the closest point of each object, what is the distance between the stool and the washer (in meters)?</div>
+        <div class="sthumbs"><img loading="lazy" src="samples/assets/vsibench_unbiased/gemma3vl/930/kf_input_00.jpg" alt="" /><img loading="lazy" src="samples/assets/vsibench_unbiased/gemma3vl/930/kf_input_01.jpg" alt="" /><img loading="lazy" src="samples/assets/vsibench_unbiased/gemma3vl/930/kf_input_02.jpg" alt="" /></div>
+        <div class="ssum"><strong>101 cross-step variable references</strong>, <strong>18 <code>show()</code> calls</strong>, 17 targeted VLM queries: the persistent kernel at its most compositional.</div>
+        <div class="scta">Open reasoning trajectory →</div>
+      </a>
+      <a class="stile" href="samples/datasets/spbench/samples/MV_246__gemma3vl.html" target="_blank" rel="noopener">
+        <div class="smeta"><span class="pill si">Single-image</span><span class="sbench">SPBench</span><span class="smodel">· Gemma 4-31B</span></div>
+        <div class="slabel">Question</div>
+        <div class="sq">Standing by the laptop and facing the chair, is the monitor to my left-front, left-back, right-front, or right-back?</div>
+        <div class="sthumbs"><img loading="lazy" src="samples/assets/spbench/gemma3vl/MV_246/kf_input_00.jpg" alt="" /><img loading="lazy" src="samples/assets/spbench/gemma3vl/MV_246/kf_input_01.jpg" alt="" /><img loading="lazy" src="samples/assets/spbench/gemma3vl/MV_246/kf_input_02.jpg" alt="" /></div>
+        <div class="ssum">3D reconstruction + mask segmentation; plots intermediate state with <code>matplotlib</code>; computes cross products for orientation.</div>
+        <div class="scta">Open reasoning trajectory →</div>
+      </a>
+      <a class="stile" href="samples/datasets/viewspatial/samples/5449__gemma3vl.html" target="_blank" rel="noopener">
+        <div class="smeta"><span class="pill gs">General spatial</span><span class="sbench">ViewSpatial</span><span class="smodel">· Gemma 4-31B</span></div>
+        <div class="slabel">Question</div>
+        <div class="sq">Imagine standing at the desk looking towards the television. Where is the toilet?</div>
+        <div class="sthumbs"><img loading="lazy" src="samples/assets/viewspatial/gemma3vl/5449/kf_input_00.jpg" alt="" /><img loading="lazy" src="samples/assets/viewspatial/gemma3vl/5449/kf_input_01.jpg" alt="" /><img loading="lazy" src="samples/assets/viewspatial/gemma3vl/5449/kf_input_02.jpg" alt="" /></div>
+        <div class="ssum">Reconstruction + segmentation; uses <code>matplotlib</code> for intermediate visualization; cross-product for viewpoint orientation.</div>
+        <div class="scta">Open reasoning trajectory →</div>
+      </a>
+      <a class="stile" href="samples/datasets/paibench/samples/712__gemma3vl.html" target="_blank" rel="noopener">
+        <div class="smeta"><span class="pill vid">Video &amp; 4D</span><span class="sbench">PAI-Bench</span><span class="smodel">· Gemma 4-31B</span></div>
+        <div class="slabel">Question</div>
+        <div class="sq">For the agent in the video performing "Checkout and scan barcode in the supermarket", what subtask is currently most plausible?</div>
+        <div class="sthumbs"><img loading="lazy" src="samples/assets/paibench/gemma3vl/712/kf_input_00.jpg" alt="" /><img loading="lazy" src="samples/assets/paibench/gemma3vl/712/kf_input_01.jpg" alt="" /><img loading="lazy" src="samples/assets/paibench/gemma3vl/712/kf_input_02.jpg" alt="" /></div>
+        <div class="ssum">3D reconstruction + mask segmentation + <code>matplotlib</code> visualization to disambiguate subtask intent across frames.</div>
+        <div class="scta">Open reasoning trajectory →</div>
+      </a>
+      <a class="stile" href="samples/datasets/mmsi/samples/234__gemma3vl.html" target="_blank" rel="noopener">
+        <div class="smeta"><span class="pill mv">Multi-view</span><span class="sbench">MMSI</span><span class="smodel">· Gemma 4-31B</span></div>
+        <div class="slabel">Question</div>
+        <div class="sq">The fireplace faces north; in which direction is the painting on the wall in the fitness area facing?</div>
+        <div class="sthumbs"><img loading="lazy" src="samples/assets/mmsi/gemma3vl/234/kf_input_00.jpg" alt="" /><img loading="lazy" src="samples/assets/mmsi/gemma3vl/234/kf_input_01.jpg" alt="" /></div>
+        <div class="ssum">3D reconstruction across multiple views; uses SVD to recover the dominant wall plane and infer the painting's facing direction.</div>
+        <div class="scta">Open reasoning trajectory →</div>
+      </a>
+    </div>
+
+    <div class="cta-row">
+      <a class="big-cta" href="samples/index.html" target="_blank" rel="noopener">Browse all 50 reasoning trajectories →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 08 · REFERENCES ============================ -->
+<section class="section bg" id="references" data-screen-label="References">
+  <div class="wrap">
+    <div class="kicker"><span class="kn">08</span><span>References</span></div>
+    <div class="sec-head"><h2 class="sec-title">References</h2></div>
+    <div class="refs-grid">
+      <div>
+        <h3 class="refs-h">Spatial reasoning agents</h3>
+        <ul class="refs-list">
+          <li><span class="refs-name">SpaceTools-Toolshed</span><span class="refs-meta">CVPR 2026. <em>Tool framework released alongside SpaceTools.</em></span><span class="refs-links">[<a href="https://spacetools.github.io/" target="_blank" rel="noopener">page</a>] [<a href="https://arxiv.org/abs/2512.04069" target="_blank" rel="noopener">arXiv</a>] [<a href="https://github.com/NVlabs/SpaceTools-Toolshed" target="_blank" rel="noopener">code</a>]</span></li>
+          <li><span class="refs-name">pySpatial</span><span class="refs-meta">ICLR 2026. <em>Generating 3D Visual Programs for Zero-Shot Spatial Reasoning.</em></span><span class="refs-links">[<a href="https://pyspatial.github.io/" target="_blank" rel="noopener">page</a>] [<a href="https://arxiv.org/abs/2603.00905" target="_blank" rel="noopener">arXiv</a>] [<a href="https://github.com/Zhanpeng1202/pySpatial" target="_blank" rel="noopener">code</a>]</span></li>
+          <li><span class="refs-name">VADAR</span><span class="refs-meta">CVPR 2025. <em>Visual Agentic AI for Spatial Reasoning with a Dynamic API.</em></span><span class="refs-links">[<a href="https://glab-caltech.github.io/vadar/" target="_blank" rel="noopener">page</a>] [<a href="https://arxiv.org/abs/2502.06787" target="_blank" rel="noopener">arXiv</a>] [<a href="https://github.com/damianomarsili/VADAR" target="_blank" rel="noopener">code</a>]</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="refs-h">Perception tools</h3>
+        <ul class="refs-list">
+          <li><span class="refs-name">SAM 3</span><span class="refs-meta">ICLR 2026. <em>Segment Anything with Concepts.</em></span><span class="refs-links">[<a href="https://ai.meta.com/research/sam3/" target="_blank" rel="noopener">page</a>] [<a href="https://arxiv.org/abs/2511.16719" target="_blank" rel="noopener">arXiv</a>] [<a href="https://github.com/facebookresearch/sam3" target="_blank" rel="noopener">code</a>]</span></li>
+          <li><span class="refs-name">Depth Anything 3</span><span class="refs-meta">ICLR 2026 (Oral). <em>Recovering the Visual Space from Any Views.</em></span><span class="refs-links">[<a href="https://depth-anything-3.github.io/" target="_blank" rel="noopener">page</a>] [<a href="https://arxiv.org/abs/2511.10647" target="_blank" rel="noopener">arXiv</a>] [<a href="https://github.com/ByteDance-Seed/Depth-Anything-3" target="_blank" rel="noopener">code</a>]</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="refs-h">VLM backbones &amp; judge</h3>
+        <ul class="refs-list">
+          <li><span class="refs-name">Qwen3-VL</span><span class="refs-meta">Alibaba Qwen Team, 2025. <em>Multimodal large language model series.</em></span><span class="refs-links">[<a href="https://github.com/QwenLM/Qwen3-VL" target="_blank" rel="noopener">page</a>] [<a href="https://arxiv.org/abs/2511.21631" target="_blank" rel="noopener">arXiv</a>]</span></li>
+          <li><span class="refs-name">Gemma 4</span><span class="refs-meta">Google DeepMind, 2025. <em>Open-weight multimodal foundation models.</em></span><span class="refs-links">[<a href="https://deepmind.google/models/gemma/gemma-4/" target="_blank" rel="noopener">page</a>] [<a href="https://ai.google.dev/gemma/docs/core/model_card_4" target="_blank" rel="noopener">model card</a>]</span></li>
+          <li><span class="refs-name">Gemini 3 Pro</span><span class="refs-meta">Google DeepMind, 2025. <em>Multimodal reasoning model used as LLM-as-judge.</em></span><span class="refs-links">[<a href="https://deepmind.google/models/gemini/pro/" target="_blank" rel="noopener">page</a>] [<a href="https://deepmind.google/models/model-cards/gemini-3-1-pro/" target="_blank" rel="noopener">model card</a>]</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ BIBTEX ============================ -->
+<section class="section" id="bibtex" data-screen-label="BibTeX">
+  <div class="wrap" style="max-width:880px;">
+    <div class="kicker"><span class="kn">↳</span><span>Cite this work</span></div>
+    <div class="sec-head"><h2 class="sec-title">BibTeX</h2></div>
+    <div class="bibtex">
+      <button class="copy-btn" onclick="copyBib()"><i class="far fa-copy"></i> Copy</button>
+<pre id="bib-content">@article{cho2026spatialclaw,
+  title   = {SpatialClaw: Rethinking Action Interface for Agentic Spatial Reasoning},
+  author  = {Cho, Seokju and Hachiuma, Ryo and Badki, Abhishek and
+             Su, Hang and Lee, Byung-Kwan and Song, Chan Hee and
+             Liu, Sifei and Radhakrishnan, Subhashree and Kim, Seungryong and
+             Wang, Yu-Chiang Frank and Chen, Min-Hung},
+  journal = {arXiv preprint},
+  year    = {2026}
+}</pre>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <img class="nvlogo" src="static/images/nvidia-logo-horz.svg" alt="NVIDIA" />
+    <span>SpatialClaw · NVIDIA Research. Page content describes the paper; see the <a href="static/pdfs/spatialclaw.pdf" target="_blank">PDF</a> for full details.</span>
+  </div>
+</footer>
+
+<script>
+  function copyBib(){
+    var t=document.getElementById('bib-content').innerText;
+    navigator.clipboard.writeText(t).then(function(){
+      var b=document.querySelector('.copy-btn');var o=b.innerHTML;
+      b.innerHTML='<i class="fas fa-check"></i> Copied';setTimeout(function(){b.innerHTML=o;},1600);
+    });
+  }
+
+  /* Inline collapsible presentation */
+  (function(){
+    var btn=document.getElementById('presentBtn');
+    var embed=document.getElementById('presentEmbed');
+    var iframe=document.getElementById('presentIframe');
+    var icon=document.getElementById('presentBtnIcon');
+    var label=btn?btn.querySelector('span[data-comment-anchor]'):null;
+    var closeBtn=document.getElementById('presentClose');
+    if(!btn||!embed||!iframe)return;
+
+    function scrollToEmbed(){
+      var top=embed.getBoundingClientRect().top+window.pageYOffset-10;
+      window.scrollTo({top:top,behavior:'smooth'});
+    }
+    function open(){
+      if(!iframe.src){iframe.src=iframe.getAttribute('data-src');}
+      embed.classList.add('open');
+      btn.classList.add('is-open');
+      btn.setAttribute('aria-expanded','true');
+      if(icon){icon.className='fas fa-chevron-up';}
+      if(label){label.textContent='Hide presentation';}
+      requestAnimationFrame(scrollToEmbed);
+    }
+    function close(scrollBack){
+      embed.classList.remove('open');
+      btn.classList.remove('is-open');
+      btn.setAttribute('aria-expanded','false');
+      if(icon){icon.className='fas fa-play';}
+      if(label){label.textContent='Presentation';}
+      if(scrollBack){
+        var top=btn.getBoundingClientRect().top+window.pageYOffset-120;
+        window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+      }
+    }
+    btn.addEventListener('click',function(e){
+      e.preventDefault();
+      embed.classList.contains('open')?close(true):open();
+    });
+    if(closeBtn){closeBtn.addEventListener('click',function(){close(true);});}
+  })();
+</script>
+<script src="theme.js"></script>
+<script src="radar.js?v=2"></script>
+<script src="walkthrough.js"></script>
+</body>
+</html>

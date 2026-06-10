@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SpatialClaw · Presentation</title>
+<link rel="icon" type="image/svg+xml" href="static/images/icon.svg" />
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@font-face{font-family:"NVIDIA Sans";font-weight:300;src:url("fonts/NVIDIASans_Lt.ttf") format("truetype");font-display:swap;}
+@font-face{font-family:"NVIDIA Sans";font-weight:400;font-style:normal;src:url("fonts/NVIDIASans_Rg.ttf") format("truetype");font-display:swap;}
+@font-face{font-family:"NVIDIA Sans";font-weight:400;font-style:italic;src:url("fonts/NVIDIASans_It.ttf") format("truetype");font-display:swap;}
+@font-face{font-family:"NVIDIA Sans";font-weight:500;src:url("fonts/NVIDIASans_Md.ttf") format("truetype");font-display:swap;}
+@font-face{font-family:"NVIDIA Sans";font-weight:600 700;font-style:normal;src:url("fonts/NVIDIASans_Bd.ttf") format("truetype");font-display:swap;}
+@font-face{font-family:"NVIDIA Sans";font-weight:600 700;font-style:italic;src:url("fonts/NVIDIASans_BdIt.ttf") format("truetype");font-display:swap;}
+
+:root{
+  --bg:#ffffff; --bg-2:#f5f5f3; --surface:#ffffff; --ink:#161616; --ink-2:#4b4b4b;
+  --muted:#757575; --faint:#a7a7a7; --line:#e4e4e1; --line-2:#cccccc;
+  --accent:#76b900; --accent-d:#549a00; --accent-ink:#3f8500;
+  --accent-wash:rgba(118,185,0,0.12); --accent-mark:rgba(118,185,0,0.28);
+  --blue:#2c5fa3; --magenta:#8b3c8b; --orange:#b56b1c; --teal:#0d8473;
+  --font-sans:"NVIDIA Sans",system-ui,sans-serif; --font-mono:"JetBrains Mono",monospace;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#0a0b0d; --bg-2:#101114; --surface:#15171b; --ink:#f4f5f4; --ink-2:#c4c7cc;
+  --muted:#8b9097; --faint:#6a6f76; --line:#2a2d33; --line-2:#3a3e45;
+  --accent:#88cc16; --accent-d:#a5de15; --accent-ink:#a5de15;
+  --accent-wash:rgba(118,185,0,0.16); --accent-mark:rgba(133,200,20,0.30);
+  --blue:#6aa6e8; --magenta:#cd7fcd; --orange:#e0a050; --teal:#3dc5b0;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;height:100%;background:#000;}
+deck-stage:not(:defined){visibility:hidden;}
+
+/* ---- slide base ---- */
+.slide{
+  padding:92px 120px;display:flex;flex-direction:column;justify-content:center;
+  background:var(--bg);color:var(--ink);font-family:var(--font-sans);overflow:hidden;
+}
+.slide.center{align-items:center;text-align:center;justify-content:center;}
+h1,h2,h3{margin:0;font-weight:700;letter-spacing:-0.025em;}
+.kick{display:flex;align-items:center;gap:18px;font-family:var(--font-mono);font-weight:600;font-size:25px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:34px;}
+.kick .kn{color:var(--muted);}
+.kick::after{content:"";flex:0 0 auto;width:54px;height:2px;background:var(--accent);}
+.s-title{font-size:72px;line-height:1.04;}
+.s-title.big{font-size:92px;line-height:1;}
+.s-title em{font-style:italic;color:var(--accent-ink);}
+.s-lede{font-size:38px;line-height:1.4;color:var(--ink-2);max-width:30ch;margin-top:28px;}
+.s-lede strong{color:var(--ink);font-weight:600;}
+.body{font-size:32px;line-height:1.5;color:var(--ink-2);}
+.body strong{color:var(--ink);font-weight:600;}
+.mk{background:linear-gradient(180deg,transparent 58%,var(--accent-mark) 58%);font-weight:600;padding:0 2px;}
+.accent{color:var(--accent-ink);}
+code{font-family:var(--font-mono);font-size:.94em;background:var(--accent-wash);color:var(--accent-ink);padding:.06em .4em;border-radius:5px;}
+
+/* ---- title slide ---- */
+.title-brand{display:flex;align-items:center;gap:24px;margin-bottom:48px;}
+.title-brand img.eye{height:84px;}
+.title-name{font-size:160px;line-height:.9;font-weight:700;letter-spacing:-0.04em;color:var(--accent);}
+.title-sub{font-size:52px;font-weight:500;color:var(--ink);margin-top:18px;letter-spacing:-0.02em;line-height:1.1;max-width:24ch;}
+.title-authors{margin-top:52px;color:var(--ink-2);font-size:27px;line-height:1.7;max-width:60ch;}
+.title-authors b{color:var(--ink);font-weight:600;}
+.title-authors sup{color:var(--accent-ink);font-weight:700;}
+.title-nv{margin-top:40px;}
+.title-nv img{height:74px;}
+.title-affil{margin-top:18px;color:var(--muted);font-size:27px;}
+.title-authors sup,.title-affil sup{font-size:.92em;}
+.title-affil sup{color:var(--accent-ink);font-weight:700;}
+:root[data-theme="dark"] .title-nv img,:root[data-theme="dark"] .corner-nv img{filter:brightness(0) invert(1);}
+
+/* ---- generic grids ---- */
+.grid{display:grid;gap:26px;margin-top:48px;}
+.g2{grid-template-columns:1fr 1fr;}
+.g3{grid-template-columns:repeat(3,1fr);}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:38px 40px;}
+.card .tag{font-family:var(--font-mono);font-size:24px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:18px;}
+.card h3{font-size:34px;margin-bottom:14px;letter-spacing:-0.01em;}
+.card p{margin:0;font-size:26px;line-height:1.45;color:var(--ink-2);}
+.card.ours{border-color:var(--accent);background:linear-gradient(180deg,var(--accent-wash),transparent);position:relative;}
+.card.ours .tag{color:var(--accent-ink);}
+.card .ic{width:64px;height:64px;border-radius:16px;background:var(--accent-wash);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:22px;}
+
+/* question chips */
+.qchips{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:46px;}
+.qchip{display:flex;align-items:center;gap:20px;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:14px;padding:28px 32px;font-size:30px;color:var(--ink);line-height:1.35;}
+.qchip i{color:var(--accent-ink);font-size:34px;flex:0 0 auto;}
+.qchip em{font-style:italic;color:var(--accent-ink);}
+
+/* image card (white-bg diagrams) */
+.fig{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px;margin-top:40px;}
+.fig img{display:block;margin:0 auto;max-width:100%;max-height:560px;border-radius:6px;}
+.figcap{font-size:24px;color:var(--muted);margin-top:24px;line-height:1.4;}
+.figcap b{color:var(--ink);}
+
+/* stats */
+.stats{display:flex;gap:26px;margin-top:50px;}
+.stat{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:40px;text-align:center;}
+.stat .v{font-size:84px;font-weight:700;color:var(--accent-ink);line-height:1;letter-spacing:-0.02em;}
+.stat .v small{font-size:.45em;color:var(--muted);}
+.stat .l{font-size:25px;color:var(--ink-2);margin-top:18px;line-height:1.4;}
+
+/* loop */
+.loop{display:flex;align-items:stretch;gap:14px;margin-top:54px;}
+.stage{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px 26px;}
+.stage.kernel{border-color:var(--accent);border-style:dashed;background:var(--accent-wash);}
+.stage .hd{display:flex;align-items:center;gap:14px;font-weight:600;font-size:27px;margin-bottom:18px;}
+.stage .num{width:42px;height:42px;border-radius:10px;background:var(--accent);color:#0d1a00;font-weight:700;font-size:24px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;}
+.stage ul{margin:0;padding:0;list-style:none;}
+.stage li{font-size:24px;color:var(--ink-2);padding:8px 0 8px 22px;position:relative;line-height:1.3;}
+.stage li::before{content:"";position:absolute;left:0;top:16px;width:8px;height:8px;border-radius:50%;background:var(--accent);}
+.arrowx{display:flex;align-items:center;color:var(--accent);font-size:34px;flex:0 0 auto;}
+.loop-back{margin-top:34px;text-align:center;}
+.loop-back .pill{display:inline-flex;align-items:center;gap:14px;border:1px dashed var(--accent);border-radius:999px;padding:16px 32px;color:var(--accent-ink);font-size:26px;}
+
+/* radar */
+.radar-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;margin-top:30px;}
+.radar-box{position:relative;width:100%;aspect-ratio:1/1;max-width:600px;margin:0 auto;}
+.checks{list-style:none;padding:0;margin:34px 0 0;display:flex;flex-direction:column;gap:22px;}
+.checks li{display:flex;gap:18px;align-items:baseline;font-size:32px;color:var(--ink);}
+.checks .ck{color:var(--accent);font-weight:700;}
+.checks b{color:var(--accent-ink);}
+.mlegend{display:flex;gap:34px;flex-wrap:wrap;margin-top:38px;padding-top:28px;border-top:1px solid var(--line);}
+.mlegend .row{display:flex;align-items:center;gap:14px;font-size:24px;color:var(--ink);}
+.mlegend .ln{width:36px;height:0;border-top:4px solid;}
+.ln-ours{border-top-color:var(--accent);}
+.ln-st{border-top-color:var(--blue);border-top-width:3px;}
+.ln-py{border-top-color:var(--orange);border-top-width:3px;}
+.ln-nt{border-top:3px dashed var(--faint);}
+
+/* table */
+table.tbl{width:100%;border-collapse:collapse;font-size:27px;margin-top:44px;border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+table.tbl th,table.tbl td{padding:18px 22px;text-align:center;border-bottom:1px solid var(--line);}
+table.tbl thead th{background:var(--bg-2);font-weight:600;font-size:25px;}
+table.tbl th.l,table.tbl td.l{text-align:left;}
+table.tbl td.num{font-family:var(--font-mono);font-size:25px;}
+table.tbl tr.ours td{background:var(--accent-wash);font-weight:600;}
+table.tbl tr.base td{color:var(--muted);font-style:italic;}
+.pos{color:var(--accent-ink);font-weight:700;}
+.neg{color:var(--magenta);font-weight:600;}
+
+/* bars (ablation) */
+.bars{margin-top:50px;display:flex;flex-direction:column;gap:30px;}
+.barrow{display:grid;grid-template-columns:420px 1fr 120px;align-items:center;gap:34px;}
+.barrow .nm{font-size:30px;color:var(--ink);}
+.barrow.ours .nm{font-weight:700;}
+.barrow .track{height:48px;background:var(--bg-2);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+.barrow .bar{height:100%;border-radius:10px;background:linear-gradient(90deg,var(--faint),var(--line-2));}
+.barrow.ours .bar{background:linear-gradient(90deg,var(--accent-d),var(--accent));}
+.barrow .val{font-family:var(--font-mono);font-size:28px;font-weight:600;text-align:right;color:var(--ink);}
+
+/* demo console */
+.slide.flow{justify-content:flex-start;padding-top:72px;}
+.demo{display:grid;grid-template-columns:1.05fr .95fr;gap:30px;margin-top:18px;align-items:stretch;}
+.console{background:#06070a;border:1px solid var(--line-2);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;}
+.console .bar{display:flex;align-items:center;gap:10px;padding:16px 22px;background:#0b0d12;}
+.console .bar .dot{width:14px;height:14px;border-radius:50%;}
+.console .bar .r{background:#ff5f56;}.console .bar .y{background:#ffbd2e;}.console .bar .g{background:#27c93f;}
+.console .bar .ttl{margin-left:10px;font-family:var(--font-mono);font-size:21px;color:#7a8089;}
+.console .bd{padding:16px 24px;overflow:hidden;flex:1;}
+.cell{margin-bottom:8px;}
+.cell .who{font-family:var(--font-mono);font-weight:600;font-size:24px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.who.agent{color:var(--accent);}.who.plan{color:#b48ce0;}.who.fb{color:#5fb0e0;}
+pre.code{margin:0;font-family:var(--font-mono);font-size:24px;line-height:1.3;white-space:pre-wrap;color:#d6dde6;}
+pre.code .s{color:#ce9178;}pre.code .c{color:#6a9a5b;font-style:italic;}pre.code .f{color:#dcdcaa;}pre.code .n{color:#9cdcfe;}pre.code .m{color:#b5cea8;}
+.fbbox{background:#0b0d12;border:1px solid rgba(255,255,255,.08);border-left:4px solid #5fb0e0;border-radius:10px;padding:12px 18px;font-family:var(--font-mono);font-size:24px;color:#c7d0da;line-height:1.5;white-space:pre-wrap;}
+.fbbox.ok{border-left-color:var(--accent);}
+.fbbox b{color:#fff;}
+.viz{display:flex;flex-direction:column;gap:24px;}
+.qbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px 30px;}
+.qbox .l{font-family:var(--font-mono);font-size:24px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.qbox .q{font-size:28px;color:var(--ink);line-height:1.4;}
+.qbox .gt{margin-top:16px;font-size:24px;color:var(--accent-ink);font-weight:600;}
+.inspect{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.inspect figure{margin:0;display:flex;flex-direction:column;gap:12px;}
+.inspect img{width:100%;height:248px;object-fit:cover;border-radius:12px;border:1px solid var(--line);background:var(--bg-2);}
+.inspect figcaption{font-family:var(--font-mono);font-size:24px;color:var(--blue);text-align:center;}
+
+/* frames strip */
+.frames{display:flex;gap:18px;margin-top:28px;}
+.frames .fr{flex:1;aspect-ratio:4/3;border-radius:12px;border:1px solid var(--line);background-size:cover;background-position:center;position:relative;}
+.frames .fr span{position:absolute;left:12px;bottom:12px;background:rgba(8,10,16,.82);color:#fff;font-family:var(--font-mono);font-size:24px;padding:4px 12px;border-radius:6px;}
+.opt{display:inline-block;background:var(--bg-2);border:1px solid var(--line);border-radius:9px;padding:8px 18px;font-family:var(--font-mono);font-size:25px;color:var(--ink-2);}
+.opt.win{border-color:var(--accent);background:var(--accent-wash);color:var(--accent-ink);font-weight:700;}
+
+/* takeaway */
+.takeaway{border:1px solid var(--accent);border-radius:20px;padding:60px 70px;background:linear-gradient(135deg,var(--accent-wash),transparent);max-width:1300px;}
+.takeaway .lab{font-family:var(--font-mono);font-size:24px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:24px;}
+.takeaway p{font-size:50px;line-height:1.25;font-weight:600;color:var(--ink);margin:0;letter-spacing:-0.02em;}
+.takeaway p strong{color:var(--accent-ink);}
+.bibtex{margin-top:46px;background:#06070a;border:1px solid var(--line-2);border-left:4px solid var(--accent);border-radius:14px;padding:30px 36px;font-family:var(--font-mono);font-size:23px;line-height:1.55;color:#c7d0da;white-space:pre;}
+
+/* corner brand + theme toggle */
+.corner-nv{position:fixed;left:26px;bottom:20px;z-index:60;display:flex;align-items:center;gap:12px;font-family:var(--font-mono);font-size:18px;color:var(--muted);opacity:.85;}
+.corner-nv img{height:22px;}
+.theme-toggle{position:fixed;top:18px;right:18px;z-index:90;display:inline-flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:9px 13px;cursor:pointer;font-family:var(--font-mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;}
+.theme-toggle:hover{border-color:var(--accent);}
+.theme-toggle .ico{width:18px;height:18px;display:grid;place-items:center;color:var(--accent-ink);}
+</style>
+</head>
+<body>
+<script>
+  (function(){try{var t=localStorage.getItem('sc-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);}catch(e){document.documentElement.setAttribute('data-theme','light');}})();
+</script>
+
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle theme"><span class="ico"></span><span class="lbl">Dark</span></button>
+
+<deck-stage width="1920" height="1080">
+
+  <!-- 0 · TITLE -->
+  <section class="slide center" data-label="Title">
+    <div class="title-brand"><img class="eye" src="static/images/icon.svg" alt="" /></div>
+    <div class="title-name">SpatialClaw</div>
+    <div class="title-sub">Rethinking the action interface for agentic spatial reasoning</div>
+    <div class="title-authors"><b>Seokju Cho</b><sup>&dagger;</sup>, Ryo Hachiuma, Abhishek Badki, Hang Su, Byung-Kwan Lee, Chan Hee Song, Sifei Liu, Subhashree Radhakrishnan, Seungryong Kim<sup>&dagger;</sup>, Yu-Chiang Frank Wang, Min-Hung Chen</div>
+    <div class="title-nv"><img src="static/images/nvidia-logo-horz.svg" alt="NVIDIA" /></div>
+    <div class="title-affil"><sup>&dagger;</sup>Affiliated with KAIST · Work done during Seokju Cho's internship at NVIDIA</div>
+  </section>
+
+  <!-- 1 · MOTIVATION -->
+  <section class="slide" data-label="Motivation">
+    <div class="kick"><span class="kn">01</span><span>Motivation</span></div>
+    <h2 class="s-title">Spatial reasoning is still hard<br/>for <em>vision-language models</em>.</h2>
+    <p class="body" style="margin-top:30px;max-width:60ch;">Determining <strong>where</strong> objects are, <strong>how</strong> they relate, and <strong>how</strong> they move in 3D: effortless for humans, unreliable for state-of-the-art VLMs.</p>
+    <div class="qchips">
+      <div class="qchip"><i class="fas fa-car-side"></i><span>"Is the car moving <em>toward</em> the camera?"</span></div>
+      <div class="qchip"><i class="fas fa-table"></i><span>"Which object is <em>closest</em> to the table?"</span></div>
+      <div class="qchip"><i class="fas fa-person-walking-arrow-right"></i><span>"Did the person turn <em>left</em> or <em>right</em>?"</span></div>
+      <div class="qchip"><i class="fas fa-ruler-combined"></i><span>"How far apart are these two objects?"</span></div>
+    </div>
+  </section>
+
+  <!-- 2 · THESIS -->
+  <section class="slide" data-label="Thesis">
+    <div class="kick"><span class="kn">02</span><span>The core idea</span></div>
+    <h2 class="s-title big">Tools alone are not enough.<br/>The <em>action interface</em> is the bottleneck.</h2>
+    <p class="body" style="margin-top:40px;max-width:54ch;">The capability of a tool-augmented agent is bounded not by <strong>which</strong> tools are available, but by <strong>how those tools can be composed</strong>: which intermediate states are observable, and whether the agent can revise before committing.</p>
+  </section>
+
+  <!-- 3 · THREE INTERFACES -->
+  <section class="slide" data-label="Three interfaces">
+    <div class="kick"><span class="kn">03</span><span>Three action interfaces</span></div>
+    <h2 class="s-title">The same tools, three very different ceilings.</h2>
+    <div class="grid g3">
+      <div class="card"><span class="tag">(a) Single-pass code</span><h3>Commit before observing</h3><p>Writes a complete program in one shot. Cannot revise once execution starts, so any wrong assumption propagates to the answer.</p></div>
+      <div class="card"><span class="tag">(b) Structured tool-call</span><h3>Limited composition</h3><p>Dispatches typed tools through a fixed JSON schema. Cannot freely combine perception outputs with NumPy / SciPy.</p></div>
+      <div class="card ours"><span class="tag">(c) SpatialClaw</span><h3>Compose · inspect · revise</h3><p>Code as the action interface, backed by a persistent kernel. Perception outputs are ordinary variables.</p></div>
+    </div>
+  </section>
+
+  <!-- 4 · CODE AS ACTION -->
+  <section class="slide" data-label="Code as action">
+    <div class="kick"><span class="kn">04</span><span>SpatialClaw</span></div>
+    <h2 class="s-title">Code is the right action interface<br/>for <em>spatial reasoning</em>.</h2>
+    <p class="body" style="margin-top:28px;max-width:62ch;">A <span class="mk">training-free</span> agent with a stateful Python kernel pre-loaded with input frames and perception + geometry primitives. The VLM writes <strong>one executable cell per step</strong>, conditioned on all prior outputs.</p>
+    <div class="grid g3">
+      <div class="card"><div class="ic"><i class="fas fa-cubes"></i></div><h3>Persistent kernel</h3><p>Masks, depth maps, point clouds and plots live as ordinary variables that persist across steps.</p></div>
+      <div class="card"><div class="ic"><i class="fas fa-eye"></i></div><h3>Visual inspection</h3><p><code>show(...)</code> embeds rendered images into the next observation, so the agent can <em>see</em> a mask before trusting it.</p></div>
+      <div class="card"><div class="ic"><i class="fas fa-code"></i></div><h3>A new analysis ≠ a new API</h3><p>A new computation is a new <em>composition</em> of primitives, assembled at test time.</p></div>
+    </div>
+  </section>
+
+  <!-- 5 · METHOD LOOP -->
+  <section class="slide" data-label="Method · loop">
+    <div class="kick"><span class="kn">05</span><span>Method</span></div>
+    <h2 class="s-title">A persistent kernel wrapped in a five-stage loop.</h2>
+    <div class="loop">
+      <div class="stage"><div class="hd"><span class="num">I</span>Planning</div><ul><li>Separate LLM session</li><li>Sees question + tool docs</li><li><em>not</em> the images</li><li>Outputs a plan</li></ul></div>
+      <div class="arrowx"><i class="fas fa-chevron-right"></i></div>
+      <div class="stage"><div class="hd"><span class="num">II</span>Code gen</div><ul><li>Purpose · Reasoning</li><li>Next goal</li><li>One Python cell</li></ul></div>
+      <div class="arrowx"><i class="fas fa-chevron-right"></i></div>
+      <div class="stage kernel"><div class="hd"><span class="num" style="background:#27c93f;">III</span>Execution</div><ul><li>AST security check</li><li><b>Persistent kernel</b></li><li>tools, show(), NumPy, SciPy</li></ul></div>
+      <div class="arrowx"><i class="fas fa-chevron-right"></i></div>
+      <div class="stage"><div class="hd"><span class="num" style="background:#ef9100;">IV</span>Feedback</div><ul><li>stdout from print()</li><li>Errors / tracebacks</li><li>Variable summaries</li><li>Visuals from show()</li></ul></div>
+      <div class="arrowx"><i class="fas fa-chevron-right"></i></div>
+      <div class="stage"><div class="hd"><span class="num" style="background:#e52020;color:#fff;">V</span>Answer</div><ul><li>If ReturnAnswer()</li><li>in code → terminate</li><li>(if valid)</li></ul></div>
+    </div>
+    <div class="loop-back"><span class="pill"><i class="fas fa-rotate-left"></i> Iterate: return to Stage II while step &lt; N<sub>max</sub></span></div>
+  </section>
+
+  <!-- 6 · KERNEL -->
+  <section class="slide" data-label="The kernel">
+    <div class="kick"><span class="kn">06</span><span>The persistent workspace</span></div>
+    <h2 class="s-title">Six entry points, one self-contained world.</h2>
+    <div class="grid g3">
+      <div class="card"><h3><code>InputImages</code></h3><p>The sampled frames or images the agent reads observations from.</p></div>
+      <div class="card"><h3><code>Metadata</code></h3><p>Frame rate, duration, and indices, letting the agent reason about temporal structure.</p></div>
+      <div class="card"><h3><code>tools</code></h3><p><b>SAM 3</b> segmentation · <b>Depth Anything 3</b> reconstruction · geometry utilities.</p></div>
+      <div class="card"><h3><code>show(...)</code></h3><p>Registers an image into the agent's next observation. <code>plt.show()</code> works too.</p></div>
+      <div class="card"><h3><code>vlm</code></h3><p>A separate VLM session: <code>vlm.locate()</code> for grounding, <code>ask_with_thinking()</code> for commonsense.</p></div>
+      <div class="card ours"><h3><code>ReturnAnswer(...)</code></h3><p>Submits the final candidate answer and terminates the loop.</p></div>
+    </div>
+  </section>
+
+  <!-- 7 · DEMO INTRO -->
+  <section class="slide" data-label="Demo · the problem">
+    <div class="kick"><span class="kn">07</span><span>Live walkthrough · real trajectory</span></div>
+    <h2 class="s-title">Watch SpatialClaw solve a real benchmark question.</h2>
+    <div class="qbox" style="margin-top:40px;max-width:1400px;">
+      <div class="l">MMSI · sample 76 · Multi-view · Gemma 4-31B</div>
+      <div class="q" style="font-size:32px;">In <strong>Figure 4</strong> the wall holding the sink faces <strong>east</strong> (outward = east). In <strong>Figure 1</strong>, what is the position of the <strong>door</strong> relative to the <strong>sink</strong>?</div>
+      <div style="margin-top:22px;display:flex;gap:16px;flex-wrap:wrap;">
+        <span class="opt">A · Northeast</span><span class="opt">B · Southwest</span><span class="opt">C · Southeast</span><span class="opt">D · Northwest</span>
+      </div>
+      <div class="gt">Ground truth: A · Northeast</div>
+    </div>
+    <div class="frames">
+      <div class="fr" style="background-image:url('samples/assets/mmsi/gemma3vl/76/kf_input_00.jpg');"><span>Fig 1</span></div>
+      <div class="fr" style="background-image:url('samples/assets/mmsi/gemma3vl/76/kf_input_01.jpg');"><span>Fig 2</span></div>
+      <div class="fr" style="background-image:url('samples/assets/mmsi/gemma3vl/76/kf_input_02.jpg');"><span>Fig 3</span></div>
+      <div class="fr" style="background-image:url('samples/assets/mmsi/gemma3vl/76/kf_input_03.jpg');"><span>Fig 4</span></div>
+    </div>
+  </section>
+
+  <!-- 8 · DEMO LOOP -->
+  <section class="slide flow" data-label="Demo · compose · inspect · revise">
+    <div class="kick"><span class="kn">07</span><span>The code–inspect–revise loop · real MMSI-76 run</span></div>
+    <div class="demo">
+      <div class="console">
+        <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="ttl">spatialclaw · persistent kernel · mmsi/76</span></div>
+        <div class="bd">
+          <div class="cell"><div class="who plan"><i class="fas fa-list-check"></i> Plan</div><div class="fbbox">East = wall normal, North = Up × East. Segment, reconstruct, project door→sink onto the axes.</div></div>
+          <div class="cell"><div class="who agent"><i class="fas fa-terminal"></i> Step 1 · code</div><pre class="code"><span class="n">seg_sink</span> = tools.SAM3.<span class="f">segment</span>(InputImages[<span class="m">3</span>], <span class="s">"sink"</span>)
+<span class="n">seg_door</span> = tools.SAM3.<span class="f">segment</span>(InputImages[<span class="m">0</span>], <span class="s">"door"</span>)
+<span class="f">show</span>([seg_sink.<span class="f">visualize</span>(), seg_door.<span class="f">visualize</span>()])</pre></div>
+          <div class="cell"><div class="who fb"><i class="fas fa-image"></i> Feedback · show()</div><div class="fbbox ok">Both mask areas &gt; 0 → <b>no empty masks</b>, verified.</div></div>
+          <div class="cell"><div class="who agent"><i class="fas fa-terminal"></i> Step 2 · compose</div><pre class="code"><span class="n">recon</span>   = tools.<span class="f">Reconstruct</span>(InputImages)
+<span class="n">v_north</span> = np.<span class="f">cross</span>([<span class="m">0</span>,<span class="m">1</span>,<span class="m">0</span>], v_east) <span class="c"># Up × East</span>
+<span class="f">ReturnAnswer</span>(<span class="s">"A"</span>)                  <span class="c"># Northeast</span></pre></div>
+          <div class="cell"><div class="who fb"><i class="fas fa-check"></i> Feedback · answer</div><div class="fbbox ok">East <b>+5.61</b> · North <b>+4.33</b> → both positive: <b>A · Northeast ✓</b></div></div>
+        </div>
+      </div>
+      <div class="viz">
+        <div class="qbox"><div class="l">Question · MMSI 76</div><div class="q">Door (Fig 1) relative to the sink (Fig 4), sink-wall facing <strong>east</strong>?</div><div class="gt">GT: A · Northeast</div></div>
+        <div class="inspect">
+          <figure><img src="samples/assets/mmsi/gemma3vl/76/show_0001_img_1.jpg" alt="" /><figcaption>SAM 3 · sink mask (Fig 4)</figcaption></figure>
+          <figure><img src="samples/assets/mmsi/gemma3vl/76/show_0001_img_3.jpg" alt="" /><figcaption>SAM 3 · door mask (Fig 1)</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · RADAR -->
+  <section class="slide" data-label="Results · radar">
+    <div class="kick"><span class="kn">08</span><span>Results</span></div>
+    <h2 class="s-title">Improves on 19 of 20 benchmarks.</h2>
+    <div class="radar-grid">
+      <div class="radar-box"><canvas id="deckRadar"></canvas></div>
+      <div>
+        <ul class="checks">
+          <li><span class="ck">✓</span><span>Improves on <b>19 of 20</b> benchmarks</span></li>
+          <li><span class="ck">✓</span><span>Average gain <b>+6.5 pp</b> over no-tool baseline</span></li>
+          <li><span class="ck">✓</span><span><b>+11.2 pp</b> over a recent prior agent</span></li>
+        </ul>
+        <p class="body" style="margin-top:30px;font-size:26px;">Each axis is rescaled so SpatialClaw lands at a constant radius, so the circle makes the consistency visible at a glance.</p>
+        <div class="mlegend">
+          <div class="row"><span class="ln ln-ours"></span><span><b>SpatialClaw</b></span></div>
+          <div class="row"><span class="ln ln-st"></span><span>SpaceTools</span></div>
+          <div class="row"><span class="ln ln-py"></span><span>pySpatial</span></div>
+          <div class="row"><span class="ln ln-nt"></span><span>No-tool</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 · MAIN TABLE -->
+  <section class="slide" data-label="Results · table">
+    <div class="kick"><span class="kn">08</span><span>Results · across backbones</span></div>
+    <h2 class="s-title">Consistent gains across six VLM backbones.</h2>
+    <table class="tbl">
+      <thead><tr><th class="l">Backbone</th><th>Single-img</th><th>Multi-view</th><th>General</th><th>Video &amp; 4D</th><th>Video Und.</th><th>Average</th><th>Δ</th></tr></thead>
+      <tbody>
+        <tr class="ours"><td class="l">Qwen 3.5-397B-A17B</td><td class="num">60.8</td><td class="num">60.7</td><td class="num">64.7</td><td class="num">58.5</td><td class="num">59.7</td><td class="num">60.4</td><td class="num pos">+3.1</td></tr>
+        <tr class="ours"><td class="l">Qwen 3.5-122B-A10B</td><td class="num">58.8</td><td class="num">54.6</td><td class="num">62.3</td><td class="num">54.3</td><td class="num">56.5</td><td class="num">56.9</td><td class="num pos">+3.2</td></tr>
+        <tr class="ours"><td class="l">Qwen 3.6-35B-A3B</td><td class="num">58.8</td><td class="num">55.4</td><td class="num">62.4</td><td class="num">54.0</td><td class="num">57.8</td><td class="num">57.2</td><td class="num pos">+4.6</td></tr>
+        <tr class="ours"><td class="l">Qwen 3.6-27B</td><td class="num">61.7</td><td class="num">64.0</td><td class="num">67.0</td><td class="num">60.6</td><td class="num">62.7</td><td class="num">62.7</td><td class="num pos">+7.7</td></tr>
+        <tr class="ours"><td class="l">Gemma 4-31B</td><td class="num">61.9</td><td class="num">62.5</td><td class="num">64.8</td><td class="num">55.1</td><td class="num">59.4</td><td class="num">59.9</td><td class="num pos">+6.5</td></tr>
+        <tr class="ours"><td class="l">Gemma 4-26B-A4B</td><td class="num">56.0</td><td class="num">56.8</td><td class="num">62.7</td><td class="num">48.7</td><td class="num">52.8</td><td class="num">54.3</td><td class="num pos">+6.3</td></tr>
+      </tbody>
+    </table>
+    <p class="body" style="margin-top:30px;font-size:25px;">Δ is the gain over each backbone's no-tool baseline. Two model families, 26B–397B parameters, no model-specific tuning.</p>
+  </section>
+
+  <!-- 11 · ABLATION -->
+  <section class="slide" data-label="Action interface ablation">
+    <div class="kick"><span class="kn">08</span><span>Ablation · same tools, same prompt</span></div>
+    <h2 class="s-title">Only the action interface differs.</h2>
+    <div class="bars">
+      <div class="barrow base"><div class="nm">No-tool baseline</div><div class="track"><div class="bar" style="width:62%;"></div></div><div class="val">53.4</div></div>
+      <div class="barrow"><div class="nm">Single-pass code</div><div class="track"><div class="bar" style="width:69%;"></div></div><div class="val">55.2 <span class="pos">+1.8</span></div></div>
+      <div class="barrow"><div class="nm">Structured tool-call</div><div class="track"><div class="bar" style="width:75%;"></div></div><div class="val">56.7 <span class="pos">+3.3</span></div></div>
+      <div class="barrow ours"><div class="nm">SpatialClaw (code as action)</div><div class="track"><div class="bar" style="width:90%;"></div></div><div class="val">59.9 <span class="pos">+6.5</span></div></div>
+    </div>
+    <p class="body" style="margin-top:46px;font-size:27px;">Against prior agents on the same Gemma 4-31B backbone, SpatialClaw improves by <strong class="accent">+11.2 pp</strong> over SpaceTools-Toolshed.</p>
+  </section>
+
+  <!-- 12 · WHY IT WORKS -->
+  <section class="slide" data-label="Why it works">
+    <div class="kick"><span class="kn">09</span><span>Analysis</span></div>
+    <h2 class="s-title"><em>Composition</em> is the main driver.</h2>
+    <div class="stats">
+      <div class="stat"><div class="v">52<small>%</small></div><div class="l">Code composition: chaining tool calls into one program</div></div>
+      <div class="stat"><div class="v">20<small>%</small></div><div class="l">Control flow: branching over intermediate results</div></div>
+      <div class="stat"><div class="v">70<small>%+</small></div><div class="l">Of wins trace to capabilities a fixed API cannot provide</div></div>
+    </div>
+    <p class="body" style="margin-top:46px;max-width:66ch;font-size:27px;">Gains are largest precisely where chained geometric computation across frames and viewpoints is required, and the agent <strong>spontaneously</strong> adapts its tool composition to the question type, with no category-specific routing.</p>
+  </section>
+
+  <!-- 13 · TAKEAWAY -->
+  <section class="slide center" data-label="Takeaway">
+    <div class="takeaway">
+      <div class="lab">Key takeaway</div>
+      <p>The gains come from <strong>the action interface itself</strong>, not engineered utilities or perception tooling. Code is the right abstraction for spatial reasoning agents.</p>
+    </div>
+    <div class="bibtex">@article{cho2026spatialclaw,
+  title  = {SpatialClaw: Rethinking Action Interface for
+            Agentic Spatial Reasoning},
+  author = {Cho, Seokju and Hachiuma, Ryo and ... and Chen, Min-Hung},
+  year   = {2026}
+}</div>
+  </section>
+
+</deck-stage>
+
+<div class="corner-nv"><img src="static/images/nvidia-logo-horz.svg" alt="NVIDIA" /><span>SpatialClaw · NVIDIA Research</span></div>
+
+<script src="deck-stage.js"></script>
+<script src="theme.js"></script>
+<script>
+/* deck radar — theme aware */
+(function(){
+  var canvas=document.getElementById('deckRadar');
+  if(!canvas||typeof Chart==='undefined')return;
+  var B=[[0,61.3,58.3,52.0,50.8],[0,54.3,51.7,50.7,50.6],[0,63.6,57.3,60.4,58.0],[0,68.4,55.1,45.1,53.5],[1,72.8,57.5,52.9,67.1],[1,51.3,37.9,33.1,33.2],[1,63.3,55.2,53.9,51.7],[2,41.6,36.9,36.6,28.7],[2,41.9,35.6,30.2,32.0],[2,68.1,65.0,65.1,46.0],[2,48.5,48.0,33.6,44.4],[2,67.6,54.7,56.0,55.0],[2,62.9,45.3,43.0,43.7],[3,73.4,75.7,58.2,60.3],[3,60.7,59.9,52.7,53.9],[3,60.2,51.7,52.1,49.9],[4,72.2,69.8,46.8,67.7],[4,44.0,36.8,38.6,37.1],[4,77.0,74.8,74.6,50.3],[4,44.4,40.7,37.4,23.0]];
+  var names=['ERQA','Omni3D','OmniSpatial','SPBench','MindCube','MMSI','SPAR','MMSI-V','OSI','PAI','VSI-U','VSTI','DSI','BLINK','SpTree','ViewSp','CV','PercC','V-MME','V-MME2'];
+  var catL={0:'#4a7a00',1:'#2c5fa3',2:'#8b3c8b',3:'#b56b1c',4:'#0d8473'},catD={0:'#9bd13a',1:'#6aa6e8',2:'#cd7fcd',3:'#e0a050',4:'#3dc5b0'};
+  var T=80, ours=B.map(function(){return T;});
+  var nt=B.map(function(b){return +(b[2]*T/b[1]).toFixed(2);}),st=B.map(function(b){return +(b[3]*T/b[1]).toFixed(2);}),py=B.map(function(b){return +(b[4]*T/b[1]).toFixed(2);});
+  var chart=null;
+  function build(){
+    var dark=document.documentElement.getAttribute('data-theme')==='dark';
+    var cc=dark?catD:catL,grid=dark?'rgba(255,255,255,0.12)':'rgba(0,0,0,0.09)';
+    if(chart)chart.destroy();
+    chart=new Chart(canvas.getContext('2d'),{type:'radar',data:{labels:names,datasets:[
+      {data:nt,backgroundColor:'rgba(140,140,140,0.06)',borderColor:dark?'rgba(150,150,150,0.8)':'rgba(120,120,120,0.85)',borderWidth:1.4,borderDash:[5,4],pointRadius:0},
+      {data:py,backgroundColor:'rgba(216,118,26,0.08)',borderColor:dark?'#e0a050':'rgba(216,118,26,0.95)',borderWidth:1.6,pointRadius:0},
+      {data:st,backgroundColor:'rgba(48,104,180,0.12)',borderColor:dark?'#6aa6e8':'rgba(50,100,180,0.95)',borderWidth:1.8,pointRadius:0},
+      {data:ours,backgroundColor:'rgba(118,185,0,0.28)',borderColor:dark?'#85c814':'rgba(90,144,0,1)',borderWidth:3,pointBackgroundColor:'#76b900',pointRadius:3}
+    ]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{r:{min:0,max:100,ticks:{display:false},angleLines:{color:grid},grid:{color:grid},pointLabels:{color:function(c){return cc[B[c.index][0]];},font:{family:"'NVIDIA Sans',sans-serif",size:16,weight:'600'}}}}}});
+  }
+  build();
+  window.addEventListener('themechange',build);
+})();
+</script>
+</body>
+</html>

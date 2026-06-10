@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 380" width="460" height="380">
+  
+  <path d="M 75,95 C 55,115 70,150 55,175 C 50,177 45,178 38,180 C 45,182 50,183 55,185 C 70,210 55,245 75,265" fill="none" stroke="#76B900" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+    
+  </path>
+  <path d="M 375,95 C 395,115 380,150 395,175 C 400,177 405,178 412,180 C 405,182 400,183 395,185 C 380,210 395,245 375,265" fill="none" stroke="#76B900" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+    
+  </path>
+
+  
+  <g>
+    
+
+    <polygon points="225,35 340,110 340,250 225,325 110,250 110,110" fill="none" stroke="#76B900" stroke-width="7" stroke-linejoin="round"></polygon>
+
+    <line x1="225" y1="180" x2="110" y2="110" stroke="#76B900" stroke-width="7" stroke-linecap="round"></line>
+    <line x1="225" y1="180" x2="340" y2="110" stroke="#76B900" stroke-width="7" stroke-linecap="round"></line>
+    <line x1="225" y1="180" x2="225" y2="325" stroke="#76B900" stroke-width="7" stroke-linecap="round"></line>
+
+    <line x1="225" y1="180" x2="225" y2="35" stroke="#76B900" stroke-width="6.5" stroke-linecap="round" stroke-dasharray="2 14">
+      
+    </line>
+    <line x1="225" y1="180" x2="110" y2="250" stroke="#76B900" stroke-width="6.5" stroke-linecap="round" stroke-dasharray="2 14">
+      
+    </line>
+    <line x1="225" y1="180" x2="340" y2="250" stroke="#76B900" stroke-width="6.5" stroke-linecap="round" stroke-dasharray="2 14">
+      
+    </line>
+
+    <circle cx="225" cy="35" r="12" fill="#76B900"></circle>
+    <circle cx="340" cy="110" r="12" fill="#76B900"></circle>
+    <circle cx="340" cy="250" r="12" fill="#76B900"></circle>
+    <circle cx="225" cy="325" r="12" fill="#76B900"></circle>
+    <circle cx="110" cy="250" r="12" fill="#76B900"></circle>
+    <circle cx="110" cy="110" r="12" fill="#76B900"></circle>
+
+    <circle cx="225" cy="180" r="13" fill="#FFFFFF" stroke="#76B900" stroke-width="6"></circle>
+  </g>
+</svg>
