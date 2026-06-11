@@ -198,35 +198,10 @@
   </div>
 </section>
 
-<!-- ============================ 04 · METHOD ============================ -->
-<section class="section bg" data-screen-label="Method">
-  <div class="wrap">
-    <div class="kicker"><span class="kn">04</span><span>Method</span></div>
-    <div class="sec-head split">
-      <h2 class="sec-title">A persistent Python workspace, wrapped in a <em>code–inspect–revise</em> loop.</h2>
-      <p class="sec-lede">The agent plans, generates one cell of code, executes it in a stateful kernel, reads the feedback, and revises until it submits an answer.</p>
-    </div>
-
-    <div class="figure lit">
-      <img src="static/images/method_loop.png" alt="SpatialClaw's five-stage outer loop" />
-    </div>
-    <p class="figcap"><strong>SpatialClaw's five-stage outer loop.</strong> Plan, generate code, execute in a persistent Python kernel, assemble feedback (variable summaries, stdout, rendered images), and revise until a final answer is submitted.</p>
-
-    <div class="prim-grid">
-      <div class="prim"><span class="pn">01</span><h3>Persistent kernel</h3><p>All intermediate results (masks, depth maps, point clouds, plots) are ordinary Python variables that persist across steps for composition and reuse.</p></div>
-      <div class="prim"><span class="pn">02</span><h3>Visual inspection</h3><p><code>show(...)</code> embeds rendered images directly into the next observation, letting the agent visually verify masks and trajectories before committing.</p></div>
-      <div class="prim"><span class="pn">03</span><h3>Perception primitives</h3><p>SAM 3 for segmentation, Depth Anything 3 for reconstruction (depth, camera pose, point maps), plus a separate VLM session for grounding and commonsense.</p></div>
-      <div class="prim"><span class="pn">04</span><h3>Code as action</h3><p>One Python cell per step. Compose perception with NumPy / SciPy / Matplotlib, so a new analysis is a new composition, not a new API entry.</p></div>
-      <div class="prim"><span class="pn">05</span><h3>Revise on feedback</h3><p>The agent inspects variable summaries, tracebacks, and rendered visualizations, then revises. A wrong mask or implausible trajectory no longer ends the run.</p></div>
-      <div class="prim"><span class="pn">06</span><h3>Training-free &amp; uniform</h3><p>One system prompt, one tool set, no benchmark-specific engineering. It encodes general spatial-reasoning discipline rather than task templates.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================ 05 · RESULTS ============================ -->
+<!-- ============================ 04 · RESULTS ============================ -->
 <section class="section" data-screen-label="Results">
   <div class="wrap">
-    <div class="kicker"><span class="kn">05</span><span>Results</span></div>
+    <div class="kicker"><span class="kn">04</span><span>Results</span></div>
     <div class="sec-head split">
       <h2 class="sec-title">Consistent gains across <em>every</em> backbone.</h2>
       <p class="sec-lede">A <strong>+11.2 pp</strong> margin over the prior spatial agent, and improvement on 19 of 20 benchmarks on the same backbone.</p>
@@ -302,10 +277,10 @@
   </div>
 </section>
 
-<!-- ============================ 06 · ANALYSIS ============================ -->
+<!-- ============================ 05 · ANALYSIS ============================ -->
 <section class="section bg" data-screen-label="Analysis">
   <div class="wrap">
-    <div class="kicker"><span class="kn">06</span><span>Analysis &amp; insights</span></div>
+    <div class="kicker"><span class="kn">05</span><span>Analysis &amp; insights</span></div>
     <div class="sec-head split">
       <h2 class="sec-title">Four findings on <em>why</em> code works.</h2>
       <p class="sec-lede">The gains trace to the action interface itself, not to engineered utilities or to the perception tooling.</p>
@@ -383,10 +358,10 @@
   </div>
 </section>
 
-<!-- ============================ 07 · TRAJECTORIES ============================ -->
+<!-- ============================ 06 · TRAJECTORIES ============================ -->
 <section class="section" id="samples" data-screen-label="Trajectories">
   <div class="wrap" style="max-width:1240px;">
-    <div class="kicker"><span class="kn">07</span><span>Reasoning trajectories</span></div>
+    <div class="kicker"><span class="kn">06</span><span>Reasoning trajectories</span></div>
     <div class="sec-head split">
       <h2 class="sec-title">Browse real agent sessions.</h2>
       <p class="sec-lede">Every trajectory is a real run: the question, the code the agent wrote, the images it inspected, and the answer it submitted.</p>
@@ -465,10 +440,10 @@
   </div>
 </section>
 
-<!-- ============================ 08 · REFERENCES ============================ -->
+<!-- ============================ 07 · REFERENCES ============================ -->
 <section class="section bg" id="references" data-screen-label="References">
   <div class="wrap">
-    <div class="kicker"><span class="kn">08</span><span>References</span></div>
+    <div class="kicker"><span class="kn">07</span><span>References</span></div>
     <div class="sec-head"><h2 class="sec-title">References</h2></div>
     <div class="refs-grid">
       <div>
