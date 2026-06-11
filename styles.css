@@ -312,8 +312,46 @@ table.tbl tr.base td{color:var(--muted);font-style:italic;}
 /* =================================================================
    Findings
    ================================================================= */
-.finding{border-top:1px solid var(--line);padding:clamp(2rem,4vw,2.8rem) 0;}
-.finding-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;}
+/* Findings — accordion (title-only by default, expand on click) */
+details.finding{border-top:1px solid var(--line);padding:0;interpolate-size:allow-keywords;}
+details.finding:last-of-type{border-bottom:1px solid var(--line);}
+summary.finding-head{
+  display:flex;align-items:flex-start;gap:1rem .9rem;flex-wrap:nowrap;
+  margin:0;padding:clamp(1.4rem,3.2vw,2rem) 0;
+  list-style:none;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
+}
+summary.finding-head::-webkit-details-marker{display:none;}
+summary.finding-head::marker{content:"";}
+.finding-n{align-self:flex-start;padding-top:.34em;}
+.finding-title{flex:1 1 auto;transition:color .2s ease;}
+summary.finding-head:hover .finding-title,
+details.finding[open]>summary.finding-head .finding-title{color:var(--accent-ink);}
+summary.finding-head::after{
+  content:"\f078";font-family:"Font Awesome 5 Free";font-weight:900;
+  flex:0 0 auto;margin-left:auto;align-self:center;
+  display:grid;place-items:center;width:2.15rem;height:2.15rem;border-radius:50%;
+  border:1px solid var(--line-2);font-size:.74rem;color:var(--muted);
+  transition:transform .35s cubic-bezier(.4,0,.2,1),color .2s ease,background .2s ease,border-color .2s ease;
+}
+summary.finding-head:hover::after{color:var(--accent-ink);border-color:var(--accent);background:var(--accent-wash);}
+details.finding[open]>summary.finding-head::after{transform:rotate(180deg);color:var(--bg);background:var(--accent);border-color:var(--accent);}
+.finding-body{padding-bottom:clamp(1.8rem,3.6vw,2.6rem);}
+.finding-body>:first-child{margin-top:0;}
+/* universal reveal — fade/slide in on open; never hides content on its own */
+details.finding[open] .finding-body{animation:findingReveal .42s cubic-bezier(.2,.6,.2,1) both;}
+/* smooth height — gated so height:0 only applies where height:auto can animate back open */
+@supports (interpolate-size: allow-keywords){
+  details.finding::details-content{
+    height:0;overflow:hidden;
+    transition:height .42s cubic-bezier(.4,0,.2,1),content-visibility .42s allow-discrete;
+  }
+  details.finding[open]::details-content{height:auto;}
+}
+@keyframes findingReveal{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:none;}}
+@media (prefers-reduced-motion:reduce){
+  summary.finding-head::after,details.finding::details-content{transition:none;}
+  details.finding[open] .finding-body{animation:none;}
+}
 .finding-n{font-family:var(--font-mono);font-weight:700;font-size:.85rem;letter-spacing:.08em;color:var(--accent-ink);flex:0 0 auto;}
 .finding-title{font-weight:600;font-size:clamp(1.2rem,2.2vw,1.65rem);line-height:1.25;letter-spacing:-0.015em;margin:0;}
 .finding-title em{font-style:italic;color:var(--accent-ink);}

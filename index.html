@@ -10,7 +10,7 @@
 <meta property="og:description" content="A training-free spatial reasoning agent that uses code as the action interface, with a persistent Python kernel for compositional perception." />
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-<link rel="stylesheet" href="styles.css?v=4" />
+<link rel="stylesheet" href="styles.css?v=5" />
 <link rel="stylesheet" href="walkthrough.css" />
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
@@ -311,8 +311,9 @@
       <p class="sec-lede">The gains trace to the action interface itself, not to engineered utilities or to the perception tooling.</p>
     </div>
 
-    <div class="finding">
-      <div class="finding-head"><span class="finding-n">Finding 1</span><h3 class="finding-title">SpatialClaw generalizes across diverse spatial tasks even <em>without</em> pre-defined utility tools.</h3></div>
+    <details class="finding">
+      <summary class="finding-head"><span class="finding-n">Finding 1</span><h3 class="finding-title">SpatialClaw generalizes across diverse spatial tasks even <em>without</em> pre-defined utility tools.</h3></summary>
+      <div class="finding-body">
       <p>We ablate two design choices. <strong>(I) No utility functions:</strong> remove all utility wrappers (<code>tools.Mask</code>, <code>tools.Geometry</code>, …), keeping only core perception tools (SAM 3, DA 3) and scientific libraries (NumPy, SciPy). <strong>(II) No perception tools:</strong> remove SAM 3 / DA 3 entirely, leaving only the code-as-action interface with scientific libraries.</p>
       <p>Variant (I) matches the full configuration (56.4 vs 56.9 avg). The persistent kernel with scientific primitives largely compensates for the absent utility tools. Variant (II) still improves over the no-tool baseline by <strong>+2.7 pp</strong>, isolating the contribution of the action interface itself, <span class="mark">independent of the perception tools</span>.</p>
       <div class="tbl-wrap" style="margin-top:1.4rem;">
@@ -327,10 +328,12 @@
         </table>
       </div>
       <p class="tbl-foot">Gemma 4-26B-A4B backbone, 15 benchmarks, 500 samples each.</p>
-    </div>
+      </div>
+    </details>
 
-    <div class="finding">
-      <div class="finding-head"><span class="finding-n">Finding 2</span><h3 class="finding-title">The agent <em>spontaneously</em> adapts its tool composition to the question type.</h3></div>
+    <details class="finding">
+      <summary class="finding-head"><span class="finding-n">Finding 2</span><h3 class="finding-title">The agent <em>spontaneously</em> adapts its tool composition to the question type.</h3></summary>
+      <div class="finding-body">
       <div class="finding-cols v">
         <div class="figure lit"><img src="static/images/primitive_usage_by_category.png" alt="Primitive usage by category" /><p class="figcap" style="margin-top:.7rem;">Primitive-usage frequency across 13 meta-categories.</p></div>
         <div>
@@ -343,17 +346,21 @@
           <p>This <span class="mark">spontaneous, task-adaptive composition</span> is precisely the behavior structured tool-call interfaces struggle to elicit, and it is what an expressive action interface unlocks.</p>
         </div>
       </div>
-    </div>
+      </div>
+    </details>
 
-    <div class="finding">
-      <div class="finding-head"><span class="finding-n">Finding 3</span><h3 class="finding-title">Gains are largest where chained geometric computation across frames and viewpoints is required.</h3></div>
+    <details class="finding">
+      <summary class="finding-head"><span class="finding-n">Finding 3</span><h3 class="finding-title">Gains are largest where chained geometric computation across frames and viewpoints is required.</h3></summary>
+      <div class="finding-body">
       <div class="figure lit" style="margin-top:.6rem;"><img src="static/images/pairwise_winloss_by_meta_category.png" alt="Pairwise win/loss by meta-category" /></div>
       <p>SpatialClaw secures a net advantage in <strong>11 of 13</strong> meta-categories over both Structured tool-call and Single-pass code. The largest lifts (<strong>+6 to +9 pp</strong>) concentrate in <em>Camera motion</em>, <em>Multi-view / viewpoint reasoning</em>, and <em>Relative direction</em>, the categories that require chained geometric computation across frames and viewpoints. Where gains are smaller, the bottleneck is perception quality on tasks already near-saturated by the backbone VLM.</p>
       <p>Together, this breakdown confirms that the <strong>expressive action interface</strong>, rather than model capacity or tool coverage, is the primary driver of performance.</p>
-    </div>
+      </div>
+    </details>
 
-    <div class="finding">
-      <div class="finding-head"><span class="finding-n">Finding 4</span><h3 class="finding-title"><em>Composition</em> is the main driver of SpatialClaw's gains over structured tool-call.</h3></div>
+    <details class="finding">
+      <summary class="finding-head"><span class="finding-n">Finding 4</span><h3 class="finding-title"><em>Composition</em> is the main driver of SpatialClaw's gains over structured tool-call.</h3></summary>
+      <div class="finding-body">
       <div class="finding-cols w">
         <div>
           <p>For every sample where SpatialClaw is correct but structured tool-call fails, an LLM judge (Gemini 3 Pro) reads both reasoning traces and the ground-truth answer, then assigns attribution categories:</p>
@@ -366,7 +373,8 @@
         </div>
         <div class="figure lit"><img src="static/images/win_attribution_breakdown.png" alt="Win attribution breakdown" /><p class="figcap" style="margin-top:.7rem;">LLM-as-judge attribution of wins over structured tool-call.</p></div>
       </div>
-    </div>
+      </div>
+    </details>
 
     <div class="takeaway">
       <div class="lab">Key takeaway</div>
