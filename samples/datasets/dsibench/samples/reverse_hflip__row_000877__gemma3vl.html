@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DSI-Bench — Gemma4-31B — sample reverse_hflip__row_000877</title>
+  <link rel="stylesheet" href="../../../static/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="crumb"><a href="../../../index.html">Highlights</a> / DSI-Bench / sample reverse_hflip__row_000877<span class="nav-hint" aria-hidden="true"><kbd>←</kbd> <kbd>→</kbd> to navigate</span></div>
+      <h1>DSI-Bench — Gemma4-31B — sample reverse_hflip__row_000877</h1>
+      
+    </div>
+  </header>
+  <main class="container">
+
+<a class="sample-nav prev" href="../../omni3d/samples/91__gemma3vl.html" aria-label="Previous sample" title="Previous sample">‹</a><a class="sample-nav next" href="../../mmsi/samples/538__gemma3vl.html" aria-label="Next sample" title="Next sample">›</a>
+<div class="qa-card">
+  <div class="keyframes"><div class="label">Keyframes</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse_hflip__row_000877/kf_input_00.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse_hflip__row_000877/kf_input_01.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse_hflip__row_000877/kf_input_02.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse_hflip__row_000877/kf_input_03.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse_hflip__row_000877/kf_input_04.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse_hflip__row_000877/kf_input_05.jpg" alt=""></div></div>
+  <div class="label">Question</div>
+  <div class="q">In this video clip, relative to its starting orientation and location, how is the observer&#x27;s location moving?
+
+This is a multiple-choice question about how an object or the camera moves in 3D space within the video clip. Choose the option that best matches the motion you observe and respond with only the option letter (A, B, C, or D).
+A. Orbiting clockwise
+B. Orbiting counterclockwise
+C. Moving downward
+D. Moving upward</div>
+  <div class="pred-row" style="margin-top:14px">
+    <div class="pred-cell"><span class="label" style="margin:0">Ground truth</span>
+      <span class="gt-pill">C</span></div>
+    <div class="pred-cell"><span class="method-pill pill-agent">SpatialClaw</span>
+      <span style="font-family:ui-monospace,Menlo,monospace">C</span>
+      <span class="tick-ok">✓</span></div>
+    <div class="pred-cell"><span class="q-badge q-only_agent">Agent wins</span></div>
+  </div>
+</div>
+<div class="baseline-tabs" role="tablist" aria-label="Baseline comparison"><button type="button" class="baseline-tab" data-pane="cot">No-tool baseline</button><button type="button" class="baseline-tab" data-pane="single-pass">Single-pass code</button><button type="button" class="baseline-tab" data-pane="react">Structured tool-call</button><button type="button" class="baseline-tab" data-pane="spacetools">SpaceTools</button></div>
+<div class="split agent-only">
+  <div class="left-stack">
+    <div class="baseline-pane" data-pane="cot"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-cot">No-tool Baseline</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="cot-md markdown"><p>To determine the observer's (camera's) motion, let's analyze the visual cues in the video:</p>
+<ol>
+<li><strong>Central Object:</strong> The white lighthouse serves as the primary focal point of the scene.</li>
+<li><strong>Foreground Motion:</strong> Observe the rocks in the foreground. As the video progresses, these rocks shift to the left relative to the frame. This indicates that the camera is moving to the right.</li>
+<li><strong>Perspective Change:</strong> The angle from which we view the lighthouse and the surrounding landscape changes smoothly. The camera is not just panning (rotating on a fixed point) but is physically changing its position in space.</li>
+<li><strong>Orbital Path:</strong> Since the camera is moving to the right while keeping the lighthouse centered in the frame, it is following a curved path around the lighthouse.</li>
+<li><strong>Direction of Orbit:</strong> If you imagine a top-down view of the scene with the lighthouse at the center, a camera moving from left to right while facing the center is moving in a clockwise direction.</li>
+</ol>
+<p>Therefore, the observer's location is orbiting the lighthouse clockwise.</p>
+<p><span class="boxed">A</span></p>
+</div></div></div><div class="baseline-pane" data-pane="single-pass"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-spcode">Single-pass code</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="single-pass-card"><div class="label">Purpose</div><div class="body prose">Determine the observer&#x27;s (camera&#x27;s) motion by reconstructing the scene and visualizing the ego-trajectory in a Bird&#x27;s-Eye View (BEV).</div><div class="label">Reasoning</div><div class="body prose">To accurately determine if the camera is orbiting or moving linearly, I need to see its path in 3D space. `tools.Reconstruct` provides the camera&#x27;s pose for each frame, and `render_bev(ego_trajectory=True)` will project this path onto a 2D top-down map. By observing the direction and curvature of the ego-trajectory (the green-to-yellow dashed line), I can distinguish between clockwise orbiting, counterclockwise orbiting, or vertical movement.</div><div class="label">Next Goal</div><div class="body prose">Analyze the BEV trajectory to select the correct multiple-choice option.</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># Reconstruct the scene using all provided key frames</span>
+<span class="n">recon</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Reconstruct</span><span class="o">.</span><span class="n">Reconstruct</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)</span>
+
+<span class="c1"># Render the BEV with the ego-trajectory enabled to see the camera&#39;s path</span>
+<span class="c1"># We don&#39;t have specific masks yet, but ego_trajectory=True will show the camera path.</span>
+<span class="n">bev_vis</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">render_bev</span><span class="p">(</span><span class="n">ego_trajectory</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Show the BEV visualization</span>
+<span class="n">show</span><span class="p">(</span><span class="n">bev_vis</span><span class="p">)</span>
+
+<span class="c1"># Also, let&#39;s check the camera positions over time to be sure</span>
+<span class="n">cam_positions</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">recon</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">:</span>
+    <span class="n">pose</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">extrinsics</span><span class="p">[</span><span class="n">fi</span><span class="p">]</span>
+    <span class="n">cam_positions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pose</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+<span class="n">cam_positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cam_positions</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Camera positions:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cam_positions</span><span class="p">)</span>
+
+<span class="c1"># Calculate the center of the trajectory to see if it&#39;s orbiting something</span>
+<span class="n">center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">cam_positions</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">relative_positions</span> <span class="o">=</span> <span class="n">cam_positions</span> <span class="o">-</span> <span class="n">center</span>
+
+<span class="c1"># Use the 2D projection on the XZ plane (ground plane) to determine rotation</span>
+<span class="c1"># X and Z are the horizontal axes in the world frame</span>
+<span class="n">x_coords</span> <span class="o">=</span> <span class="n">relative_positions</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">z_coords</span> <span class="o">=</span> <span class="n">relative_positions</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+
+<span class="c1"># Calculate angles to determine the direction of rotation</span>
+<span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">z_coords</span><span class="p">,</span> <span class="n">x_coords</span><span class="p">)</span>
+<span class="n">angle_diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span>
+
+<span class="c1"># Handle wrap-around for arctan2</span>
+<span class="n">angle_diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle_diffs</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle_diffs</span><span class="p">))</span>
+<span class="n">avg_rotation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">angle_diffs</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Average angle change per frame: </span><span class="si">{</span><span class="n">avg_rotation</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">avg_rotation</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rotation is counter-clockwise&quot;</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">avg_rotation</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rotation is clockwise&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No rotation detected&quot;</span><span class="p">)</span>
+
+<span class="c1"># Check for vertical movement (Y axis)</span>
+<span class="n">y_start</span> <span class="o">=</span> <span class="n">cam_positions</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">y_end</span> <span class="o">=</span> <span class="n">cam_positions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Y start: </span><span class="si">{</span><span class="n">y_start</span><span class="si">}</span><span class="s2">, Y end: </span><span class="si">{</span><span class="n">y_end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">y_end</span> <span class="o">-</span> <span class="n">y_start</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span> <span class="c1"># Significant vertical change</span>
+    <span class="k">if</span> <span class="n">y_end</span> <span class="o">&gt;</span> <span class="n">y_start</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Moving upward&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Moving downward&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No significant vertical movement&quot;</span><span class="p">)</span>
+
+<span class="c1"># Final decision based on results</span>
+<span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">avg_rotation</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.01</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">avg_rotation</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ReturnAnswer</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">)</span> <span class="c1"># Counter-clockwise</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ReturnAnswer</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">)</span> <span class="c1"># Clockwise</span>
+<span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">y_end</span> <span class="o">-</span> <span class="n">y_start</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">y_end</span> <span class="o">&gt;</span> <span class="n">y_start</span><span class="p">:</span>
+        <span class="n">ReturnAnswer</span><span class="p">(</span><span class="s2">&quot;D&quot;</span><span class="p">)</span> <span class="c1"># Upward</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ReturnAnswer</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">)</span> <span class="c1"># Downward</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># Fallback if neither is clear, though one should be.</span>
+    <span class="n">ReturnAnswer</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out"> [image: show_0001] 
+Camera positions:
+ [[ 3.90435945e-01  1.04305882e+00  1.18478607e-03]
+ [ 3.60477161e-01  1.01785001e+00  1.34187105e-03]
+ [ 3.45644674e-01  1.00549671e+00  4.43053922e-03]
+ [ 3.11224235e-01  9.79670614e-01  2.70114873e-03]
+ [ 2.79844808e-01  9.53928226e-01  6.33003513e-03]
+ [ 2.50927305e-01  9.28455017e-01  3.71976826e-03]
+ [ 2.18623922e-01  9.03067095e-01  7.48648821e-03]
+ [ 1.99006552e-01  8.86550548e-01  5.97828537e-03]
+ [ 1.61076161e-01  8.53276415e-01  4.20789933e-03]
+ [ 1.27300193e-01  8.25215162e-01 -8.35904413e-04]
+ [ 9.21597976e-02  7.97270393e-01  9.38939144e-03]
+ [ 6.17232569e-02  7.69954334e-01  6.34440993e-03]
+ [ 4.01965683e-02  7.53722192e-01  3.41698989e-04]
+ [-1.60971301e-04  7.17801136e-01 -5.08712949e-04]
+ [-3.40881125e-02  6.94012525e-01 -4.79211467e-03]
+ [-6.30869818e-02  6.62525079e-01 -5.55210183e-03]
+ [-9.66664272e-02  6.35330890e-01 -4.42481848e-03]
+ [-1.15757864e-01  6.17529358e-01 -5.04757094e-03]
+ [-1.51060161e-01  5.86727157e-01 -7.82152361e-03]
+ [-1.80830798e-01  5.61592079e-01 -6.37983045e-03]
+ [-2.08604718e-01  5.37615183e-01 -1.75762921e-03]
+ [-2.34776778e-01  5.13652286e-01 -1.26956546e-03]
+ [-2.51171857e-01  5.00378091e-01 -1.53338631e-03]
+ [-2.83943486e-01  4.73804855e-01  1.52028839e-02]
+ [-3.01775476e-01  4.53462858e-01  1.75993025e-02]
+ [-3.21271341e-01  4.36000994e-01  3.04519005e-02]
+ [-3.38799098e-01  4.19243034e-01  3.17712184e-02]
+ [-3.52548705e-01  4.08530824e-01  3.69153562e-02]
+ [-3.75288846e-01  3.92946341e-01  6.01243583e-02]
+ [-3.93080099e-01  3.80059215e-01  7.95884336e-02]
+ [-4.06975645e-01  3.69782925e-01  8.50653842e-02]
+ [-4.18075520e-01  3.63385223e-01  9.82772359e-02]]
+Average angle change per frame: -0.10992400175283627
+Rotation is clockwise
+Y start: 1.0430588176712976, Y end: 0.36338522</pre><div class="label">show_0001</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse_hflip__row_000877/show_0001_img_0.jpg" alt=""></div><div class="label">Final answer</div><div class="body prose">A</div></div></div></div><div class="baseline-pane" data-pane="react"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-react">Structured tool-call</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="timeline">
+<div class="tl-step tl-plan">
+  <div class="kind">Plan</div>
+  <div class="body markdown"><h3>Task Analysis</h3>
+<p>The objective is to determine the 3D motion of the observer (the camera) relative to its starting position and orientation. The options suggest either a rotational motion in a horizontal plane (orbiting clockwise or counterclockwise) or a linear motion along the vertical axis (moving upward or downward).</p>
+<p><strong>Coordinate System Resolution:</strong>
+The question asks about the observer's location in 3D space. I will use the <strong>World Space</strong> provided by the reconstruction tool. In this system:</p>
+<ul>
+<li><strong>+Y</strong> is aligned with gravity (Up).</li>
+<li>The <strong>XZ-plane</strong> represents the ground/horizontal plane.</li>
+<li>Camera positions are extracted from the translation component of the camera-to-world (c2w) matrices.</li>
+<li>&quot;Orbiting&quot; will be analyzed by looking at the trajectory in the XZ-plane.</li>
+<li>&quot;Upward/Downward&quot; will be analyzed by looking at the change in the Y-coordinate over time.</li>
+</ul>
+<h3>Information Needs</h3>
+<p>To answer this reliably, I need the sequence of 3D camera positions across the video clip.</p>
+<ol>
+<li><strong>Camera Trajectory</strong>: A set of (X, Y, Z) coordinates for the camera at each sampled frame.</li>
+<li><strong>Visual Trajectory</strong>: A top-down (BEV) view of the camera's path to identify orbiting patterns.</li>
+<li><strong>Height Profile</strong>: A time-series plot of the camera's Y-coordinate to identify vertical motion.</li>
+</ol>
+<h3>Computation Plan</h3>
+<ol>
+<li>
+<p><strong>3D Reconstruction</strong>:</p>
+<ul>
+<li>Perform a full reconstruction of the scene using all available frames to obtain accurate camera poses.</li>
+<li><code>recon = tools.Reconstruct.Reconstruct(InputImages)</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Horizontal Motion Analysis (Orbiting)</strong>:</p>
+<ul>
+<li>Render a Bird's Eye View (BEV) focusing on the camera's path.</li>
+<li><code>bev_vis = recon.render_bev(masks=None, ego_trajectory=True)</code></li>
+<li><code>show(bev_vis)</code></li>
+<li>Analyze the trajectory line:
+<ul>
+<li>If the path forms an arc or circle, determine the direction of the arrowheads (red $\rightarrow$ blue).</li>
+<li>Clockwise vs. Counterclockwise will be determined by the progression of the path in the XZ-plane.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Vertical Motion Analysis (Up/Down)</strong>:</p>
+<ul>
+<li>Extract the Y-coordinate (height) of the camera for every reconstructed frame.</li>
+<li><code>positions = [recon.extrinsics[fi][:3, 3] for fi in recon.frame_indices]</code></li>
+<li><code>y_coords = np.array([p[1] for p in positions])</code></li>
+<li>Plot the height over time to see the trend.</li>
+<li><code>y_plot = tools.Graph.plot(y_coords, y_label=&quot;Height (m)&quot;, title=&quot;Camera Height over Time&quot;)</code></li>
+<li><code>show(y_plot)</code></li>
+<li>Analyze the plot: A consistent increase indicates &quot;Moving upward&quot;; a consistent decrease indicates &quot;Moving downward&quot;.</li>
+</ul>
+</li>
+<li>
+<p><strong>Cross-Validation</strong>:</p>
+<ul>
+<li>Compare the BEV trajectory with the height plot. If the BEV shows a point or a straight line and the height plot shows a strong trend, the motion is vertical. If the height plot is flat and the BEV shows a curve, the motion is orbiting.</li>
+<li>If the reconstruction seems noisy (e.g., erratic jumps in position), I will use <code>vlm.ask_with_thinking</code> on a selection of frames (start, middle, end) to qualitatively describe the camera's movement (e.g., &quot;Is the camera moving higher or lower?&quot;, &quot;Is the camera circling an object?&quot;).</li>
+</ul>
+</li>
+</ol>
+<h3>Verification Checklist</h3>
+<pre><code class="language-json">[
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Verify that the reconstruction is stable and not producing erratic camera jumps&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Confirm the direction of the BEV trajectory using the red-to-blue color gradient&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Check if the change in Y-coordinate is significant relative to the overall scale of motion&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Cross-reference numerical trajectory data with visual BEV and height plots&quot;}
+]
+</code></pre>
+<h3>Fallbacks</h3>
+<ul>
+<li><strong>Reconstruction Failure</strong>: If <code>tools.Reconstruct</code> fails or provides low-confidence poses (e.g., due to lack of parallax), I will rely on <code>vlm.ask_with_thinking</code> by providing a sequence of frames and asking specifically about the camera's perceived motion relative to the scene.</li>
+<li><strong>Ambiguous Trajectory</strong>: If the motion is a combination (e.g., orbiting while rising), I will prioritize the most dominant component as per the multiple-choice options.</li>
+</ul>
+</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 0</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Reconstruct the 3D scene to obtain camera poses.</div><div class="label">Reasoning</div><div class="body prose">To analyze the camera&#x27;s trajectory (orbiting or vertical motion), I need the 3D coordinates of the camera over time. `tools.Reconstruct.Reconstruct` provides these via the `extrinsics` attribute.</div><div class="label">Next Goal</div><div class="body prose">Render a BEV of the camera trajectory to check for orbiting motion.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools.Reconstruct.Reconstruct&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;frames&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;InputImages[:32]&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 0 Execution Feedback ===
+
+[SUCCESS] Code executed in 10.26s.
+
+[Variables] New/changed:
+  result_0: Reconstruction, frames=[0..87] (32 frames)
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 1</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Visualize the camera&#x27;s horizontal trajectory in a top-down view.</div><div class="label">Reasoning</div><div class="body prose">A BEV render with `ego_trajectory=True` will show the camera&#x27;s path in the world XZ-plane. If the camera is orbiting, the trajectory will appear as an arc or circle. The color gradient (red to blue) and arrowheads will indicate the direction (clockwise vs. counterclockwise).</div><div class="label">Next Goal</div><div class="body prose">Inspect the BEV image and then analyze vertical motion.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;show&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;result_0.render_bev(masks=None, ego_trajectory=True)&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out"> [image: show_0001] 
+</pre><div class="label">show_0001</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse_hflip__row_000877/show_0001_img_0.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 1 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.21s.
+
+[Variables] New/changed:
+  result_1: NoneType
+
+[Inline Images] 1 image(s) attached below.
+  Labels: result_0.render_bev(masks=None, ego_trajectory=True)
+[show() budget] 249/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 2</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Analyze the camera&#x27;s vertical motion (height) over time.
+**Reasoning**: The BEV plot shows primarily horizontal motion (right to left), but the options include &quot;Moving upward&quot; and &quot;Moving downward&quot;. I need to check the Y-coordinates of the camera poses to see if there is a significant vertical trend.
+**Next Goal**: Plot the camera&#x27;s height over time to determine if it&#x27;s moving up or down.
+**Tool Call (translated)**:
+```python
+# Extract Y-coordinates from the camera poses (extrinsics)
+# result_0.extrinsics is a dict-like object where result_0.extrinsics[fi] is the 4x4 c2w matrix.
+# The camera position is the 4th column: pose[:3, 3]. Y is index 1.
+import numpy as np
+positions = [result_0.extrinsics[fi][:3, 3] for fi in result_0.frame_indices]
+y_coords = np.array([p[1] for p in positions])
+result_2 = tools.Graph.plot(y_coords, y_label=&quot;Height (m)&quot;, title=&quot;Camera Height over Time&quot;)
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 2 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 4</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Qualitatively determine the camera&#x27;s 3D motion across the video.</div><div class="label">Reasoning</div><div class="body prose">The BEV trajectory in `result_1` shows the camera moving from right to left in a shallow arc. To distinguish between &quot;orbiting&quot; and &quot;vertical motion&quot; (and to determine the direction of the orbit), I will use the VLM to analyze the visual cues across the video, such as the changing perspective of the lighthouse and the stability of the horizon.</div><div class="label">Next Goal</div><div class="body prose">Use the VLM&#x27;s interpretation to select the correct multiple-choice option.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vlm.ask_with_thinking&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;visual_input&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;InputImages[0]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;InputImages[15]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;InputImages[31]&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;question&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Analyze the camera movement across these frames. Is the camera orbiting the scene (clockwise or counter-clockwise), or is it moving primarily upward or downward? Look at the position of the lighthouse and the horizon to determine the motion.&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out">[VLM Q | thinking] Analyze the camera movement across these frames. Is the camera orbiting the scene (clockwise or counter-clockwise), or is it moving primarily upward or downward? Look at the position of the lighthouse and the horizon to determine the motion.
+[VLM A | thinking] Based on the provided frames, the camera is not orbiting the scene nor is it moving primarily upward or downward. Instead, the camera is moving **forward (dolly-in)** toward the subjects.
+
+This is evident because:
+- **Lighthouse and Plane:** Both the lighthouse (on the left) and the plane (on the right) become significantly larger in the frame from frame 0 to frame 2, indicating the camera is getting closer to them.
+- **Horizon:** The horizon line remains relatively stable in its vertical position across all three frames, ruling out primary upward or downward movement.
+- **Relative Positions:** The lighthouse remains on the left and the plane remains on the right; there is no horizontal shift in their relative positions that would suggest an orbiting motion.
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 4 Execution Feedback ===
+
+[SUCCESS] Code executed in 549.86s.
+
+[Output]
+[VLM Q | thinking] Analyze the camera movement across these frames. Is the camera orbiting the scene (clockwise or counter-clockwise), or is it moving primarily upward or downward? Look at the position of the lighthouse and the horizon to determine the motion.
+[VLM A | thinking] Based on the provided frames, the camera is not orbiting the scene nor is it moving primarily upward or downward. Instead, the camera is moving **forward (dolly-in)** toward the subjects.
+
+This is evident because:
+- **Lighthouse and Plane:** Both the lighthouse (on the left) and the plane (on the right) become significantly larger in the frame from frame 0 to frame 2, indicating the camera is getting closer to them.
+- **Horizon:** The horizon line remains relatively stable in its vertical position across all three frames, ruling out primary upward or downward movement.
+- **Relative Positions:** The lighthouse remains on the left and the plane remains on the right; there is no horizontal shift in their relative positions that would suggest an orbiting motion.
+
+[Variables] New/changed:
+  result_4: str
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 5</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Determine the observer&#x27;s motion based on the BEV trajectory and visual evidence.</div><div class="label">Reasoning</div><div class="body prose">1. **BEV Analysis**: The Bird&#x27;s Eye View (BEV) in `result_1` shows the camera&#x27;s trajectory starting at approximately `(0.4, 0.0)` and moving to approximately `(-0.4, -0.1)`. This is a clear right-to-left motion across the scene. In a top-down coordinate system, moving from the right side to the left side around a central point of interest (the scene center/lighthouse) corresponds to a counter-clockwise orbital motion.
+2. **Vertical Analysis**: The VLM analysis in `result_4` noted that the horizon line remains relatively stable, which argues against significant upward or downward motion.
+3. **Visual Evidence**: The frames show the camera moving laterally from right to left, which is consistent with the BEV trajectory.
+4. **Conclusion**: The most accurate description among the choices is &quot;Orbiting counterclockwise&quot;.</div><div class="label">Next Goal</div><div class="body prose">Submit the final answer.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ReturnAnswer&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;answer&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;B&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out">[ReturnAnswer] Answer submitted: B
+</pre></div></div>
+</div>
+<div class="tl-step tl-answer">
+  <div class="kind">Answer</div>
+  <div class="body prose">B</div>
+</div></div></div></div><div class="baseline-pane" data-pane="spacetools"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-spacetools">SpaceTools</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="timeline"><div class="tl-step tl-st-reasoning"><div class="kind">Reasoning</div><div class="body markdown"><p>Based on the sequence of images, the camera (observer) is moving in a circular path around the lighthouse. As the video progresses, the lighthouse shifts from the left side of the frame towards the center, and the observer's perspective changes in a way that indicates they are orbiting the central landmark. Specifically, the movement follows a clockwise direction relative to the lighthouse.</p>
+<p>A</p>
+</div></div><div class="tl-step tl-st-complete"><div class="kind">Final answer</div><div class="body markdown"><p>Based on the sequence of images, the camera (observer) is moving in a circular path around the lighthouse. As the video progresses, the lighthouse shifts from the left side of the frame towards the center, and the observer's perspective changes in a way that indicates they are orbiting the central landmark. Specifically, the movement follows a clockwise direction relative to the lighthouse.</p>
+<p>A</p>
+</div></div><div class="tl-step tl-st-final"><div class="kind">Final response</div><div class="body markdown"><p>Based on the sequence of images, the camera (observer) is moving in a circular path around the lighthouse. As the video progresses, the lighthouse shifts from the left side of the frame towards the center, and the observer's perspective changes in a way that indicates they are orbiting the central landmark. Specifically, the movement follows a clockwise direction relative to the lighthouse.</p>
+<p>A</p>
+</div></div></div></div></div>
+  </div>
+  
+<div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-agent">SpatialClaw</span></h2>
+    <div class="verdict"><span class='tick-ok'>✓ Correct</span></div>
+  </div>
+  <div class="timeline">
+<div class="tl-step tl-plan">
+  <div class="kind">Plan</div>
+  <div class="body markdown"><p><strong>Task Analysis</strong>
+The objective is to determine the 3D motion of the observer (camera) relative to its initial state. The target variable is the camera's trajectory in world space.</p>
+<ul>
+<li><strong>Coordinate System</strong>: The world space provided by the reconstruction is gravity-aligned, where $+Y$ is &quot;up&quot;. Therefore, &quot;moving upward&quot; corresponds to an increase in the Y-coordinate of the camera position, and &quot;moving downward&quot; corresponds to a decrease. &quot;Orbiting&quot; refers to a curved path in the XZ (ground) plane. Clockwise vs. counter-clockwise is determined from a top-down (BEV) perspective.</li>
+<li><strong>Answer Format</strong>: Multiple choice (A, B, C, or D).</li>
+</ul>
+<p><strong>Information Needs</strong>
+To reliably determine the camera's motion, I need the sequence of camera poses (extrinsics) across the video. Specifically:</p>
+<ol>
+<li>The 3D world positions of the camera center for all frames.</li>
+<li>The trajectory of the camera in the XZ plane to detect orbiting.</li>
+<li>The trajectory of the camera along the Y-axis to detect vertical movement.</li>
+<li>A visual representation of the camera's path (BEV) to confirm the direction of any orbit.</li>
+</ol>
+<p><strong>Computation Plan</strong></p>
+<ol>
+<li>
+<p><strong>3D Reconstruction</strong>: Perform a full reconstruction of the sampled frames to obtain camera extrinsics.</p>
+<ul>
+<li><code>recon = tools.Reconstruct.Reconstruct(InputImages)</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Trajectory Extraction</strong>:</p>
+<ul>
+<li>Iterate through <code>recon.frame_indices</code> and extract the camera position from each pose: <code>cam_pos = recon.extrinsics[fi][:3, 3]</code>.</li>
+<li>Store these positions in a numpy array <code>trajectory</code> of shape <code>(num_frames, 3)</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Vertical Motion Analysis</strong>:</p>
+<ul>
+<li>Extract the Y-coordinates: <code>y_coords = trajectory[:, 1]</code>.</li>
+<li>Plot the Y-coordinates over time using <code>tools.Graph.plot(y_coords, y_label=&quot;Height (m)&quot;, title=&quot;Camera Height over Time&quot;)</code>.</li>
+<li>Analyze the trend: A consistent increase indicates &quot;Moving upward&quot;; a consistent decrease indicates &quot;Moving downward&quot;.</li>
+</ul>
+</li>
+<li>
+<p><strong>Horizontal Motion Analysis (Orbiting)</strong>:</p>
+<ul>
+<li>Render a Bird's Eye View of the camera trajectory: <code>recon.render_bev(ego_trajectory=True)</code>.</li>
+<li>Use <code>show()</code> to inspect the BEV plot. The trajectory is color-coded from red (start) to blue (end).</li>
+<li>If the path is circular or arc-like, determine the rotation direction (Clockwise vs. Counter-clockwise) based on the temporal progression of the colors.</li>
+<li>To be quantitative, calculate the change in the angle of the camera position relative to the center of the orbit in the XZ plane using <code>np.arctan2(z, x)</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Final Synthesis</strong>:</p>
+<ul>
+<li>Compare the magnitude of vertical movement vs. the curvature of the horizontal movement.</li>
+<li>Match the dominant motion to the provided options (A, B, C, or D).</li>
+</ul>
+</li>
+</ol>
+<p><strong>Verification</strong></p>
+<ul>
+<li><strong>Visual Verification</strong>: Use <code>show()</code> on the BEV plot to ensure the trajectory matches the numerical findings.</li>
+<li><strong>Consistency Check</strong>: Ensure that the &quot;up/down&quot; conclusion is supported by a clear trend in the Y-coordinate graph, not just a difference between the first and last frame.</li>
+<li><strong>Directional Check</strong>: For orbiting, verify the sequence of frames (red $\rightarrow$ blue) in the BEV to avoid mirroring the rotation direction.</li>
+<li><strong>Scale Check</strong>: Compare the total vertical displacement to the radius of the orbit to determine which motion is the defining characteristic of the observer's movement.</li>
+</ul>
+<p><strong>Fallbacks</strong></p>
+<ul>
+<li>If the reconstruction is noisy or fails (e.g., insufficient parallax), use <code>vlm.ask_with_thinking</code> on a sequence of frames (start, middle, end) to qualitatively describe the camera's movement (e.g., &quot;Is the camera rising, falling, or circling an object?&quot;).</li>
+<li>If the BEV is ambiguous, calculate the signed area of the XZ projection to mathematically determine the rotation direction.</li>
+</ul>
+<h3>CHECKLIST</h3>
+<pre><code class="language-json">[
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Verify that the reconstruction successfully produced valid camera poses for the frame range.&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Confirm the vertical motion trend using a graph of Y-coordinates over time.&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Visually verify the orbit direction (CW vs CCW) using the color-coded BEV trajectory (red to blue).&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Ensure the coordinate system interpretation (+Y = up) is correctly applied to the trajectory data.&quot;}
+]
+</code></pre>
+</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 0</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Perform 3D reconstruction of the video frames to obtain camera poses and trajectories.</div><div class="label">Reasoning</div><div class="body prose">To determine how the observer (camera) is moving in 3D space, I need the camera&#x27;s world positions over time. The `tools.Reconstruct.Reconstruct` tool provides gravity-aligned camera extrinsics (c2w matrices), from which I can extract the 3D position of the camera center for every frame.</div><div class="label">Next Goal</div><div class="body prose">Extract the camera trajectory and analyze the vertical motion (Y-coordinate) to check for &quot;moving upward&quot; or &quot;moving downward&quot;.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># Perform 3D reconstruction of all sampled frames</span>
+<span class="n">recon</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Reconstruct</span><span class="o">.</span><span class="n">Reconstruct</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reconstruction complete. Number of frames: </span><span class="si">{</span><span class="n">recon</span><span class="o">.</span><span class="n">num_frames</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Metric scale: </span><span class="si">{</span><span class="n">recon</span><span class="o">.</span><span class="n">metric_scale</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">Reconstruction complete. Number of frames: 32
+Metric scale: 4.455207347869873
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 0 Execution Feedback ===
+
+[SUCCESS] Code executed in 7.60s.
+
+[Output]
+Reconstruction complete. Number of frames: 32
+Metric scale: 4.455207347869873
+
+[Variables] New/changed:
+  recon: Reconstruction, frames=[0..87] (32 frames)
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 1</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Extract the camera trajectory and analyze vertical motion to detect upward or downward movement.</div><div class="label">Reasoning</div><div class="body prose">The camera&#x27;s world position is the translation component of the camera-to-world (c2w) matrix (the first three elements of the fourth column). By extracting these positions for all frames, I can plot the Y-coordinate (height) over time. A consistent increase in Y indicates &quot;moving upward,&quot; and a consistent decrease indicates &quot;moving downward.&quot;</div><div class="label">Next Goal</div><div class="body prose">Analyze the horizontal motion (XZ plane) using a BEV plot and numerical calculations to check for orbiting and its direction (CW vs CCW).</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Extract camera positions for all reconstructed frames</span>
+<span class="n">trajectory</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">recon</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">:</span>
+    <span class="n">pose</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">extrinsics</span><span class="p">[</span><span class="n">fi</span><span class="p">]</span>
+    <span class="n">cam_pos</span> <span class="o">=</span> <span class="n">pose</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">trajectory</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cam_pos</span><span class="p">)</span>
+
+<span class="n">trajectory</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">trajectory</span><span class="p">)</span>
+
+<span class="c1"># Extract coordinates</span>
+<span class="n">x_coords</span> <span class="o">=</span> <span class="n">trajectory</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">y_coords</span> <span class="o">=</span> <span class="n">trajectory</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">z_coords</span> <span class="o">=</span> <span class="n">trajectory</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+
+<span class="c1"># Plot vertical motion</span>
+<span class="n">y_plot</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Graph</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_coords</span><span class="p">,</span> <span class="n">y_label</span><span class="o">=</span><span class="s2">&quot;Height (m)&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Camera Height over Time&quot;</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">y_plot</span><span class="p">)</span>
+
+<span class="c1"># Print start and end heights for quick reference</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Start height: </span><span class="si">{</span><span class="n">y_coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> m&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;End height: </span><span class="si">{</span><span class="n">y_coords</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> m&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total vertical change: </span><span class="si">{</span><span class="n">y_coords</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y_coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> m&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out"> [image: show_0001] 
+Start height: 1.043 m
+End height: 0.363 m
+Total vertical change: -0.680 m
+</pre><div class="label">show_0001</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse_hflip__row_000877/show_0001_img_0.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 1 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.88s.
+
+[Output]
+Start height: 1.043 m
+End height: 0.363 m
+Total vertical change: -0.680 m
+
+[Variables] New/changed:
+  trajectory: ndarray, shape=(32, 3), dtype=float64
+  fi: int
+  pose: ndarray, shape=(4, 4), dtype=float64
+  cam_pos: ndarray, shape=(3,), dtype=float64
+  x_coords: ndarray, shape=(32,), dtype=float64
+  y_coords: ndarray, shape=(32,), dtype=float64
+  z_coords: ndarray, shape=(32,), dtype=float64
+  y_plot: VisualFeedback
+
+[Inline Images] 1 image(s) attached below.
+  Labels: y_plot
+
+[Tool Calls] 1 tool/VLM call(s) this step.
+[show() budget] 249/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 2</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Analyze the horizontal motion (XZ plane) using a BEV plot to check for orbiting and its direction.</div><div class="label">Reasoning</div><div class="body prose">While the vertical analysis shows a clear downward trend, I need to determine if the observer is also orbiting. A BEV (Bird&#x27;s Eye View) plot of the camera&#x27;s egomotion trajectory will visually reveal if the path is linear or circular. If it&#x27;s circular, the color gradient (red $\rightarrow$ blue) will indicate whether the orbit is clockwise or counter-clockwise.</div><div class="label">Next Goal</div><div class="body prose">Compare the vertical descent with the horizontal trajectory to determine the dominant motion and select the correct multiple-choice option.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># Render BEV with camera egomotion trajectory</span>
+<span class="n">bev_plot</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">render_bev</span><span class="p">(</span><span class="n">ego_trajectory</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">bev_plot</span><span class="p">)</span>
+
+<span class="c1"># Quantitatively check for orbiting by calculating the change in angle in the XZ plane</span>
+<span class="c1"># Use the first camera position as a reference if it&#39;s orbiting a central point, </span>
+<span class="c1"># or better, find the center of the XZ coordinates.</span>
+<span class="n">center_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">x_coords</span><span class="p">)</span>
+<span class="n">center_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">z_coords</span><span class="p">)</span>
+
+<span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">z_coords</span> <span class="o">-</span> <span class="n">center_z</span><span class="p">,</span> <span class="n">x_coords</span> <span class="o">-</span> <span class="n">center_x</span><span class="p">)</span>
+<span class="n">angle_diff</span> <span class="o">=</span> <span class="n">angles</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">angles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Unwrapping angles to handle the -pi to pi jump</span>
+<span class="n">unwrapped_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unwrap</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span>
+<span class="n">total_angle_change</span> <span class="o">=</span> <span class="n">unwrapped_angles</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">unwrapped_angles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total angle change in XZ plane: </span><span class="si">{</span><span class="n">total_angle_change</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> radians (</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">total_angle_change</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> degrees)&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out"> [image: show_0002] 
+Total angle change in XZ plane: -3.408 radians (-195.244 degrees)
+</pre><div class="label">show_0002</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse_hflip__row_000877/show_0002_img_0.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 2 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.69s.
+
+[Output]
+Total angle change in XZ plane: -3.408 radians (-195.244 degrees)
+
+[Variables] New/changed:
+  bev_plot: VisualFeedback
+  center_x: float64, shape=(), dtype=float64
+  center_z: float64, shape=(), dtype=float64
+  angles: ndarray, shape=(32,), dtype=float64
+  angle_diff: float64, shape=(), dtype=float64
+  unwrapped_angles: ndarray, shape=(32,), dtype=float64
+  total_angle_change: float64, shape=(), dtype=float64
+
+[Inline Images] 1 image(s) attached below.
+  Labels: bev_plot
+[show() budget] 248/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 3</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Synthesize all findings to determine the observer&#x27;s motion.</div><div class="label">Reasoning</div><div class="body prose">1.  **Vertical Motion**: The analysis of the camera&#x27;s Y-coordinates shows a clear, monotonic decrease from $1.043\text{ m}$ to $0.363\text{ m}$, a total drop of $0.680\text{ m}$. This strongly indicates the observer is &quot;Moving downward&quot;.
+2.  **Horizontal Motion**: The BEV plot shows the camera moving from approximately $(0.4, 0)$ to $(-0.4, -0.1)$ in the XZ plane. While there is a calculated angle change of $-195^\circ$, the trajectory in the BEV plot is a very shallow arc, nearly a straight line. This suggests that while there is some curvature, the motion is not a distinct, dominant &quot;orbit&quot; in the way a circular path would be.
+3.  **Comparison**: The downward vertical motion is consistent, significant, and unambiguous. The horizontal motion is primarily a translation from right to left with a slight arc. Among the choices, &quot;Moving downward&quot; is the most accurate and dominant characteristic of the observer&#x27;s movement.</div><div class="label">Next Goal</div><div class="body prose">Return the final answer.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="n">ReturnAnswer</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">[ReturnAnswer] Answer submitted: C
+</pre></div></div>
+</div>
+<div class="tl-step tl-answer">
+  <div class="kind">Answer</div>
+  <div class="body prose">C</div>
+</div>
+<div class="tl-step tl-evaluation">
+  <div class="kind">Evaluation</div>
+  <div class="body">Ground truth: <strong>C</strong> · Agent: <strong>C</strong></div>
+</div></div>
+</div>
+</div>
+
+  </main>
+  <footer class="site-footer">SpatialClaw — Supplementary Material</footer>
+  <script src="../../../static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DSI-Bench — Gemma4-31B — sample reverse__row_000627</title>
+  <link rel="stylesheet" href="../../../static/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="crumb"><a href="../../../index.html">Highlights</a> / DSI-Bench / sample reverse__row_000627<span class="nav-hint" aria-hidden="true"><kbd>←</kbd> <kbd>→</kbd> to navigate</span></div>
+      <h1>DSI-Bench — Gemma4-31B — sample reverse__row_000627</h1>
+      
+    </div>
+  </header>
+  <main class="container">
+
+<a class="sample-nav prev" href="../../dsibench/samples/reverse__row_000109__gemma3vl.html" aria-label="Previous sample" title="Previous sample">‹</a><a class="sample-nav next" href="../../paibench/samples/203__gemma3vl.html" aria-label="Next sample" title="Next sample">›</a>
+<div class="qa-card">
+  <div class="keyframes"><div class="label">Keyframes</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000627/kf_input_00.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000627/kf_input_01.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000627/kf_input_02.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000627/kf_input_03.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000627/kf_input_04.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000627/kf_input_05.jpg" alt=""></div></div>
+  <div class="label">Question</div>
+  <div class="q">In this video clip, how is the race car&#x27;s location moving in the 3D scene relative to his/her/its starting orientation and location?
+
+This is a multiple-choice question about how an object or the camera moves in 3D space within the video clip. Choose the option that best matches the motion you observe and respond with only the option letter (A, B, C, or D).
+A. Moving right
+B. Moving forward
+C. Moving left
+D. Moving backward</div>
+  <div class="pred-row" style="margin-top:14px">
+    <div class="pred-cell"><span class="label" style="margin:0">Ground truth</span>
+      <span class="gt-pill">D</span></div>
+    <div class="pred-cell"><span class="method-pill pill-agent">SpatialClaw</span>
+      <span style="font-family:ui-monospace,Menlo,monospace">D</span>
+      <span class="tick-ok">✓</span></div>
+    <div class="pred-cell"><span class="q-badge q-only_agent">Agent wins</span></div>
+  </div>
+</div>
+<div class="baseline-tabs" role="tablist" aria-label="Baseline comparison"><button type="button" class="baseline-tab" data-pane="cot">No-tool baseline</button><button type="button" class="baseline-tab" data-pane="single-pass">Single-pass code</button><button type="button" class="baseline-tab" data-pane="react">Structured tool-call</button><button type="button" class="baseline-tab" data-pane="spacetools">SpaceTools</button></div>
+<div class="split agent-only">
+  <div class="left-stack">
+    <div class="baseline-pane" data-pane="cot"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-cot">No-tool Baseline</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="cot-md markdown"><p>To determine the race car's motion relative to its starting orientation and location, let's analyze the video frames:</p>
+<ol>
+<li><strong>Initial Position and Orientation:</strong> In the first frame, the race car is positioned in the center-right of the image, facing away from the camera.</li>
+<li><strong>Observation of Motion:</strong> As the sequence progresses through the frames, the car continues to travel in the direction it is facing (away from the camera).</li>
+<li><strong>Path Analysis:</strong> While the car follows a slightly curving dirt path, its primary movement is in the direction of its front bumper, which is defined as &quot;forward&quot; relative to its own orientation.</li>
+<li><strong>Evaluating Options:</strong>
+<ul>
+<li><strong>A. Moving right:</strong> While the car may shift slightly right in the frame, its overall movement is forward.</li>
+<li><strong>B. Moving forward:</strong> The car is consistently traveling in the direction it is facing.</li>
+<li><strong>C. Moving left:</strong> The car is not moving primarily to the left.</li>
+<li><strong>D. Moving backward:</strong> The car is clearly moving in the direction of its front, not its rear.</li>
+</ul>
+</li>
+</ol>
+<p>The most accurate description of the race car's motion relative to its starting orientation is that it is moving forward.</p>
+<p><span class="boxed">B</span></p>
+</div></div></div><div class="baseline-pane" data-pane="single-pass"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-spcode">Single-pass code</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="single-pass-card"><div class="label">Purpose</div><div class="body prose">Determine the 3D motion of the race car relative to its starting orientation and location.</div><div class="label">Reasoning</div><div class="body prose">1. I will use `tools.Reconstruct` to build a 3D model of the scene.
+2. I will use `tools.SAM3.segment_video_by_text` to track the race car throughout the video.
+3. I will compute the 3D centroids of the race car at the beginning and end of the clip.
+4. By comparing the start and end positions, I can determine the overall direction of movement.
+5. Visually, the car starts facing away from the camera and continues to drive away, which corresponds to &quot;moving forward&quot; relative to its own orientation.</div><div class="label">Next Goal</div><div class="body prose">Execute reconstruction and segmentation to quantitatively verify the motion.</div><div class="label">Code</div><pre class="code py-hl"><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># 1. Reconstruct the scene</span>
+<span class="n">recon</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Reconstruct</span><span class="o">.</span><span class="n">Reconstruct</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)</span>
+
+<span class="c1"># 2. Segment the race car across the video</span>
+<span class="n">seg</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">SAM3</span><span class="o">.</span><span class="n">segment_video_by_text</span><span class="p">([</span><span class="s2">&quot;race car&quot;</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race car&quot;</span><span class="p">])</span>
+
+<span class="c1"># 3. Extract 3D centroids for the car</span>
+<span class="n">centroids</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">valid_frames</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">:</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">get_centroid_3d</span><span class="p">(</span><span class="n">recon</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">fi</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">centroids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+        <span class="n">valid_frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fi</span><span class="p">)</span>
+
+<span class="n">centroids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">centroids</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">centroids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">start_pos</span> <span class="o">=</span> <span class="n">centroids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">end_pos</span> <span class="o">=</span> <span class="n">centroids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">displacement</span> <span class="o">=</span> <span class="n">end_pos</span> <span class="o">-</span> <span class="n">start_pos</span>
+    
+    <span class="c1"># The car starts facing away from the camera.</span>
+    <span class="c1"># In the reconstructed world, the first camera looks toward -Z.</span>
+    <span class="c1"># Let&#39;s check the displacement.</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Start Position: </span><span class="si">{</span><span class="n">start_pos</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;End Position: </span><span class="si">{</span><span class="n">end_pos</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Displacement: </span><span class="si">{</span><span class="n">displacement</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># To be more precise, we can look at the BEV.</span>
+    <span class="c1"># The BEV will show the trajectory.</span>
+    <span class="n">bev_img</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">render_bev</span><span class="p">(</span><span class="n">masks</span><span class="o">=</span><span class="n">seg</span><span class="p">)</span>
+    <span class="n">show</span><span class="p">(</span><span class="n">bev_img</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Failed to track the car.&quot;</span><span class="p">)</span>
+
+<span class="c1"># Based on visual inspection of the frames:</span>
+<span class="c1"># Frame 0: Car is facing away, moving away.</span>
+<span class="c1"># Frame 14: Car is further away, still moving in the same general direction.</span>
+<span class="c1"># This is &quot;Moving forward&quot; relative to its starting orientation.</span>
+
+<span class="n">ReturnAnswer</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
+</pre><div class="label">Error</div><pre class="err">---------------------------------------------------------------------------
+KeyError                                  Traceback (most recent call last)
+Cell In[94], line 13
+     11 valid_frames = []
+     12 for fi in seg.frame_indices:
+---&gt; 13     c = seg.get_centroid_3d(recon, frame=fi, object=0)
+     14     if c is not None:
+     15         centroids.append(c)
+
+File SpatialAgent/spatial_agent/kernel_types/per_frame_types.py:203, in PerFrameMask.get_centroid_3d(self, recon, frame, object, conf_threshold)
+    190 &quot;&quot;&quot;Get ``(3,)`` median 3D position of confidence-filtered masked points.
+    191 
+    192 Args:
+   (...)    200     is empty (safe for arithmetic; use ``np.isnan()`` to check).
+    201 &quot;&quot;&quot;
+    202 mask_2d = self.get_mask(frame, object)
+--&gt; 203 local_r = recon.points.get_by_frame_index(frame)
+    204 pts = recon.points.points[local_r][mask_2d]
+    205 if len(pts) == 0:
+
+File SpatialAgent/spatial_agent/kernel_types/per_frame_types.py:69, in PerFrameData.get_by_frame_index(self, abs_frame_idx)
+     64     if abs_frame_idx == 0 and 0 not in avail:
+     65         hint = (
+     66             f&quot;\n  Hint: Did you mean frame={avail[0]}? &quot;
+     67             f&quot;Use ABSOLUTE frame indices (from seg.frame_indices), not 0-based local indices.&quot;
+     68         )
+---&gt; 69     raise KeyError(
+     70         f&quot;Frame {abs_frame_idx} not found in {avail}. &quot;
+     71         f&quot;Available frames: {avail}{hint}&quot;
+     72     )
+     73 return self._frame_indices.index(abs_frame_idx)
+
+KeyError: &#x27;Frame 1 not found in [0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 78, 84]. Available frames: [0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 78, 84]&#x27;</pre><div class="label">Final answer</div><div class="body prose">B</div></div></div></div><div class="baseline-pane" data-pane="react"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-react">Structured tool-call</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="timeline">
+<div class="tl-step tl-plan">
+  <div class="kind">Plan</div>
+  <div class="body markdown"><h3>Task Analysis</h3>
+<p>The objective is to determine the 3D motion of a race car relative to its own starting orientation and location. This is an object-perspective spatial reasoning task.</p>
+<p><strong>Coordinate System Resolution:</strong>
+The question asks for motion &quot;relative to his/her/its starting orientation and location.&quot; This defines an object-centric coordinate system anchored at the car's position at $t=0$.</p>
+<ul>
+<li><strong>Forward/Backward:</strong> Along the axis defined by the car's heading vector at the first frame.</li>
+<li><strong>Left/Right:</strong> Along the axis perpendicular to the heading vector and the world-up vector (+Y).
+I must first establish the car's initial 3D position ($P_0$) and its initial facing direction ($V_{fwd,0}$) in world space, then calculate the displacement vector $\Delta P$ to the final position ($P_{final}$) and project it onto these axes.</li>
+</ul>
+<h3>Information Needs</h3>
+<ol>
+<li><strong>Object Identification:</strong> Accurate segmentation masks for the &quot;race car&quot; across the video.</li>
+<li><strong>3D Geometry:</strong> A 3D reconstruction of the scene to obtain world-space coordinates and camera poses.</li>
+<li><strong>Initial State:</strong> The 3D centroid of the car in the first frame and its initial heading vector in world space.</li>
+<li><strong>Final State:</strong> The 3D centroid of the car in the last frame.</li>
+<li><strong>Visual Confirmation:</strong> A BEV (Bird's Eye View) rendering to qualitatively verify the trajectory and starting orientation.</li>
+</ol>
+<h3>Computation Plan</h3>
+<ol>
+<li>
+<p><strong>Object Grounding and Segmentation:</strong></p>
+<ul>
+<li>Use <code>vlm.ask_with_thinking</code> on <code>InputImages[0]</code> to confirm the race car's presence and appearance.</li>
+<li>Use <code>tools.SAM3.segment_video_by_text(prompts=[&quot;race car&quot;], ...)</code> to track the car across all 15 frames.</li>
+<li>Programmatically verify that masks are non-empty in the first and last frames.</li>
+</ul>
+</li>
+<li>
+<p><strong>3D Reconstruction:</strong></p>
+<ul>
+<li>Call <code>tools.Reconstruct.Reconstruct(InputImages)</code> to generate the 3D point cloud and camera extrinsics.</li>
+</ul>
+</li>
+<li>
+<p><strong>Determining Initial Orientation ($V_{fwd,0}$):</strong></p>
+<ul>
+<li>Call <code>vlm.ask_with_thinking</code> on <code>InputImages[0]</code> to determine the car's heading relative to the camera (e.g., &quot;Is the car facing away from the camera, towards the camera, or to the side?&quot;).</li>
+<li>Use the camera's forward vector <code>recon.extrinsics[0][:3, 2]</code> and right vector <code>recon.extrinsics[0][:3, 0]</code> to translate the VLM's relative description into a world-space heading vector $V_{fwd,0}$.</li>
+<li><em>Alternative/Verification:</em> Use <code>recon.render_bev(masks=seg)</code> and observe the orientation of the bounding box or the start of the trajectory line in the first frame.</li>
+</ul>
+</li>
+<li>
+<p><strong>Quantitative Motion Analysis:</strong></p>
+<ul>
+<li>Extract the 3D centroid at the first frame $P_0 = seg.get_centroid_3d(recon, frame=fi_start, object=0)$.</li>
+<li>Extract the 3D centroid at the last frame $P_{final} = seg.get_centroid_3d(recon, frame=fi_end, object=0)$.</li>
+<li>Compute the displacement vector: $\Delta P = P_{final} - P_0$.</li>
+<li>Define the initial right vector: $V_{right,0} = \text{cross}(V_{fwd,0}, [0, 1, 0])$ (World-Up is +Y).</li>
+<li>Calculate projections:
+<ul>
+<li><code>forward_component = np.dot(delta_P, V_fwd_0)</code></li>
+<li><code>right_component = np.dot(delta_P, V_right_0)</code></li>
+</ul>
+</li>
+<li>Determine the dominant direction:
+<ul>
+<li><code>forward_component &gt; 0</code> $\rightarrow$ Forward</li>
+<li><code>forward_component &lt; 0</code> $\rightarrow$ Backward</li>
+<li><code>right_component &gt; 0</code> $\rightarrow$ Right</li>
+<li><code>right_component &lt; 0</code> $\rightarrow$ Left</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Visual Cross-Validation:</strong></p>
+<ul>
+<li>Render the BEV: <code>recon.render_bev(masks=seg, ego_trajectory=True)</code>.</li>
+<li>Use <code>show()</code> to inspect the BEV. The trajectory line (red $\rightarrow$ blue) should align with the calculated $\Delta P$, and the starting orientation of the car (bounding box) should align with $V_{fwd,0}$.</li>
+</ul>
+</li>
+</ol>
+<h3>Verification Checklist</h3>
+<pre><code class="language-json">[
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Verify that SAM3 masks accurately cover the race car in both the first and last frames&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Confirm the initial heading vector V_fwd_0 is correctly derived from VLM description and camera pose&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Ensure 3D centroids are not NaN and are physically plausible given the scene scale&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Cross-check the quantitative projection results with the qualitative BEV trajectory path&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Verify that the displacement delta_P is significant enough to be distinguished from reconstruction noise&quot;}
+]
+</code></pre>
+<h3>Fallbacks</h3>
+<ul>
+<li><strong>Segmentation Failure:</strong> If <code>segment_video_by_text</code> fails or produces empty masks, I will use <code>vlm.locate</code> on the first frame to get a bounding box and then use <code>tools.SAM3.segment_video_by_box</code>.</li>
+<li><strong>Orientation Ambiguity:</strong> If the VLM cannot determine the heading from a single frame, I will use <code>vlm.ask_with_thinking</code> on a sequence of the first 3 frames to infer the heading from the initial movement.</li>
+<li><strong>Reconstruction Noise:</strong> If the 3D centroids are unstable, I will average the centroids over a small window of frames at the start and end of the clip.</li>
+</ul>
+</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 0</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Confirm the race car&#x27;s presence and appearance in the first frame.</div><div class="label">Reasoning</div><div class="body prose">Before starting segmentation, I need to visually confirm the object of interest and its appearance to ensure the text prompt for SAM3 will be effective.</div><div class="label">Next Goal</div><div class="body prose">Segment the race car across all frames using SAM3.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vlm.ask_with_thinking&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;visual_input&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;InputImages[0]&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;question&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Is there a race car in this image? If so, please describe its appearance and location.&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out">[VLM Q | thinking] Is there a race car in this image? If so, please describe its appearance and location.
+[VLM A | thinking] Yes, there are race cars in the image. The most prominent one is a dark-colored rally car with red and blue accents and a large rear wing, located in the center-right and drifting across a dirt and grass area, kicking up dust. There is another light-colored race car further in the background on the paved track to the right.
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 0 Execution Feedback ===
+
+[SUCCESS] Code executed in 22.86s.
+
+[Output]
+[VLM Q | thinking] Is there a race car in this image? If so, please describe its appearance and location.
+[VLM A | thinking] Yes, there are race cars in the image. The most prominent one is a dark-colored rally car with red and blue accents and a large rear wing, located in the center-right and drifting across a dirt and grass area, kicking up dust. There is another light-colored race car further in the background on the paved track to the right.
+
+[Variables] New/changed:
+  result_0: str
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 1</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Segment the race car across all frames.</div><div class="label">Reasoning</div><div class="body prose">I need segmentation masks to track the car&#x27;s 3D position and orientation over time. I&#x27;ll use a text prompt &quot;race car&quot; as the object is visually distinct.</div><div class="label">Next Goal</div><div class="body prose">Reconstruct the 3D scene to obtain depth and camera poses.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools.SAM3.segment_video_by_text&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;prompts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;race car&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 1 Execution Feedback ===
+
+[SUCCESS] Code executed in 7.53s.
+
+[Variables] New/changed:
+  result_1: PerFrameMask, frames=[0..89] (90 frames)
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 2</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Reconstruct the 3D scene.
+**Reasoning**: I need a 3D reconstruction to map the 2D segmentation masks to 3D world coordinates and to obtain the camera&#x27;s pose for orientation analysis.
+**Next Goal**: Verify the segmentation masks and check the car&#x27;s initial orientation.
+**Tool Call (translated)**:
+```python
+result_2 = tools.Reconstruct.Reconstruct(InputImages)
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 2 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 3</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Reconstruct the 3D scene to obtain depth and camera poses.</div><div class="label">Reasoning</div><div class="body prose">To analyze the race car&#x27;s motion in 3D space relative to its starting position and orientation, I need a 3D reconstruction of the environment. This will provide the necessary world-space coordinates and camera extrinsics.</div><div class="label">Next Goal</div><div class="body prose">Determine the car&#x27;s initial orientation in the first frame.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools.Reconstruct.Reconstruct&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;frames&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;InputImages&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 3 Execution Feedback ===
+
+[SUCCESS] Code executed in 3.16s.
+
+[Variables] New/changed:
+  result_3: Reconstruction, frames=[0..84] (15 frames)
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 4</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Visually inspect the race car&#x27;s trajectory and starting orientation from a top-down perspective.</div><div class="label">Reasoning</div><div class="body prose">A Bird&#x27;s Eye View (BEV) rendering will allow me to qualitatively see the car&#x27;s path and its initial heading. This provides a crucial sanity check for the quantitative calculations I will perform later.</div><div class="label">Next Goal</div><div class="body prose">Determine the car&#x27;s initial heading vector in world space.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;show&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;result_3.render_bev(masks=result_1)&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out"> [image: show_0001] 
+</pre><div class="label">show_0001</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000627/show_0001_img_0.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 4 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.32s.
+
+[Variables] New/changed:
+  result_4: NoneType
+
+[Inline Images] 1 image(s) attached below.
+  Labels: result_3.render_bev(masks=result_1)
+[show() budget] 249/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 5</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Determine the race car&#x27;s initial heading relative to the camera in the first frame.
+**Reasoning**: To calculate the motion relative to the car&#x27;s starting orientation, I need to know exactly which way it was facing at $t=0$. The BEV provides a global view, but the image provides the precise orientation of the car&#x27;s chassis.
+**Next Goal**: Combine the VLM&#x27;s orientation description with camera poses to define the world-space initial heading vector $V_{fwd,0}$.
+**Tool Call (translated)**:
+```python
+result_5 = vlm.ask_with_thinking(visual_input=InputImages[0], question=&#x27;In the first frame, which direction is the race car facing? Please describe its heading relative to the camera (e.g., facing away, facing towards, or facing to the left/right of the camera). Be specific about the direction the nose of the car is pointing.&#x27;)
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 5 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 6</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Quantitatively analyze the race car&#x27;s 3D motion relative to its starting orientation.</div><div class="label">Reasoning</div><div class="body prose">I have a BEV visualization that suggests the car moves from the right side of the scene towards the left. To be precise, I need the 3D centroids at the start and end frames and the car&#x27;s initial heading vector. I will extract these and then compute the projection of the displacement vector onto the car&#x27;s initial forward and right axes.
+
+First, I need to identify the absolute frame indices for the start and end of the reconstructed sequence.
+`fi_start = result_3.frame_indices[0]`
+`fi_end = result_3.frame_indices[-1]`
+
+I will then get the centroids:
+`p0 = result_1.get_centroid_3d(result_3, frame=fi_start, object=0)`
+`p_final = result_1.get_centroid_3d(result_3, frame=fi_end, object=0)`
+
+To find the initial heading $V_{fwd,0}$, I&#x27;ll use `vlm.ask_with_thinking` on the first few frames to confirm the car&#x27;s facing direction relative to the camera, then map that to world coordinates using the camera pose.
+Actually, the BEV already shows the starting orientation (the red bounding box). It&#x27;s facing roughly towards the left of the plot.
+Let&#x27;s get the centroids first.</div><div class="label">Next Goal</div><div class="body prose">Compute 3D centroids and determine initial heading.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vlm.ask_with_thinking&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;visual_input&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;InputImages[0]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;InputImages[1]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;InputImages[2]&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;question&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;In the first few frames, which direction is the race car facing relative to the camera? Is it facing away, towards, or to the side (left/right)? Also, is it drifting?&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out">[VLM Q | thinking] In the first few frames, which direction is the race car facing relative to the camera? Is it facing away, towards, or to the side (left/right)? Also, is it drifting?
+[VLM A | thinking] In the first few frames, the race car is facing away from the camera and is drifting, as evidenced by the dust being kicked up from its rear wheels.
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 6 Execution Feedback ===
+
+[SUCCESS] Code executed in 10.26s.
+
+[Output]
+[VLM Q | thinking] In the first few frames, which direction is the race car facing relative to the camera? Is it facing away, towards, or to the side (left/right)? Also, is it drifting?
+[VLM A | thinking] In the first few frames, the race car is facing away from the camera and is drifting, as evidenced by the dust being kicked up from its rear wheels.
+
+[Variables] New/changed:
+  result_6: str
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 7</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Quantitatively determine the race car&#x27;s 3D displacement and project it onto its initial orientation axes.
+**Reasoning**: I have a conflict between the VLM&#x27;s description (&quot;facing away from the camera&quot;) and the BEV visualization (where the initial bounding box is oriented towards the left). To resolve this, I will compute the exact 3D centroids at the start and end frames and use the camera&#x27;s pose to establish a precise coordinate system.
+
+1.  **Initial Position ($P_0$):** Centroid at the first reconstructed frame.
+2.  **Final Position ($P_{final}$):** Centroid at the last reconstructed frame.
+3.  **Displacement ($\Delta P$):** $P_{final} - P_0$.
+4.  **Initial Heading ($V_{fwd,0}$):** I will use the VLM&#x27;s observation that the car is facing away from the camera, which means $V_{fwd,0} \approx$ Camera 0&#x27;s forward vector. I will then cross-reference this with the BEV&#x27;s oriented bounding box.
+
+First, I will extract the 3D centroids for the start and end frames.
+**Next Goal**: Extract 3D centroids and compute displacement.
+**Tool Call (translated)**:
+```python
+# I&#x27;ll use a small loop or multiple calls to get the centroids. 
+# Since I can only do one tool call, I&#x27;ll get the first centroid now.
+result_7 = result_1.get_centroid_3d(result_3, frame=result_3.frame_indices[0], object=0)
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 7 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 8</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Determine the race car&#x27;s motion relative to its starting orientation using the BEV visualization.
+**Reasoning**: The BEV plot provides a top-down view of the car&#x27;s trajectory (red $\rightarrow$ blue line) and its starting orientation (the red bounding box). By observing the direction the red box is pointing (the car&#x27;s initial heading) and comparing it to the overall direction of the trajectory, I can determine if the motion is primarily forward, backward, left, or right relative to the car&#x27;s own perspective. In the BEV, the red box is oriented towards the left of the image, and the trajectory proceeds from the right side of the image towards the left. This indicates the car is moving in the direction it was initially facing.
+**Next Goal**: Finalize the answer based on the BEV and VLM observations.
+**Tool Call (translated)**:
+```json
+{&quot;tool&quot;: &quot;ReturnAnswer&quot;, &quot;args&quot;: {&quot;answer&quot;: &quot;B&quot;}}
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 8 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 9</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Determine the final answer based on the gathered evidence.</div><div class="label">Reasoning</div><div class="body prose">1. **Initial Orientation**: The VLM (`result_6`) confirmed that in the first few frames, the race car is facing away from the camera. In the BEV coordinate system (`result_4`), &quot;away from camera&quot; corresponds to the positive Y-axis (Forward).
+2. **Trajectory Analysis**: The BEV plot (`result_4`) shows the car&#x27;s trajectory starting at the red dot (approximately $x=6, y=15$) and ending at the blue arrowhead (approximately $x=-10, y=10$).
+3. **Displacement Calculation**: 
+   - The change in position is $\Delta x \approx -10 - 6 = -16$ and $\Delta y \approx 10 - 15 = -5$.
+   - Relative to the starting orientation (where $+Y$ is forward and $+X$ is right), a negative $\Delta x$ indicates motion to the **left**, and a negative $\Delta y$ indicates motion **backward**.
+4. **Dominant Motion**: The displacement in the X-axis ($-16$ units) is significantly larger than the displacement in the Y-axis ($-5$ units). Therefore, the dominant motion of the car relative to its starting orientation and location is to the left.</div><div class="label">Next Goal</div><div class="body prose">Return the final answer.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ReturnAnswer&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;answer&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;C&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out">[ReturnAnswer] Answer submitted: C
+</pre></div></div>
+</div>
+<div class="tl-step tl-answer">
+  <div class="kind">Answer</div>
+  <div class="body prose">C</div>
+</div></div></div></div><div class="baseline-pane" data-pane="spacetools"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-spacetools">SpaceTools</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="timeline"><div class="tl-step tl-st-reasoning"><div class="kind">Reasoning</div><div class="body markdown"><p>B</p>
+</div></div><div class="tl-step tl-st-complete"><div class="kind">Final answer</div><div class="body markdown"><p>B</p>
+</div></div><div class="tl-step tl-st-final"><div class="kind">Final response</div><div class="body markdown"><p>B</p>
+</div></div></div></div></div>
+  </div>
+  
+<div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-agent">SpatialClaw</span></h2>
+    <div class="verdict"><span class='tick-ok'>✓ Correct</span></div>
+  </div>
+  <div class="timeline">
+<div class="tl-step tl-plan">
+  <div class="kind">Plan</div>
+  <div class="body markdown"><h3>Task Analysis</h3>
+<p>The objective is to determine the 3D motion of a race car relative to its own starting orientation and location. This is a trajectory analysis problem in an object-centric coordinate system.</p>
+<p><strong>Coordinate System Resolution:</strong>
+The question asks for motion relative to the car's &quot;starting orientation and location.&quot; This requires establishing a local coordinate system anchored at the car's position at the first frame ($t=0$):</p>
+<ul>
+<li><strong>Origin</strong>: The 3D centroid of the race car at the first frame.</li>
+<li><strong>Forward Axis ($\vec{v}_{fwd}$)</strong>: The vector pointing from the rear of the car to the front (nose) of the car at the first frame.</li>
+<li><strong>Right Axis ($\vec{v}_{right}$)</strong>: The vector perpendicular to the forward axis and the world-up axis (defined as $\vec{v}_{fwd} \times \text{up}$).</li>
+<li><strong>Backward Axis</strong>: $-\vec{v}_{fwd}$.</li>
+<li><strong>Left Axis</strong>: $-\vec{v}_{right}$.</li>
+</ul>
+<p>The target variable is the dominant direction of the displacement vector $\vec{D} = \text{Position}<em>{final} - \text{Position}</em>{initial}$ when projected onto these local axes.</p>
+<h3>Information Needs</h3>
+<ol>
+<li><strong>Object Identification &amp; Tracking</strong>: Precise 3D masks for the race car across all frames to calculate its centroid.</li>
+<li><strong>3D Geometry</strong>: A 3D reconstruction of the scene to map 2D masks to world coordinates.</li>
+<li><strong>Starting Orientation</strong>: The 3D direction the car's nose is pointing in the first frame.</li>
+<li><strong>Trajectory Data</strong>: The sequence of 3D centroids from the start to the end of the clip.</li>
+</ol>
+<h3>Computation Plan</h3>
+<ol>
+<li>
+<p><strong>Initial Grounding &amp; Orientation</strong>:</p>
+<ul>
+<li><code>show(InputImages[0])</code> to identify the race car and its orientation.</li>
+<li>Use <code>vlm.locate</code> to find the normalized coordinates of the <strong>nose</strong> (front) and the <strong>tail</strong> (rear) of the race car in the first frame.</li>
+<li>Convert these normalized coordinates to pixels using <code>tools.Geometry.normalized_to_pixel</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>3D Reconstruction &amp; Segmentation</strong>:</p>
+<ul>
+<li>Perform 3D reconstruction: <code>recon = tools.Reconstruct.Reconstruct(InputImages)</code>.</li>
+<li>Track the race car across all frames: <code>seg = tools.SAM3.segment_video_by_text([&quot;race car&quot;], ...)</code> (using the first frame as the prompt frame).</li>
+<li><strong>Verification</strong>: <code>show([InputImages[0], seg.visualize(seg.frame_indices[0])])</code> to ensure the mask accurately covers the car.</li>
+</ul>
+</li>
+<li>
+<p><strong>Establishing the Local Coordinate System</strong>:</p>
+<ul>
+<li>Get the absolute frame index of the first frame: <code>fi_0 = seg.frame_indices[0]</code>.</li>
+<li>Retrieve the 3D world coordinates of the nose and tail using <code>recon.points[fi_0][y, x]</code> at the pixel coordinates found in Step 1.</li>
+<li>Calculate the starting forward vector: $\vec{v}<em>{fwd} = \text{Normalize}(\text{Point}</em>{nose} - \text{Point}_{tail})$.</li>
+<li>Calculate the starting right vector: $\vec{v}<em>{right} = \text{Normalize}(\vec{v}</em>{fwd} \times [0, 1, 0])$ (assuming $+Y$ is up).</li>
+</ul>
+</li>
+<li>
+<p><strong>Trajectory Analysis</strong>:</p>
+<ul>
+<li>Extract 3D centroids for the first and last frames:
+<ul>
+<li>$P_{start} = \text{seg.get_centroid_3d(recon, frame=fi_0, object=0)}$</li>
+<li>$P_{end} = \text{seg.get_centroid_3d(recon, frame=seg.frame_indices[-1], object=0)}$</li>
+</ul>
+</li>
+<li>Calculate the total displacement vector: $\vec{D} = P_{end} - P_{start}$.</li>
+</ul>
+</li>
+<li>
+<p><strong>Directional Projection</strong>:</p>
+<ul>
+<li>Compute the projection of $\vec{D}$ onto the local axes:
+<ul>
+<li>$\text{proj}<em>{fwd} = \vec{D} \cdot \vec{v}</em>{fwd}$</li>
+<li>$\text{proj}<em>{right} = \vec{D} \cdot \vec{v}</em>{right}$</li>
+</ul>
+</li>
+<li>Compare the absolute values of $\text{proj}<em>{fwd}$ and $\text{proj}</em>{right}$ to determine the dominant axis of motion.</li>
+<li>Determine the sign:
+<ul>
+<li>$\text{proj}<em>{fwd} &gt; 0 \rightarrow$ Forward; $\text{proj}</em>{fwd} &lt; 0 \rightarrow$ Backward.</li>
+<li>$\text{proj}<em>{right} &gt; 0 \rightarrow$ Right; $\text{proj}</em>{right} &lt; 0 \rightarrow$ Left.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Visual Cross-Validation</strong>:</p>
+<ul>
+<li>Render a BEV plot: <code>recon.render_bev(masks=seg)</code>.</li>
+<li>Inspect the trajectory line (red $\rightarrow$ blue) relative to the car's starting bounding box orientation to visually confirm the calculated direction.</li>
+</ul>
+</li>
+</ol>
+<h3>Verification Checklist</h3>
+<pre><code class="language-json">[
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Verify the race car mask is accurate and consistent across frames via seg.visualize()&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Confirm the 3D points for the nose and tail are correctly sampled from the reconstruction&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Ensure the displacement vector is calculated using absolute frame indices&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Cross-check the numerical projection result with the BEV trajectory visualization&quot;},
+  {&quot;priority&quot;: &quot;LOW&quot;, &quot;description&quot;: &quot;Sanity check the magnitude of displacement to ensure it is physically plausible for a race car&quot;}
+]
+</code></pre>
+<h3>Fallbacks</h3>
+<ul>
+<li><strong>Mask Failure</strong>: If <code>segment_video_by_text</code> fails or is noisy, I will use <code>vlm.locate</code> to get a bounding box in the first frame and use <code>tools.SAM3.segment_video_by_box</code>.</li>
+<li><strong>Orientation Ambiguity</strong>: If the nose/tail are not clearly distinguishable in the first frame, I will use <code>vlm.ask_with_thinking</code> on the first 3 frames to deter</li>
+</ul>
+</div>
+</div>
+<div class="tl-step tl-condense">
+  <div class="kind">Condense · step 0</div>
+  <div class="body prose">**Purpose**: Identify the race car and determine its starting orientation in the first frame.
+**Reasoning**: [errored — condensed]
+**Next Goal**: [errored — condensed]
+**Code**:
+```python
+# Show the first frame to visually ground the object
+show(InputImages[0])
+
+# Locate the nose (front) and tail (rear) of the race car in the first frame
+nose_coords = vlm.locate(InputImages[0], &quot;Give the (x, y) center coordinates in 0-1000 normalized scale for the nose (front bumper) of the race car. Reply with ONLY the numbers.&quot;)
+tail_coords = vlm.locate(InputImages[0], &quot;Give the (x, y) center coordinates in 0-1000 normalized scale for the tail (rear bumper) of the race car. Reply with ONLY the numbers.&quot;)
+
+print(f&quot;Nose coords (normalized): {nose_coords}&quot;)
+print(f&quot;Tail coords (normalized): {tail_coords}&quot;)
+
+# Convert normalized coordinates to pixels
+W, H = InputImages[0].width, InputImages[0].height
+nose_px = tools.Geometry.normalized_to_pixel(eval(nose_coords.replace(&#x27;(&#x27;, &#x27;[&#x27;).replace(&#x27;)&#x27;, &#x27;]&#x27;)), ...  # &lt;-- ERROR
+# Security violation: Forbidden builtin call: &#x27;eval()&#x27;. This operation is not allowed.
+```</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 1</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Identify the race car and determine its starting orientation in the first frame.</div><div class="label">Reasoning</div><div class="body prose">To establish the car&#x27;s local coordinate system, I need to know which way it is facing at the start. I will use `vlm.locate` to find the 2D pixel positions of the car&#x27;s nose and tail in the first frame. These will later be mapped to 3D world coordinates to define the &quot;forward&quot; axis.</div><div class="label">Next Goal</div><div class="body prose">Perform 3D reconstruction and track the race car across the video to analyze its trajectory.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># Show the first frame to visually ground the object</span>
+<span class="n">show</span><span class="p">(</span><span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># Locate the nose (front) and tail (rear) of the race car in the first frame</span>
+<span class="n">nose_res</span> <span class="o">=</span> <span class="n">vlm</span><span class="o">.</span><span class="n">locate</span><span class="p">(</span><span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;Give the (x, y) center coordinates in 0-1000 normalized scale for the nose (front bumper) of the race car. Reply with ONLY the numbers.&quot;</span><span class="p">)</span>
+<span class="n">tail_res</span> <span class="o">=</span> <span class="n">vlm</span><span class="o">.</span><span class="n">locate</span><span class="p">(</span><span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;Give the (x, y) center coordinates in 0-1000 normalized scale for the tail (rear bumper) of the race car. Reply with ONLY the numbers.&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nose response: </span><span class="si">{</span><span class="n">nose_res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tail response: </span><span class="si">{</span><span class="n">tail_res</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Helper to parse &quot;x, y&quot; or &quot;(x, y)&quot; strings into a list of floats</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_coords</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="c1"># Remove parentheses and split by comma</span>
+    <span class="n">cleaned</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cleaned</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">nose_norm</span> <span class="o">=</span> <span class="n">parse_coords</span><span class="p">(</span><span class="n">nose_res</span><span class="p">)</span>
+    <span class="n">tail_norm</span> <span class="o">=</span> <span class="n">parse_coords</span><span class="p">(</span><span class="n">tail_res</span><span class="p">)</span>
+    
+    <span class="n">W</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">height</span>
+    <span class="n">nose_px</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">normalized_to_pixel</span><span class="p">(</span><span class="n">nose_norm</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+    <span class="n">tail_px</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">normalized_to_pixel</span><span class="p">(</span><span class="n">tail_norm</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nose pixels: </span><span class="si">{</span><span class="n">nose_px</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tail pixels: </span><span class="si">{</span><span class="n">tail_px</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error parsing coordinates: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out"> [image: show_0001] 
+[VLM Q | locate] Before answering, first check whether what the question describes is clearly visible in the provided image(s). If it is absent or ambiguous, reply EXACTLY `Not visible` on its own line (optionally followed by one short line explaining what you saw instead) — do NOT return coordinates in that case. Only if the requested target is clearly and unambiguously present, answer the request below.
+
+Request: Give the (x, y) center coordinates in 0-1000 normalized scale for the nose (front bumper) of the race car. Reply with ONLY the numbers.
+[VLM A | locate] 500 480
+[VLM Q | locate] Before answering, first check whether what the question describes is clearly visible in the provided image(s). If it is absent or ambiguous, reply EXACTLY `Not visible` on its own line (optionally followed by one short line explaining what you saw instead) — do NOT return coordinates in that case. Only if the requested target is clearly and unambiguously present, answer the request below.
+
+Request: Give the (x, y) center coordinates in 0-1000 normalized scale for the tail (rear bumper) of the race car. Reply with ONLY the numbers.
+[VLM A | locate] 771 486
+Nose response: 500 480
+Tail response: 771 486
+Error parsing coordinates: could not convert string to float: &#x27;500 480&#x27;
+</pre><div class="label">show_0001</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000627/show_0001_img_0.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 1 Execution Feedback ===
+
+[SUCCESS] Code executed in 11.50s.
+
+[Output]
+[VLM Q | locate] Before answering, first check whether what the question describes is clearly visible in the provided image(s). If it is absent or ambiguous, reply EXACTLY `Not visible` on its own line (optionally followed by one short line explaining what you saw instead) — do NOT return coordinates in that case. Only if the requested target is clearly and unambiguously present, answer the request below.
+
+Request: Give the (x, y) center coordinates in 0-1000 normalized scale for the nose (front bumper) of the race car. Reply with ONLY the numbers.
+[VLM A | locate] 500 480
+[VLM Q | locate] Before answering, first check whether what the question describes is clearly visible in the provided image(s). If it is absent or ambiguous, reply EXACTLY `Not visible` on its own line (optionally followed by one short line explaining what you saw instead) — do NOT return coordinates in that case. Only if the requested target is clearly and unambiguously present, answer the request below.
+
+Request: Give the (x, y) center coordinates in 0-1000 normalized scale for the tail (rear bumper) of the race car. Reply with ONLY the numbers.
+[VLM A | locate] 771 486
+Nose response: 500 480
+Tail response: 771 486
+Error parsing coordinates: could not convert string to float: &#x27;500 480&#x27;
+
+[Variables] New/changed:
+  nose_res: str
+  tail_res: str
+
+[Inline Images] 1 image(s) attached below.
+  Labels: InputImages[0]
+
+[Tool Calls] 4 tool/VLM call(s) this step.
+[show() budget] 249/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 2</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Correct coordinate parsing and proceed with 3D reconstruction and segmentation.</div><div class="label">Reasoning</div><div class="body prose">The previous parsing failed because the VLM returned space-separated coordinates. I&#x27;ll update the parser to handle any whitespace or commas. Then, I&#x27;ll perform the 3D reconstruction and track the race car throughout the video to get its trajectory.</div><div class="label">Next Goal</div><div class="body prose">Establish the local coordinate system using the 3D points of the nose and tail, then analyze the displacement.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># Fixed parsing function to handle spaces or commas</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_coords_robust</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="c1"># Replace commas with spaces, then split by whitespace</span>
+    <span class="n">cleaned</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cleaned</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+
+<span class="c1"># Parse the results from the previous step</span>
+<span class="n">nose_norm</span> <span class="o">=</span> <span class="n">parse_coords_robust</span><span class="p">(</span><span class="n">nose_res</span><span class="p">)</span>
+<span class="n">tail_norm</span> <span class="o">=</span> <span class="n">parse_coords_robust</span><span class="p">(</span><span class="n">tail_res</span><span class="p">)</span>
+
+<span class="n">W</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">height</span>
+<span class="n">nose_px</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">normalized_to_pixel</span><span class="p">(</span><span class="n">nose_norm</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+<span class="n">tail_px</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">normalized_to_pixel</span><span class="p">(</span><span class="n">tail_norm</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nose pixels: </span><span class="si">{</span><span class="n">nose_px</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tail pixels: </span><span class="si">{</span><span class="n">tail_px</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3D Reconstruction</span>
+<span class="n">recon</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Reconstruct</span><span class="o">.</span><span class="n">Reconstruct</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)</span>
+
+<span class="c1"># Segmentation and Tracking</span>
+<span class="c1"># Using the first frame as the prompt frame</span>
+<span class="n">seg</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">SAM3</span><span class="o">.</span><span class="n">segment_video_by_text</span><span class="p">([</span><span class="s2">&quot;race car&quot;</span><span class="p">],</span> <span class="n">prompt_frame_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Verification</span>
+<span class="n">fi_0</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">vis</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">fi_0</span><span class="p">)</span>
+<span class="n">show</span><span class="p">([</span><span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vis</span><span class="p">])</span>
+
+<span class="c1"># Programmatic check for mask area</span>
+<span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">:</span>
+    <span class="n">area</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">fi</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">area</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: mask empty at frame </span><span class="si">{</span><span class="n">fi</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">Nose pixels: [384.0, 207.35999999999999]
+Tail pixels: [592.128, 209.952]
+ [image: show_0002] 
+Warning: mask empty at frame 41
+Warning: mask empty at frame 42
+Warning: mask empty at frame 43
+Warning: mask empty at frame 44
+Warning: mask empty at frame 45
+Warning: mask empty at frame 46
+Warning: mask empty at frame 47
+Warning: mask empty at frame 48
+Warning: mask empty at frame 49
+Warning: mask empty at frame 50
+Warning: mask empty at frame 51
+Warning: mask empty at frame 52
+Warning: mask empty at frame 53
+Warning: mask empty at frame 54
+Warning: mask empty at frame 55
+Warning: mask empty at frame 56
+Warning: mask empty at frame 57
+Warning: mask empty at frame 58
+Warning: mask empty at frame 59
+Warning: mask empty at frame 60
+Warning: mask empty at frame 61
+Warning: mask empty at frame 62
+Warning: mask empty at frame 63
+Warning: mask empty at frame 64
+Warning: mask empty at frame 65
+Warning: mask empty at frame 66
+Warning: mask empty at frame 67
+Warning: mask empty at frame 68
+Warning: mask empty at frame 69
+Warning: mask empty at frame 70
+Warning: mask empty at frame 71
+Warning: mask empty at frame 72
+Warning: mask empty at frame 73
+Warning: mask empty at frame 74
+Warning: mask empty at frame 75
+Warning: mask empty at frame 76
+Warning: mask empty at frame 77
+Warning: mask empty at frame 78
+Warning: mask empty at frame 79
+Warning: mask empty at frame 80
+Warning: mask empty at frame 81
+Warning: mask empty at frame 82
+Warning: mask empty at frame 83
+Warning: mask empty at frame 84
+Warning: mask empty at frame 85
+Warning: mask empty at frame 86
+Warning: mask empty at frame 87
+Warning: mask empty at frame 88
+Warning: mask empty at frame 89
+</pre><div class="label">show_0002</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000627/show_0002_img_0.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000627/show_0002_img_1.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 2 Execution Feedback ===
+
+[SUCCESS] Code executed in 13.55s.
+
+[Output]
+Nose pixels: [384.0, 207.35999999999999]
+Tail pixels: [592.128, 209.952]
+
+Warning: mask empty at frame 41
+Warning: mask empty at frame 42
+Warning: mask empty at frame 43
+Warning: mask empty at frame 44
+Warning: mask empty at frame 45
+Warning: mask empty at frame 46
+Warning: mask empty at frame 47
+Warning: mask empty at frame 48
+Warning: mask empty at frame 49
+Warning: mask empty at frame 50
+Warning: mask empty at frame 51
+Warning: mask empty at frame 52
+Warning: mask empty at frame 53
+Warning: mask empty at frame 54
+Warning: mask empty at frame 55
+Warning: mask empty at frame 56
+Warning: mask empty at frame 57
+Warning: mask empty at frame 58
+Warning: mask empty at frame 59
+Warning: mask empty at frame 60
+Warning: mask empty at frame 61
+Warning: mask empty at frame 62
+Warning: mask empty at frame 63
+Warning: mask empty at frame 64
+Warning: mask empty at frame 65
+Warning: mask empty at frame 66
+Warning: mask empty at frame 67
+Warning: mask empty at frame 68
+Warning: mask empty at frame 69
+Warning: mask empty at frame 70
+Warning: mask empty at frame 71
+Warning: mask empty at frame 72
+Warning: mask empty at frame 73
+Warning: mask empty at frame 74
+Warning: mask empty at frame 75
+Warning: mask empty at frame 76
+Warning: mask empty at frame 77
+Warning: mask empty at frame 78
+Warning: mask empty at frame 79
+Warning: mask empty at frame 80
+Warning: mask empty at frame 81
+Warning: mask empty at frame 82
+Warning: mask empty at frame 83
+Warning: mask empty at frame 84
+Warning: mask empty at frame 85
+Warning: mask empty at frame 86
+Warning: mask empty at frame 87
+Warning: mask empty at frame 88
+Warning: mask empty at frame 89
+
+[Variables] New/changed:
+  nose_norm: list, len=2
+  tail_norm: list, len=2
+  W: int
+  H: int
+  nose_px: list, len=2
+  tail_px: list, len=2
+  recon: Reconstruction, frames=[0..84] (15 frames)
+  seg: PerFrameMask, frames=[0..89] (90 frames)
+  fi_0: int
+  vis: VisualFeedback
+  fi: int
+  area: int64, shape=(), dtype=int64
+
+[Inline Images] 2 image(s) attached below.
+  Labels: [InputImages[0], vis]
+
+[Tool Calls] 4 tool/VLM call(s) this step.
+[show() budget] 247/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-step tl-condense">
+  <div class="kind">Condense · step 3</div>
+  <div class="body prose">**Purpose**: Fix the failed segmentation and accurately track the race car throughout the video.
+**Reasoning**: [errored — condensed]
+**Next Goal**: [errored — condensed]
+**Code**:
+```python
+# Get a bounding box for the race car in the first frame
+bbox_res = vlm.locate(InputImages[0], &quot;Give the bounding box (x1, y1, x2, y2) in 0-1000 normalized scale for the race car. Reply with ONLY the numbers.&quot;)
+print(f&quot;BBox response: {bbox_res}&quot;)
+
+# Parse the bounding box
+bbox_norm = parse_coords_robust(bbox_res)  # &lt;-- ERROR
+# ValueError: could not convert string to float: &#x27;Not&#x27;
+```</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 4</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Fix the failed segmentation by using specific point prompts for the foreground race car.</div><div class="label">Reasoning</div><div class="body prose">`segment_video_by_text` was unreliable, and `vlm.locate` for a bounding box failed due to ambiguity (multiple cars). However, I already have precise pixel coordinates for the nose and tail of the primary race car from the first frame. I can use these as point prompts for `segment_video_by_points` to uniquely identify and track the foreground car across the video.</div><div class="label">Next Goal</div><div class="body prose">Once segmentation is fixed, I will establish the 3D local coordinate system and calculate the displacement vector to determine the motion direction.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># Use the previously found nose and tail pixels as prompts for the race car</span>
+<span class="c1"># points_per_object is a list of lists (one list per object)</span>
+<span class="n">points_per_object</span> <span class="o">=</span> <span class="p">[[</span><span class="n">nose_px</span><span class="p">,</span> <span class="n">tail_px</span><span class="p">]]</span>
+<span class="n">point_labels_per_object</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;race car&quot;</span><span class="p">]</span>
+
+<span class="c1"># Track the race car across the video</span>
+<span class="n">seg</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">SAM3</span><span class="o">.</span><span class="n">segment_video_by_points</span><span class="p">(</span>
+    <span class="n">points_per_object</span><span class="o">=</span><span class="n">points_per_object</span><span class="p">,</span>
+    <span class="n">point_labels_per_object</span><span class="o">=</span><span class="n">point_labels_per_object</span><span class="p">,</span>
+    <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+    <span class="n">prompt_frame_idx</span><span class="o">=</span><span class="mi">0</span>
+<span class="p">)</span>
+
+<span class="c1"># Verification: Check first and last frames</span>
+<span class="n">fi_start</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">fi_end</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">vis_start</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">fi_start</span><span class="p">)</span>
+<span class="n">vis_end</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">fi_end</span><span class="p">)</span>
+
+<span class="n">show</span><span class="p">([</span><span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vis_start</span><span class="p">,</span> <span class="n">InputImages</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">vis_end</span><span class="p">])</span>
+
+<span class="c1"># Programmatic check for mask area across the video</span>
+<span class="n">empty_frames</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">:</span>
+    <span class="n">area</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">fi</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">area</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">empty_frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fi</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of empty frames: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">empty_frames</span><span class="p">)</span><span class="si">}</span><span class="s2"> out of </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">empty_frames</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;First few empty frames: </span><span class="si">{</span><span class="n">empty_frames</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out"> [image: show_0003] 
+Number of empty frames: 0 out of 90
+</pre><div class="label">show_0003</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000627/show_0003_img_0.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000627/show_0003_img_1.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000627/show_0003_img_2.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000627/show_0003_img_3.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 4 Execution Feedback ===
+
+[SUCCESS] Code executed in 9.14s.
+
+[Output]
+Number of empty frames: 0 out of 90
+
+[Variables] New/changed:
+  points_per_object: list, len=1
+  point_labels_per_object: list, len=1
+  labels: list, len=1
+  fi_start: int
+  fi_end: int
+  vis_start: VisualFeedback
+  vis_end: VisualFeedback
+  empty_frames: list, len=0
+
+[Inline Images] 4 image(s) attached below.
+  Labels: [InputImages[0], vis_start, InputImages[14], vis_end]
+
+[Tool Calls] 1 tool/VLM call(s) this step.
+[show() budget] 243/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-step tl-condense">
+  <div class="kind">Condense · step 5</div>
+  <div class="body prose">**Purpose**: Establish the race car&#x27;s local coordinate system and analyze its 3D trajectory.
+**Reasoning**: [errored — condensed]
+**Next Goal**: [errored — condensed]
+**Code**:
+```python
+# 1. Establish the Local Coordinate System at t=0
+fi_0 = seg.frame_indices[0]
+# Note: recon.points[fi] is (H, W, 3). Indexing is [y, x]
+nose_3d = recon.points[fi_0][int(nose_px[1]), int(nose_px[0])]
+tail_3d = recon.points[fi_0][int(tail_px[1]), int(tail_px[0])]
+
+# Forward vector: from tail to nose
+v_fwd = nose_3d - tail_3d
+v_fwd = v_fwd / np.linalg.norm(v_fwd)
+
+# Right vector: perpendicular to forward and world-up (0, 1, 0)
+world_up = np.array([0, 1, 0])
+v_right = np.cross(v_fwd, world_up)
+v_right = v_right / np.linalg.norm(v_right)
+
+print(f&quot;Starting Forward Vector: {v_fwd}&quot;)
+print(f&quot;Starting Right Vector: {v_right}&quot;)
+
+# 2. Trajectory Analysis
+p_start = seg.get_centroid_3d(recon, frame=fi_start, object=0)
+p_end = seg.get_centroid_3d(recon, frame=fi_end, object=0)  # &lt;-- ERROR
+# KeyError: &#x27;Frame 89 not found in [0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 78, 84]. Available frames: [0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 78, 84]&#x27;
+```</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 6</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Calculate the 3D displacement of the race car and project it onto the local coordinate system to determine the direction of motion.</div><div class="label">Reasoning</div><div class="body prose">I need to calculate the total displacement from the first frame to the last available reconstructed frame. By projecting this displacement vector onto the car&#x27;s starting forward and right vectors, I can quantitatively determine if the car moved primarily forward, backward, left, or right relative to its initial orientation. I will then cross-validate this with a BEV plot.</div><div class="label">Next Goal</div><div class="body prose">Finalize the direction determination and submit the answer.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># 1. Get the centroid at the last reconstructed frame</span>
+<span class="n">fi_last_recon</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">p_end</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">get_centroid_3d</span><span class="p">(</span><span class="n">recon</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">fi_last_recon</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># 2. Calculate total displacement vector</span>
+<span class="n">displacement</span> <span class="o">=</span> <span class="n">p_end</span> <span class="o">-</span> <span class="n">p_start</span>
+
+<span class="c1"># 3. Project displacement onto local axes</span>
+<span class="n">proj_fwd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">displacement</span><span class="p">,</span> <span class="n">v_fwd</span><span class="p">)</span>
+<span class="n">proj_right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">displacement</span><span class="p">,</span> <span class="n">v_right</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Displacement vector: </span><span class="si">{</span><span class="n">displacement</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Projection on Forward axis: </span><span class="si">{</span><span class="n">proj_fwd</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> m&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Projection on Right axis: </span><span class="si">{</span><span class="n">proj_right</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> m&quot;</span><span class="p">)</span>
+
+<span class="c1"># 4. Determine dominant direction</span>
+<span class="n">abs_fwd</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">proj_fwd</span><span class="p">)</span>
+<span class="n">abs_right</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">proj_right</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">abs_fwd</span> <span class="o">&gt;</span> <span class="n">abs_right</span><span class="p">:</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">if</span> <span class="n">proj_fwd</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;Backward&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;Right&quot;</span> <span class="k">if</span> <span class="n">proj_right</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;Left&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dominant direction: </span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 5. Visual Cross-Validation with BEV</span>
+<span class="c1"># Render BEV with the tracked car mask</span>
+<span class="n">bev_vis</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">render_bev</span><span class="p">(</span><span class="n">masks</span><span class="o">=</span><span class="n">seg</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;race car&quot;</span><span class="p">])</span>
+<span class="n">show</span><span class="p">(</span><span class="n">bev_vis</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">Displacement vector: [ 4.840618  -1.2540921  3.6485002]
+Projection on Forward axis: -5.208 m
+Projection on Right axis: -3.123 m
+Dominant direction: Backward
+ [image: show_0004] 
+</pre><div class="label">show_0004</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000627/show_0004_img_0.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 6 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.23s.
+
+[Output]
+Displacement vector: [ 4.840618  -1.2540921  3.6485002]
+Projection on Forward axis: -5.208 m
+Projection on Right axis: -3.123 m
+Dominant direction: Backward
+
+[Variables] New/changed:
+  fi_last_recon: int
+  p_end: ndarray, shape=(3,), dtype=float32
+  displacement: ndarray, shape=(3,), dtype=float32
+  proj_fwd: float32, shape=(), dtype=float32
+  proj_right: float64, shape=(), dtype=float64
+  abs_fwd: float32, shape=(), dtype=float32
+  abs_right: float64, shape=(), dtype=float64
+  direction: str
+  bev_vis: VisualFeedback
+
+[Inline Images] 1 image(s) attached below.
+  Labels: bev_vis
+[show() budget] 242/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 7</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Finalize the direction determination based on the 3D trajectory analysis.</div><div class="label">Reasoning</div><div class="body prose">1.  **Local Coordinate System**: I established a local coordinate system anchored at the car&#x27;s start position, with the forward axis ($\vec{v}_{fwd}$) defined by the vector from the car&#x27;s tail to its nose in the first frame.
+2.  **Quantitative Analysis**: 
+    - The total 3D displacement vector $\vec{D}$ was calculated as the difference between the final centroid ($P_{end}$) and the initial centroid ($P_{start}$).
+    - I projected this displacement onto the local axes:
+        - $\text{proj}_{fwd} = -5.208\text{ m}$ (indicating motion in the opposite direction of the car&#x27;s nose).
+        - $\text{proj}_{right} = -3.123\text{ m}$ (indicating motion to the car&#x27;s left).
+    - The magnitude of the backward motion ($| -5.208 |$) is significantly larger than the lateral motion ($| -3.123 |$).
+3.  **Visual Cross-Validation**: The BEV visualization confirms that the car&#x27;s trajectory (red $\rightarrow$ blue) moves generally &quot;down&quot; and &quot;right&quot; relative to the scene. Given the car&#x27;s starting orientation (facing roughly &quot;up&quot; in the scene), this movement is primarily backward.
+
+The dominant motion relative to the starting orientation is backward.</div><div class="label">Next Goal</div><div class="body prose">Submit the final answer.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="n">ReturnAnswer</span><span class="p">(</span><span class="s2">&quot;D&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">[ReturnAnswer] Answer submitted: D
+</pre></div></div>
+</div>
+<div class="tl-step tl-answer">
+  <div class="kind">Answer</div>
+  <div class="body prose">D</div>
+</div>
+<div class="tl-step tl-evaluation">
+  <div class="kind">Evaluation</div>
+  <div class="body">Ground truth: <strong>D</strong> · Agent: <strong>D</strong></div>
+</div></div>
+</div>
+</div>
+
+  </main>
+  <footer class="site-footer">SpatialClaw — Supplementary Material</footer>
+  <script src="../../../static/app.js"></script>
+</body>
+</html>

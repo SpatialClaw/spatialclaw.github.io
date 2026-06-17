@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DSI-Bench — Gemma4-31B — sample reverse__row_000051</title>
+  <link rel="stylesheet" href="../../../static/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="crumb"><a href="../../../index.html">Highlights</a> / DSI-Bench / sample reverse__row_000051<span class="nav-hint" aria-hidden="true"><kbd>←</kbd> <kbd>→</kbd> to navigate</span></div>
+      <h1>DSI-Bench — Gemma4-31B — sample reverse__row_000051</h1>
+      
+    </div>
+  </header>
+  <main class="container">
+
+<a class="sample-nav prev" href="../../mmsivideo/samples/question_0184__gemma3vl.html" aria-label="Previous sample" title="Previous sample">‹</a><a class="sample-nav next" href="../../spbench/samples/SI_365__gemma3vl.html" aria-label="Next sample" title="Next sample">›</a>
+<div class="qa-card">
+  <div class="keyframes"><div class="label">Keyframes</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/kf_input_00.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/kf_input_01.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/kf_input_02.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/kf_input_03.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/kf_input_04.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/kf_input_05.jpg" alt=""></div></div>
+  <div class="label">Question</div>
+  <div class="q">In this video clip, how is the runner&#x27;s location moving in the 3D scene relative to his/her/its starting orientation and location?
+
+This is a multiple-choice question about how an object or the camera moves in 3D space within the video clip. Choose the option that best matches the motion you observe and respond with only the option letter (A, B, C, or D).
+A. Moving forward
+B. Moving backward
+C. Moving right
+D. Moving left</div>
+  <div class="pred-row" style="margin-top:14px">
+    <div class="pred-cell"><span class="label" style="margin:0">Ground truth</span>
+      <span class="gt-pill">B</span></div>
+    <div class="pred-cell"><span class="method-pill pill-agent">SpatialClaw</span>
+      <span style="font-family:ui-monospace,Menlo,monospace">B</span>
+      <span class="tick-ok">✓</span></div>
+    <div class="pred-cell"><span class="q-badge q-only_agent">Agent wins</span></div>
+  </div>
+</div>
+<div class="baseline-tabs" role="tablist" aria-label="Baseline comparison"><button type="button" class="baseline-tab" data-pane="cot">No-tool baseline</button><button type="button" class="baseline-tab" data-pane="single-pass">Single-pass code</button><button type="button" class="baseline-tab" data-pane="react">Structured tool-call</button><button type="button" class="baseline-tab" data-pane="spacetools">SpaceTools</button></div>
+<div class="split agent-only">
+  <div class="left-stack">
+    <div class="baseline-pane" data-pane="cot"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-cot">No-tool Baseline</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="cot-md markdown"><p>To determine the runner's motion in the 3D scene relative to their starting orientation and location, let's analyze the video frames:</p>
+<ol>
+<li><strong>Starting Position and Orientation:</strong> In the first few frames, the runner is positioned in the distance, facing towards the camera.</li>
+<li><strong>Motion Observed:</strong> As the sequence progresses, the runner runs along the black track, moving from the background toward the foreground.</li>
+<li><strong>Interaction with Environment:</strong> The runner jumps over a hurdle and continues their trajectory toward the camera.</li>
+<li><strong>Relative Direction:</strong> Because the runner is facing the camera and moving in that same direction, they are moving &quot;forward&quot; relative to their own orientation and starting point.</li>
+</ol>
+<p>Comparing this to the given options:</p>
+<ul>
+<li><strong>A. Moving forward:</strong> Matches the observed motion (running in the direction they are facing).</li>
+<li><strong>B. Moving backward:</strong> Incorrect, as the runner is not running backward.</li>
+<li><strong>C. Moving right:</strong> Incorrect, as the primary motion is along the track toward the camera.</li>
+<li><strong>D. Moving left:</strong> Incorrect, as the primary motion is along the track toward the camera.</li>
+</ul>
+<p>Therefore, the runner is moving forward.</p>
+<p><span class="boxed">A</span></p>
+</div></div></div><div class="baseline-pane" data-pane="single-pass"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-spcode">Single-pass code</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="single-pass-card"><div class="label">Purpose</div><div class="body prose">Determine the 3D motion of the runner relative to their starting orientation and location.</div><div class="label">Reasoning</div><div class="body prose">1.  **Visual Observation**: By inspecting the provided key frames, the runner is seen running on a track. 
+2.  **Orientation**: In all frames, the runner is facing towards the camera.
+3.  **Motion**: The runner starts in the distance (Frame 0) and moves progressively closer to the camera (Frame 14).
+4.  **Relative Motion**: Since the runner is facing the camera and moving in that same direction, the motion is &quot;forward&quot; relative to the runner&#x27;s own starting orientation.
+5.  **Camera State**: The background (buildings, horizon, and the white wall) remains stationary, indicating the camera is fixed.</div><div class="label">Next Goal</div><div class="body prose">Return the final answer.</div><div class="label">Code</div><pre class="code py-hl"><span class="n">ReturnAnswer</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">[ReturnAnswer] Answer submitted: A
+</pre><div class="label">Final answer</div><div class="body prose">A</div></div></div></div><div class="baseline-pane" data-pane="react"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-react">Structured tool-call</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="timeline">
+<div class="tl-step tl-plan">
+  <div class="kind">Plan</div>
+  <div class="body markdown"><h3>Task Analysis</h3>
+<p>The objective is to determine the 3D motion of a &quot;runner&quot; relative to their starting orientation and location. This is a 3D spatial reasoning task requiring an object-centric coordinate system.</p>
+<p><strong>Implicit Coordinate System Resolution:</strong>
+The question asks for motion &quot;relative to his/her/its starting orientation and location.&quot; This defines a local coordinate system anchored to the runner at the first frame of appearance:</p>
+<ul>
+<li><strong>Forward:</strong> The direction the runner is facing at the start.</li>
+<li><strong>Backward:</strong> The opposite of the starting facing direction.</li>
+<li><strong>Right:</strong> 90 degrees clockwise from the starting facing direction (relative to the runner's perspective).</li>
+<li><strong>Left:</strong> 90 degrees counter-clockwise from the starting facing direction.</li>
+</ul>
+<p>The target variable is the primary direction of the 3D displacement vector $\vec{v}<em>{motion} = \text{Position}</em>{end} - \text{Position}_{start}$, projected onto the runner's initial local axes.</p>
+<h3>Information Needs</h3>
+<ol>
+<li><strong>Object Identification &amp; Tracking:</strong> Accurate segmentation masks for the runner across the video to extract 3D centroids.</li>
+<li><strong>3D Geometry:</strong> A metric reconstruction of the scene to obtain world-space coordinates for the runner and the camera poses.</li>
+<li><strong>Starting Orientation:</strong> The world-space vector representing the direction the runner is facing in the first frame.</li>
+<li><strong>Trajectory Data:</strong> The 3D positions of the runner at the start and end of the clip.</li>
+</ol>
+<h3>Computation Plan</h3>
+<ol>
+<li>
+<p><strong>Object Identification &amp; Segmentation:</strong></p>
+<ul>
+<li>Use <code>tools.SAM3.segment_video_by_text(prompts=[&quot;runner&quot;], ...)</code> to generate masks for the runner across all provided frames.</li>
+<li>Programmatically verify that masks are non-empty in the first and last frames.</li>
+<li>Use <code>show()</code> to visually inspect the segmentation overlay on the first and last frames to ensure the runner is correctly tracked.</li>
+</ul>
+</li>
+<li>
+<p><strong>3D Scene Reconstruction:</strong></p>
+<ul>
+<li>Call <code>tools.Reconstruct.Reconstruct(InputImages)</code> to generate the 3D point cloud, camera extrinsics, and intrinsics.</li>
+</ul>
+</li>
+<li>
+<p><strong>Trajectory Extraction:</strong></p>
+<ul>
+<li>For the first frame ($f_{start}$) and last frame ($f_{end}$) where the runner is masked, compute the 3D centroids using <code>seg.get_centroid_3d(recon, frame=fi, object='runner')</code>.</li>
+<li>Let these be $P_{start}$ and $P_{end}$.</li>
+<li>Calculate the motion vector: $\vec{v}<em>{motion} = P</em>{end} - P_{start}$.</li>
+</ul>
+</li>
+<li>
+<p><strong>Starting Orientation Determination:</strong></p>
+<ul>
+<li>Use <code>vlm.ask_with_thinking</code> on <code>InputImages[0]</code> (or the first frame the runner appears) to determine the runner's facing direction relative to the camera (e.g., &quot;facing away from camera&quot;, &quot;facing towards the right of the image&quot;).</li>
+<li>Retrieve the camera pose at $f_{start}$ from <code>recon.extrinsics[f_{start}]</code>.</li>
+<li>Use the camera's basis vectors (<code>cam_fwd</code>, <code>cam_right</code>) to convert the VLM's relative description into a world-space facing vector $\vec{v}_{facing}$.</li>
+</ul>
+</li>
+<li>
+<p><strong>Relative Direction Calculation:</strong></p>
+<ul>
+<li><strong>Forward/Backward:</strong> Compute the dot product $d_{fwd} = \vec{v}<em>{motion} \cdot \vec{v}</em>{facing}$.
+<ul>
+<li>If $d_{fwd} &gt; 0$, the motion is primarily Forward.</li>
+<li>If $d_{fwd} &lt; 0$, the motion is primarily Backward.</li>
+</ul>
+</li>
+<li><strong>Left/Right:</strong> Define the runner's starting right vector $\vec{v}<em>{right} = \vec{v}</em>{facing} \times [0, 1, 0]$ (assuming world +Y is up). Compute the dot product $d_{right} = \vec{v}<em>{motion} \cdot \vec{v}</em>{right}$.
+<ul>
+<li>If $d_{right} &gt; 0$, the motion is primarily Right.</li>
+<li>If $d_{right} &lt; 0$, the motion is primarily Left.</li>
+</ul>
+</li>
+<li>Compare the magnitudes of $|d_{fwd}|$ and $|d_{right}|$ to determine the dominant direction.</li>
+</ul>
+</li>
+<li>
+<p><strong>Visual Cross-Validation:</strong></p>
+<ul>
+<li>Render a BEV plot using <code>recon.render_bev(masks=seg)</code>.</li>
+<li>Inspect the BEV to see the trajectory line (red to blue).</li>
+<li>Compare the trajectory's direction with the runner's starting orientation (which can be inferred from the runner's body pose in the first frame of the BEV) to confirm the geometric result.</li>
+</ul>
+</li>
+</ol>
+<h3>CHECKLIST</h3>
+<pre><code class="language-json">[
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Verify SAM3 masks accurately cover the runner across the video duration&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Confirm the starting orientation vector is correctly derived from the VLM description and camera pose&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Ensure 3D centroids are not NaN and are physically plausible in the reconstructed scene&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Cross-validate the calculated motion direction with the visual trajectory in the BEV render&quot;},
+  {&quot;priority&quot;: &quot;LOW&quot;, &quot;description&quot;: &quot;Check for any significant camera shake or reconstruction drift that might skew the motion vector&quot;}
+]
+</code></pre>
+<h3>Fallbacks</h3>
+<ul>
+<li><strong>Segmentation Failure:</strong> If <code>segment_video_by_text</code> fails or is noisy, use <code>vlm.locate</code> on the first frame to get a bounding box and use <code>tools.SAM3.segment_video_by_box</code>.</li>
+<li><strong>Orientation Ambiguity:</strong> If the runner's facing direction is unclear from the first frame, use <code>vlm.ask_with_thinking</code> on a sequence of the first 3-5 frames to determine the orientation based on the initial d</li>
+</ul>
+</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 0</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Segment the runner across the video to track their 3D position over time.</div><div class="label">Reasoning</div><div class="body prose">To determine the runner&#x27;s motion in 3D space, I first need accurate segmentation masks for the runner in every frame. `tools.SAM3.segment_video_by_text` is the most efficient way to identify and track the &quot;runner&quot; throughout the clip.</div><div class="label">Next Goal</div><div class="body prose">Verify the segmentation masks visually and programmatically to ensure the runner is correctly tracked.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools.SAM3.segment_video_by_text&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;prompts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;runner&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;labels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;runner&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 0 Execution Feedback ===
+
+[SUCCESS] Code executed in 6.13s.
+
+[Variables] New/changed:
+  result_0: PerFrameMask, frames=[0..41] (42 frames)
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 1</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Visually verify the segmentation masks for the runner at the start and end of the video.</div><div class="label">Reasoning</div><div class="body prose">Before proceeding to 3D reconstruction and trajectory analysis, I must ensure the &quot;runner&quot; masks are accurate and consistent. Comparing the masks with the original frames at the beginning and end of the clip will confirm the tracking quality.</div><div class="label">Next Goal</div><div class="body prose">Perform a 3D reconstruction of the scene to obtain metric coordinates.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;show&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;InputImages[0]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;result_0.visualize(0)&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;InputImages[14]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;result_0.visualize(39)&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out"> [image: show_0001] 
+</pre><div class="label">show_0001</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0001_img_0.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0001_img_1.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0001_img_2.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0001_img_3.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 1 Execution Feedback ===
+
+[SUCCESS] Code executed in 3.12s.
+
+[Variables] New/changed:
+  result_1: NoneType
+
+[Inline Images] 4 image(s) attached below.
+  Labels: [InputImages[0], result_0.visualize(0), InputImages[14], result_0.visualize(39)]
+[show() budget] 246/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 2</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Reconstruct the 3D scene to enable metric spatial analysis of the runner&#x27;s motion.</div><div class="label">Reasoning</div><div class="body prose">To calculate the runner&#x27;s 3D displacement and relative motion, I need a metric 3D reconstruction of the environment. This provides the depth maps and camera poses necessary to convert 2D masks into 3D world coordinates.</div><div class="label">Next Goal</div><div class="body prose">Extract the 3D centroids of the runner at the beginning and end of the clip.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools.Reconstruct.Reconstruct&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;frames&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;InputImages&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 2 Execution Feedback ===
+
+[SUCCESS] Code executed in 12.04s.
+
+[Variables] New/changed:
+  result_2: Reconstruction, frames=[0..39] (15 frames)
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 3</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Extract the runner&#x27;s 3D position at the start and end of the video clip.
+**Reasoning**: By obtaining the 3D centroids of the runner at the first and last frames, I can calculate the overall 3D displacement vector, which is essential for determining the direction of motion.
+**Next Goal**: Determine the runner&#x27;s starting orientation to define the local coordinate system.
+**Tool Call (translated)**:
+```python
+result_3 = [result_0.get_centroid_3d(result_2, frame=0, object=&#x27;runner&#x27;), result_0.get_centroid_3d(result_2, frame=39, object=&#x27;runner&#x27;)]
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 3 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 4</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Extract the 3D centroids of the runner at the start and end of the video clip.</div><div class="label">Reasoning</div><div class="body prose">To calculate the displacement vector $\vec{v}_{motion}$, I need the runner&#x27;s 3D world coordinates at the first and last frames. I will use the `get_centroid_3d` method from the `PerFrameMask` object, passing the `Reconstruction` result.</div><div class="label">Next Goal</div><div class="body prose">Determine the runner&#x27;s starting facing direction to establish the local coordinate system.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vlm.ask_with_thinking&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;visual_input&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;InputImages[0]&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;question&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;In this image, which direction is the runner facing relative to the camera? (e.g., facing towards the camera, facing away, facing left, facing right)&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out">[VLM Q | thinking] In this image, which direction is the runner facing relative to the camera? (e.g., facing towards the camera, facing away, facing left, facing right)
+[VLM A | thinking] The runner is facing towards the camera.
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 4 Execution Feedback ===
+
+[SUCCESS] Code executed in 1.68s.
+
+[Output]
+[VLM Q | thinking] In this image, which direction is the runner facing relative to the camera? (e.g., facing towards the camera, facing away, facing left, facing right)
+[VLM A | thinking] The runner is facing towards the camera.
+
+[Variables] New/changed:
+  result_4: str
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 5</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Extract the 3D centroids of the runner at the start and end of the video to compute the motion vector.
+**Reasoning**: I have the segmentation masks (`result_0`) and the 3D reconstruction (`result_2`). By calculating the 3D centroids at the first frame (index 0) and the last frame (index 39), I can determine the runner&#x27;s overall displacement in world space.
+**Next Goal**: Compute the motion vector and project it onto the runner&#x27;s starting orientation to determine the direction.
+**Tool Call (translated)**:
+```python
+result_5 = [result_0.get_centroid_3d(result_2, frame=0, object=&#x27;runner&#x27;), result_0.get_centroid_3d(result_2, frame=39, object=&#x27;runner&#x27;)]
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 5 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 6</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Visualize the runner&#x27;s trajectory from a top-down perspective to determine the direction of motion.</div><div class="label">Reasoning</div><div class="body prose">A Bird&#x27;s Eye View (BEV) rendering provides a clear, metric representation of the object&#x27;s 3D path. By observing the trajectory line (from red to blue) and knowing the runner&#x27;s starting orientation (facing towards the camera), I can directly determine if the motion is forward, backward, left, or right relative to the runner.</div><div class="label">Next Goal</div><div class="body prose">Analyze the BEV trajectory and the runner&#x27;s starting orientation to conclude the motion direction.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;show&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;result_2.render_bev(masks=result_0)&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out"> [image: show_0002] 
+</pre><div class="label">show_0002</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0002_img_0.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 6 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.17s.
+
+[Variables] New/changed:
+  result_6: NoneType
+
+[Inline Images] 1 image(s) attached below.
+  Labels: result_2.render_bev(masks=result_0)
+[show() budget] 245/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 7</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Compute the 3D centroids of the runner at the start and end of the video to quantitatively determine the motion vector.
+**Reasoning**: The BEV render did not clearly show the trajectory, so I will manually extract the 3D world coordinates of the runner at the first and last frames. This will allow me to calculate the displacement vector and project it onto the runner&#x27;s starting orientation.
+**Next Goal**: Calculate the displacement vector and determine if the motion is forward, backward, left, or right relative to the runner&#x27;s starting facing direction.
+**Tool Call (translated)**:
+```python
+result_7 = [result_0.get_centroid_3d(result_2, frame=0, object=&#x27;runner&#x27;), result_0.get_centroid_3d(result_2, frame=39, object=&#x27;runner&#x27;)]
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 7 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 8</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Determine the runner&#x27;s 3D motion relative to their starting orientation.</div><div class="label">Reasoning</div><div class="body prose">1. **Starting Orientation**: In Step 4, the VLM confirmed that the runner is facing towards the camera in the first frame.
+2. **Observed Motion**: Comparing the first frame (`InputImages[0]`) and the last frame (`InputImages[14]`), the runner moves from a distant position to a much closer position, maintaining their heading toward the camera.
+3. **Relative Direction**: Since the runner is facing the camera and moving in that same direction (towards the camera), the motion is &quot;Forward&quot; relative to the runner&#x27;s starting orientation.
+4. **Cross-Validation**: The runner remains centered on the track, indicating no significant left or right lateral movement. The motion is a direct approach toward the camera.</div><div class="label">Next Goal</div><div class="body prose">Submit the final answer.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ReturnAnswer&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;answer&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;A&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out">[ReturnAnswer] Answer submitted: A
+</pre></div></div>
+</div>
+<div class="tl-step tl-answer">
+  <div class="kind">Answer</div>
+  <div class="body prose">A</div>
+</div></div></div></div><div class="baseline-pane" data-pane="spacetools"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-spacetools">SpaceTools</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="timeline"><div class="tl-step tl-st-reasoning"><div class="kind">Reasoning</div><div class="body markdown"><p>Based on the sequence of images, the runner is moving away from the camera, heading deeper into the scene. This movement is forward relative to the runner's orientation.</p>
+<p>A</p>
+</div></div><div class="tl-step tl-st-complete"><div class="kind">Final answer</div><div class="body markdown"><p>Based on the sequence of images, the runner is moving away from the camera, heading deeper into the scene. This movement is forward relative to the runner's orientation.</p>
+<p>A</p>
+</div></div><div class="tl-step tl-st-final"><div class="kind">Final response</div><div class="body markdown"><p>Based on the sequence of images, the runner is moving away from the camera, heading deeper into the scene. This movement is forward relative to the runner's orientation.</p>
+<p>A</p>
+</div></div></div></div></div>
+  </div>
+  
+<div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-agent">SpatialClaw</span></h2>
+    <div class="verdict"><span class='tick-ok'>✓ Correct</span></div>
+  </div>
+  <div class="timeline">
+<div class="tl-step tl-plan">
+  <div class="kind">Plan</div>
+  <div class="body markdown"><h3>Task Analysis</h3>
+<p>The objective is to determine the direction of a runner's movement in a 3D scene relative to their starting orientation and location.</p>
+<p><strong>Coordinate System Resolution:</strong>
+The question asks for motion &quot;relative to his/her/its starting orientation and location.&quot; This requires a <strong>local object-centric coordinate system</strong> anchored at the runner's position at the start of the clip.</p>
+<ul>
+<li><strong>Origin</strong>: Runner's 3D centroid at the first frame.</li>
+<li><strong>Forward Axis ($\vec{f}_{start}$)</strong>: The direction the runner is facing at the first frame.</li>
+<li><strong>Right Axis ($\vec{r}_{start}$)</strong>: The vector perpendicular to the forward axis and the world-up vector (+Y).</li>
+<li><strong>Backward/Left Axes</strong>: $-\vec{f}<em>{start}$ and $-\vec{r}</em>{start}$ respectively.</li>
+</ul>
+<p>The final answer will be determined by projecting the runner's total 3D displacement vector onto these local axes.</p>
+<h3>Information Needs</h3>
+<ol>
+<li><strong>Object Identification &amp; Tracking</strong>: Precise 2D masks of the runner across all frames to compute 3D centroids.</li>
+<li><strong>3D Scene Geometry</strong>: A 3D reconstruction to map 2D masks to world-space coordinates and provide camera poses.</li>
+<li><strong>Starting Orientation</strong>: The direction the runner is facing at the first frame, which defines the &quot;forward&quot; reference.</li>
+<li><strong>Trajectory Data</strong>: The sequence of 3D centroids to calculate the total displacement vector.</li>
+</ol>
+<h3>Computation Plan</h3>
+<ol>
+<li>
+<p><strong>Segmentation</strong>:</p>
+<ul>
+<li>Use <code>tools.SAM3.segment_video_by_text(prompts=[&quot;runner&quot;], ...)</code> to track the runner across all 15 frames.</li>
+<li><strong>Verification</strong>: Use <code>seg.visualize(fi)</code> and <code>show()</code> on the first, middle, and last frames to ensure the mask accurately covers the runner.</li>
+</ul>
+</li>
+<li>
+<p><strong>3D Reconstruction</strong>:</p>
+<ul>
+<li>Use <code>tools.Reconstruct.Reconstruct(InputImages)</code> to generate the 3D point cloud and camera extrinsics.</li>
+<li><strong>Verification</strong>: Render a BEV plot using <code>recon.render_bev(masks=seg)</code> to visually inspect the runner's trajectory and ensure it looks physically plausible.</li>
+</ul>
+</li>
+<li>
+<p><strong>Trajectory Extraction</strong>:</p>
+<ul>
+<li>For each frame index <code>fi</code> in <code>seg.frame_indices</code>, compute the 3D centroid: <code>p_i = seg.get_centroid_3d(recon, frame=fi, object='runner')</code>.</li>
+<li>Store these as a sequence of points $P = [p_0, p_1, ..., p_{n-1}]$.</li>
+</ul>
+</li>
+<li>
+<p><strong>Starting Orientation Determination</strong>:</p>
+<ul>
+<li>Use <code>vlm.ask_with_thinking</code> on the first frame (<code>InputImages[0]</code>) to determine the runner's facing direction relative to the camera (e.g., &quot;facing away from camera&quot;, &quot;facing right&quot;).</li>
+<li>Combine this description with the camera pose at frame 0 (<code>recon.extrinsics[fi_0]</code>) to define the world-space forward vector $\vec{f}_{start}$.</li>
+<li>Compute the right vector: $\vec{r}<em>{start} = \vec{f}</em>{start} \times [0, 1, 0]$ (normalized).</li>
+</ul>
+</li>
+<li>
+<p><strong>Motion Analysis</strong>:</p>
+<ul>
+<li>Compute the total displacement vector: $\vec{d} = p_{n-1} - p_0$.</li>
+<li>Calculate the projection of $\vec{d}$ onto the local axes:
+<ul>
+<li>$\text{forward_score} = \vec{d} \cdot \vec{f}_{start}$</li>
+<li>$\text{right_score} = \vec{d} \cdot \vec{r}_{start}$</li>
+</ul>
+</li>
+<li>Determine the dominant direction:
+<ul>
+<li>If $|\text{forward_score}|$ is dominant and positive $\rightarrow$ Forward.</li>
+<li>If $|\text{forward_score}|$ is dominant and negative $\rightarrow$ Backward.</li>
+<li>If $|\text{right_score}|$ is dominant and positive $\rightarrow$ Right.</li>
+<li>If $|\text{right_score}|$ is dominant and negative $\rightarrow$ Left.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3>Verification Checklist</h3>
+<pre><code class="language-json">[
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Verify SAM3 masks accurately track the runner without drifting or disappearing across frames.&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Confirm the runner's starting orientation (facing direction) is correctly interpreted from the VLM and mapped to world coordinates.&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Cross-validate the computed displacement vector against the visual trajectory seen in the BEV render.&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Check that 3D centroids are stable and not jumping due to reconstruction noise (use median filtering if necessary).&quot;},
+  {&quot;priority&quot;: &quot;LOW&quot;, &quot;description&quot;: &quot;Sanity check the magnitude of the displacement relative to the video duration and typical running speeds.&quot;}
+]
+</code></pre>
+<h3>Verification</h3>
+<ul>
+<li><strong>Visual-Geometric Cross-Check</strong>: I will compare the result of the dot product calculation with the BEV plot. If the math says &quot;Right&quot; but the BEV shows the runner moving &quot;Left&quot; relative to their start, I will re-examine the starting orientation vector $\vec{f}_{start}$.</li>
+<li><strong>Temporal Consistency</strong>: I will calculate the displacement between multiple pairs of frames (e.g., frame 0 to 7, frame 0 to 14) to ensure the direction of motion is consistent throughout the clip.</li>
+<li><strong>VLM Double-Check</strong>: I will use <code>vlm.ask_with_thinking</code> on the full sequence of frames to qualitatively describe the runner's motion relative to their start, using this as a second independent line of evidence to support the geometric result.</li>
+</ul>
+<h3>Fallbacks</h3>
+<ul>
+<li><strong>SAM3 Failure</strong>: If text segmentation fails, I will use <code>vlm.locate</code> to find the runner i</li>
+</ul>
+</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 0</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Segment and track the runner across all frames of the video.</div><div class="label">Reasoning</div><div class="body prose">To analyze the runner&#x27;s 3D movement, I first need precise 2D segmentation masks for every frame. I&#x27;ll use `tools.SAM3.segment_video_by_text` to track the &quot;runner&quot; throughout the sequence. After segmentation, I will verify the quality of the masks by visualizing them on the first, middle, and last frames to ensure the runner is accurately tracked without drift.</div><div class="label">Next Goal</div><div class="body prose">Perform 3D reconstruction of the scene and render a BEV plot to visually inspect the runner&#x27;s trajectory.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># Segment the runner across all frames</span>
+<span class="n">seg</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">SAM3</span><span class="o">.</span><span class="n">segment_video_by_text</span><span class="p">(</span><span class="n">prompts</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;runner&quot;</span><span class="p">])</span>
+
+<span class="c1"># Verify masks programmatically</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mask area check:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">fi</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">area</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frame </span><span class="si">{</span><span class="n">fi</span><span class="si">}</span><span class="s2">: area = </span><span class="si">{</span><span class="n">area</span><span class="si">}</span><span class="s2"> pixels&quot;</span><span class="p">)</span>
+
+<span class="c1"># Visual verification on first, middle, and last frames</span>
+<span class="n">fi_start</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">fi_mid</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">fi_end</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">vis_start</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">fi_start</span><span class="p">)</span>
+<span class="n">vis_mid</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">fi_mid</span><span class="p">)</span>
+<span class="n">vis_end</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">fi_end</span><span class="p">)</span>
+
+<span class="n">show</span><span class="p">([</span>
+    <span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vis_start</span><span class="p">,</span>
+    <span class="n">InputImages</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">],</span> <span class="n">vis_mid</span><span class="p">,</span>
+    <span class="n">InputImages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">vis_end</span>
+<span class="p">])</span>
+</pre><div class="label">Output</div><pre class="out">Mask area check:
+Frame 0: area = 0 pixels
+Frame 1: area = 0 pixels
+Frame 2: area = 0 pixels
+Frame 3: area = 0 pixels
+Frame 4: area = 0 pixels
+Frame 5: area = 0 pixels
+Frame 6: area = 0 pixels
+Frame 7: area = 0 pixels
+Frame 8: area = 0 pixels
+Frame 9: area = 0 pixels
+Frame 10: area = 0 pixels
+Frame 11: area = 0 pixels
+Frame 12: area = 0 pixels
+Frame 13: area = 0 pixels
+Frame 14: area = 0 pixels
+Frame 15: area = 0 pixels
+Frame 16: area = 0 pixels
+Frame 17: area = 0 pixels
+Frame 18: area = 0 pixels
+Frame 19: area = 0 pixels
+Frame 20: area = 0 pixels
+Frame 21: area = 0 pixels
+Frame 22: area = 0 pixels
+Frame 23: area = 0 pixels
+Frame 24: area = 0 pixels
+Frame 25: area = 0 pixels
+Frame 26: area = 0 pixels
+Frame 27: area = 0 pixels
+Frame 28: area = 0 pixels
+Frame 29: area = 0 pixels
+Frame 30: area = 0 pixels
+Frame 31: area = 0 pixels
+Frame 32: area = 0 pixels
+Frame 33: area = 0 pixels
+Frame 34: area = 0 pixels
+Frame 35: area = 0 pixels
+Frame 36: area = 0 pixels
+Frame 37: area = 0 pixels
+Frame 38: area = 0 pixels
+Frame 39: area = 0 pixels
+Frame 40: area = 0 pixels
+Frame 41: area = 0 pixels
+ [image: show_0001] 
+</pre><div class="label">show_0001</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0001_img_0.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0001_img_1.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0001_img_2.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0001_img_3.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0001_img_4.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0001_img_5.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 0 Execution Feedback ===
+
+[SUCCESS] Code executed in 5.91s.
+
+[Output]
+Mask area check:
+Frame 0: area = 0 pixels
+Frame 1: area = 0 pixels
+Frame 2: area = 0 pixels
+Frame 3: area = 0 pixels
+Frame 4: area = 0 pixels
+Frame 5: area = 0 pixels
+Frame 6: area = 0 pixels
+Frame 7: area = 0 pixels
+Frame 8: area = 0 pixels
+Frame 9: area = 0 pixels
+Frame 10: area = 0 pixels
+Frame 11: area = 0 pixels
+Frame 12: area = 0 pixels
+Frame 13: area = 0 pixels
+Frame 14: area = 0 pixels
+Frame 15: area = 0 pixels
+Frame 16: area = 0 pixels
+Frame 17: area = 0 pixels
+Frame 18: area = 0 pixels
+Frame 19: area = 0 pixels
+Frame 20: area = 0 pixels
+Frame 21: area = 0 pixels
+Frame 22: area = 0 pixels
+Frame 23: area = 0 pixels
+Frame 24: area = 0 pixels
+Frame 25: area = 0 pixels
+Frame 26: area = 0 pixels
+Frame 27: area = 0 pixels
+Frame 28: area = 0 pixels
+Frame 29: area = 0 pixels
+Frame 30: area = 0 pixels
+Frame 31: area = 0 pixels
+Frame 32: area = 0 pixels
+Frame 33: area = 0 pixels
+Frame 34: area = 0 pixels
+Frame 35: area = 0 pixels
+Frame 36: area = 0 pixels
+Frame 37: area = 0 pixels
+Frame 38: area = 0 pixels
+Frame 39: area = 0 pixels
+Frame 40: area = 0 pixels
+Frame 41: area = 0 pixels
+
+[Variables] New/changed:
+  seg: PerFrameMask, frames=[0..41] (42 frames)
+  fi: int
+  mask: ndarray, shape=(432, 768), dtype=bool
+  area: int64, shape=(), dtype=int64
+  fi_start: int
+  fi_mid: int
+  fi_end: int
+  vis_start: VisualFeedback
+  vis_mid: VisualFeedback
+  vis_end: VisualFeedback
+
+[Inline Images] 6 image(s) attached below.
+  Labels: [
+    InputImages[0], vis_start,
+    InputImages[len(InputImages)//2], vis_mid,
+    InputImages[-1], vis_end
+]
+
+[Tool Calls] 1 tool/VLM call(s) this step.
+[show() budget] 244/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-step tl-condense">
+  <div class="kind">Condense · step 1</div>
+  <div class="body prose">**Purpose**: Segment and track the runner using a bounding box prompt after text segmentation failed.
+**Reasoning**: [errored — condensed]
+**Next Goal**: [errored — condensed]
+**Code**:
+```python
+# 1. Locate the runner in the first frame
+img_0 = InputImages[0]
+W, H = img_0.width, img_0.height
+bbox_norm = vlm.locate(img_0, &quot;Give the bounding box (x1, y1, x2, y2) in 0-1000 normalized scale for the runner. Reply with ONLY the numbers.&quot;)
+print(f&quot;Normalized bbox: {bbox_norm}&quot;)
+
+# Parse the normalized coordinates
+import ast
+try:
+    # Handle cases where the VLM might return a string like &quot;(100, 200, 300, 400)&quot; or &quot;100, 200, 300, 400&quot;
+    bbox_vals = ast.literal_eval(bbox_norm.strip().replace(&#x27;(&#x27;, &#x27;[&#x27;).replace(&#x27;)&#x27;, &#x27;]&#x27;))  # &lt;-- ERROR
+# ValueError: could not convert string to float: &#x27;381 246 436 541&#x27;
+```</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 2</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Segment and track the runner using a bounding box prompt after text segmentation failed.</div><div class="label">Reasoning</div><div class="body prose">The initial attempt to segment the runner using text failed (all masks were empty). I have now obtained a normalized bounding box `[381, 246, 436, 541]` from the VLM for the first frame. I will parse these coordinates, convert them to pixel values, and use `tools.SAM3.segment_video_by_box` to track the runner across the entire video. I will then verify the resulting masks.</div><div class="label">Next Goal</div><div class="body prose">Perform 3D reconstruction and render a BEV plot to analyze the runner&#x27;s trajectory.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># 1. Parse the normalized coordinates from the VLM response</span>
+<span class="n">bbox_str</span> <span class="o">=</span> <span class="n">bbox_norm</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<span class="n">bbox_norm_vals</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">bbox_str</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parsed normalized bbox: </span><span class="si">{</span><span class="n">bbox_norm_vals</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 2. Convert normalized coordinates to pixel coordinates</span>
+<span class="c1"># bbox_norm_vals is [x1, y1, x2, y2]</span>
+<span class="n">px_bbox</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">normalized_to_pixel</span><span class="p">(</span><span class="n">bbox_norm_vals</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pixel bbox: </span><span class="si">{</span><span class="n">px_bbox</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3. Segment and track the runner using the bounding box</span>
+<span class="c1"># We use video_index=1 as it&#39;s a single video sample.</span>
+<span class="n">seg</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">SAM3</span><span class="o">.</span><span class="n">segment_video_by_box</span><span class="p">(</span>
+    <span class="n">boxes</span><span class="o">=</span><span class="p">[</span><span class="n">px_bbox</span><span class="p">],</span> 
+    <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;runner&quot;</span><span class="p">],</span> 
+    <span class="n">prompt_frame_idx</span><span class="o">=</span><span class="mi">0</span>
+<span class="p">)</span>
+
+<span class="c1"># 4. Verify masks programmatically</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Mask area check:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">fi</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">area</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">area</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frame </span><span class="si">{</span><span class="n">fi</span><span class="si">}</span><span class="s2">: area = 0 pixels (WARNING: EMPTY)&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Just print a few to avoid spamming</span>
+        <span class="k">if</span> <span class="n">fi</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frame </span><span class="si">{</span><span class="n">fi</span><span class="si">}</span><span class="s2">: area = </span><span class="si">{</span><span class="n">area</span><span class="si">}</span><span class="s2"> pixels&quot;</span><span class="p">)</span>
+
+<span class="c1"># 5. Visual verification on first, middle, and last frames</span>
+<span class="n">fi_start</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">fi_mid</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">fi_end</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">vis_start</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">fi_start</span><span class="p">)</span>
+<span class="n">vis_mid</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">fi_mid</span><span class="p">)</span>
+<span class="n">vis_end</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">fi_end</span><span class="p">)</span>
+
+<span class="n">show</span><span class="p">([</span>
+    <span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vis_start</span><span class="p">,</span>
+    <span class="n">InputImages</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">],</span> <span class="n">vis_mid</span><span class="p">,</span>
+    <span class="n">InputImages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">vis_end</span>
+<span class="p">])</span>
+</pre><div class="label">Output</div><pre class="out">Parsed normalized bbox: [381, 246, 436, 541]
+Pixel bbox: [292.608, 106.27199999999999, 334.848, 233.71200000000002]
+
+Mask area check:
+Frame 0: area = 3121 pixels
+Frame 10: area = 1522 pixels
+Frame 20: area = 821 pixels
+Frame 30: area = 692 pixels
+Frame 40: area = 515 pixels
+ [image: show_0002] 
+</pre><div class="label">show_0002</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0002_img_0.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0002_img_1.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0002_img_2.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0002_img_3.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0002_img_4.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0002_img_5.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 2 Execution Feedback ===
+
+[SUCCESS] Code executed in 7.05s.
+
+[Output]
+Parsed normalized bbox: [381, 246, 436, 541]
+Pixel bbox: [292.608, 106.27199999999999, 334.848, 233.71200000000002]
+
+Mask area check:
+Frame 0: area = 3121 pixels
+Frame 10: area = 1522 pixels
+Frame 20: area = 821 pixels
+Frame 30: area = 692 pixels
+Frame 40: area = 515 pixels
+
+[Variables] New/changed:
+  bbox_str: str
+  bbox_norm_vals: list, len=4
+  px_bbox: list, len=4
+
+[Inline Images] 6 image(s) attached below.
+  Labels: [
+    InputImages[0], vis_start,
+    InputImages[len(InputImages)//2], vis_mid,
+    InputImages[-1], vis_end
+]
+
+[Tool Calls] 2 tool/VLM call(s) this step.
+[show() budget] 238/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 3</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Re-segment the runner more robustly and perform 3D reconstruction to analyze the trajectory.</div><div class="label">Reasoning</div><div class="body prose">The previous bounding-box-based segmentation failed to track the runner accurately in later frames (masks became too small or disappeared). I will try `tools.SAM3.segment_video_by_text` with the prompt &quot;person&quot; as it is often more robust for human tracking. Simultaneously, I will perform the 3D reconstruction of the scene using all available frames. This will allow me to map the 2D masks to 3D world coordinates and visualize the trajectory in a Bird&#x27;s Eye View (BEV) plot, which is essential for confirming the direction of motion.</div><div class="label">Next Goal</div><div class="body prose">Extract 3D centroids, determine the starting orientation using the VLM, and compute the displacement vector relative to the local coordinate system.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># 1. Try a more robust segmentation prompt</span>
+<span class="n">seg</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">SAM3</span><span class="o">.</span><span class="n">segment_video_by_text</span><span class="p">(</span><span class="n">prompts</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;person&quot;</span><span class="p">])</span>
+
+<span class="c1"># 2. Perform 3D reconstruction</span>
+<span class="n">recon</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Reconstruct</span><span class="o">.</span><span class="n">Reconstruct</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)</span>
+
+<span class="c1"># 3. Verify segmentation and visualize trajectory in BEV</span>
+<span class="c1"># Check mask areas to ensure tracking is successful</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mask area check (person):&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">fi</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">area</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">fi</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frame </span><span class="si">{</span><span class="n">fi</span><span class="si">}</span><span class="s2">: area = </span><span class="si">{</span><span class="n">area</span><span class="si">}</span><span class="s2"> pixels&quot;</span><span class="p">)</span>
+
+<span class="c1"># Render BEV to see the trajectory</span>
+<span class="n">bev_vis</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">render_bev</span><span class="p">(</span><span class="n">masks</span><span class="o">=</span><span class="n">seg</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;runner&quot;</span><span class="p">])</span>
+
+<span class="c1"># Visual verification of masks on key frames</span>
+<span class="n">fi_start</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">fi_mid</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">fi_end</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">show</span><span class="p">([</span>
+    <span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">seg</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">fi_start</span><span class="p">),</span>
+    <span class="n">InputImages</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">],</span> <span class="n">seg</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">fi_mid</span><span class="p">),</span>
+    <span class="n">InputImages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">seg</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">fi_end</span><span class="p">),</span>
+    <span class="n">bev_vis</span>
+<span class="p">])</span>
+</pre><div class="label">Output</div><pre class="out">Mask area check (person):
+Frame 0: area = 2986 pixels
+Frame 10: area = 1532 pixels
+Frame 20: area = 817 pixels
+Frame 30: area = 675 pixels
+Frame 40: area = 508 pixels
+ [image: show_0003] 
+</pre><div class="label">show_0003</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0003_img_0.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0003_img_1.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0003_img_2.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0003_img_3.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0003_img_4.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0003_img_5.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000051/show_0003_img_6.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 3 Execution Feedback ===
+
+[SUCCESS] Code executed in 385.89s.
+
+[Output]
+Mask area check (person):
+Frame 0: area = 2986 pixels
+Frame 10: area = 1532 pixels
+Frame 20: area = 817 pixels
+Frame 30: area = 675 pixels
+Frame 40: area = 508 pixels
+
+[Variables] New/changed:
+  recon: Reconstruction, frames=[0..39] (15 frames)
+  bev_vis: VisualFeedback
+
+[Inline Images] 7 image(s) attached below.
+  Labels: [
+    InputImages[0], seg.visualize(fi_start),
+    InputImages[len(InputImages)//2], seg.visualize(fi_mid),
+    InputImages[-1], seg.visualize(fi_end),
+    bev_vis
+]
+
+[Tool Calls] 2 tool/VLM call(s) this step.
+[show() budget] 231/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-step tl-condense">
+  <div class="kind">Condense · step 4</div>
+  <div class="body prose">**Purpose**: Extract 3D centroids and determine the runner&#x27;s motion relative to their starting orientation.
+**Reasoning**: [errored — condensed]
+**Next Goal**: [errored — condensed]
+**Code**:
+```python
+import numpy as np
+
+# 1. Extract 3D centroids
+centroids = []
+for fi in seg.frame_indices:
+    c = seg.get_centroid_3d(recon, frame=fi, object=0)  # &lt;-- ERROR
+# KeyError: &#x27;Frame 1 not found in [0, 3, 6, 8, 11, 14, 17, 20, 22, 25, 28, 31, 34, 36, 39]. Available frames: [0, 3, 6, 8, 11, 14, 17, 20, 22, 25, 28, 31, 34, 36, 39]&#x27;
+```</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 5</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Extract 3D centroids and compute the runner&#x27;s motion relative to their starting orientation.</div><div class="label">Reasoning</div><div class="body prose">To determine the direction of motion relative to the runner&#x27;s starting orientation, I need the 3D displacement vector and the runner&#x27;s initial facing direction.
+1.  **Trajectory**: I&#x27;ll extract 3D centroids for frames that exist in both the segmentation (`seg`) and the reconstruction (`recon`).
+2.  **Starting Orientation**: By observing the first frame, the runner is facing the camera. In the world coordinate system defined by the reconstruction, the camera&#x27;s forward vector is $\vec{z}_{cam} = \text{pose}[:3, 2]$. Since the runner is facing the camera, their starting forward vector is $\vec{f}_{start} \approx -\vec{z}_{cam}$.
+3.  **Motion Analysis**: I&#x27;ll compute the displacement $\vec{d} = p_{last} - p_0$ and project it onto the local axes ($\vec{f}_{start}$ and $\vec{r}_{start} = \vec{f}_{start} \times [0, 1, 0]$).
+4.  **Cross-Validation**: I will compare the calculated direction with the visual evidence from the images (where the runner clearly moves towards the camera).</div><div class="label">Next Goal</div><div class="body prose">Calculate the final displacement scores and determine the answer.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># 1. Extract 3D centroids for frames present in both seg and recon</span>
+<span class="n">valid_frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">fi</span> <span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span> <span class="k">if</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">recon</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">]</span>
+<span class="n">centroids</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">valid_frames</span><span class="p">:</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">get_centroid_3d</span><span class="p">(</span><span class="n">recon</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">fi</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">centroids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">centroids</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not enough valid centroids found.&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">p_start</span> <span class="o">=</span> <span class="n">centroids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">p_end</span> <span class="o">=</span> <span class="n">centroids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">displacement</span> <span class="o">=</span> <span class="n">p_end</span> <span class="o">-</span> <span class="n">p_start</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Start position: </span><span class="si">{</span><span class="n">p_start</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;End position: </span><span class="si">{</span><span class="n">p_end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Displacement vector: </span><span class="si">{</span><span class="n">displacement</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># 2. Define starting orientation</span>
+    <span class="c1"># The runner is facing the camera in the first frame.</span>
+    <span class="n">fi_0</span> <span class="o">=</span> <span class="n">valid_frames</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">pose_0</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">extrinsics</span><span class="p">[</span><span class="n">fi_0</span><span class="p">]</span>
+    <span class="n">cam_fwd</span> <span class="o">=</span> <span class="n">pose_0</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+    
+    <span class="c1"># Runner&#39;s forward is opposite to camera&#39;s forward</span>
+    <span class="n">f_start</span> <span class="o">=</span> <span class="o">-</span><span class="n">cam_fwd</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">cam_fwd</span><span class="p">)</span>
+    <span class="c1"># Right vector is f_start cross world-up (0, 1, 0)</span>
+    <span class="n">r_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">f_start</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
+    <span class="n">r_start</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">r_start</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Local Forward vector: </span><span class="si">{</span><span class="n">f_start</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Local Right vector: </span><span class="si">{</span><span class="n">r_start</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># 3. Project displacement onto local axes</span>
+    <span class="n">forward_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">displacement</span><span class="p">,</span> <span class="n">f_start</span><span class="p">)</span>
+    <span class="n">right_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">displacement</span><span class="p">,</span> <span class="n">r_start</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Forward score: </span><span class="si">{</span><span class="n">forward_score</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Right score: </span><span class="si">{</span><span class="n">right_score</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Determine dominant direction</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">forward_score</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">right_score</span><span class="p">):</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">if</span> <span class="n">forward_score</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;Backward&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;Right&quot;</span> <span class="k">if</span> <span class="n">right_score</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;Left&quot;</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dominant direction relative to start: </span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">Start position: [-0.6587664  2.0556076 -3.8113675]
+End position: [-0.4580781  2.1639428 -5.5432577]
+Displacement vector: [ 0.2006883   0.10833526 -1.7318902 ]
+Local Forward vector: [ 1.59272277e-17 -2.30315794e-09  1.00000000e+00]
+Local Right vector: [-1.00000000e+00  0.00000000e+00  1.59272277e-17]
+Forward score: -1.7319
+Right score: -0.2007
+Dominant direction relative to start: Backward
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 5 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.03s.
+
+[Output]
+Start position: [-0.6587664  2.0556076 -3.8113675]
+End position: [-0.4580781  2.1639428 -5.5432577]
+Displacement vector: [ 0.2006883   0.10833526 -1.7318902 ]
+Local Forward vector: [ 1.59272277e-17 -2.30315794e-09  1.00000000e+00]
+Local Right vector: [-1.00000000e+00  0.00000000e+00  1.59272277e-17]
+Forward score: -1.7319
+Right score: -0.2007
+Dominant direction relative to start: Backward
+
+[Variables] New/changed:
+  valid_frames: list, len=15
+  p_start: ndarray, shape=(3,), dtype=float32
+  p_end: ndarray, shape=(3,), dtype=float32
+  displacement: ndarray, shape=(3,), dtype=float32
+  fi_0: int
+  pose_0: ndarray, shape=(4, 4), dtype=float64
+  cam_fwd: ndarray, shape=(3,), dtype=float64
+  f_start: ndarray, shape=(3,), dtype=float64
+  r_start: ndarray, shape=(3,), dtype=float64
+  forward_score: float64, shape=(), dtype=float64
+  right_score: float64, shape=(), dtype=float64
+  direction: str
+  centroids: list, len=15</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 6</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Finalize the analysis of the runner&#x27;s motion relative to their starting orientation.</div><div class="label">Reasoning</div><div class="body prose">1.  **Starting Orientation**: In the first frame, the runner is facing the camera. In the world coordinate system, the camera looks toward the $-Z$ axis. Therefore, the runner&#x27;s starting forward vector $\vec{f}_{start}$ points toward the camera (approximately along the $+Z$ axis).
+2.  **Trajectory Analysis**: 
+    *   The 3D centroids show the runner starting at $Z \approx -3.8\text{m}$ and ending at $Z \approx -5.5\text{m}$. 
+    *   Since the camera is at $Z=0$ and looking toward $-Z$, a change from $-3.8$ to $-5.5$ indicates the runner is moving further away from the camera.
+    *   The BEV plot confirms this, showing the runner&#x27;s trajectory moving from $Y \approx 4$ to $Y \approx 6$ along the &quot;Camera 0 Forward&quot; axis.
+3.  **Relative Motion**: The runner is facing the camera but moving away from it. This direction of motion is opposite to their starting orientation.
+4.  **Conclusion**: Moving in the direction opposite to one&#x27;s forward orientation is defined as moving &quot;backward.&quot;</div><div class="label">Next Goal</div><div class="body prose">Submit the final answer.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="n">ReturnAnswer</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">[ReturnAnswer] Answer submitted: B
+</pre></div></div>
+</div>
+<div class="tl-step tl-answer">
+  <div class="kind">Answer</div>
+  <div class="body prose">B</div>
+</div>
+<div class="tl-step tl-evaluation">
+  <div class="kind">Evaluation</div>
+  <div class="body">Ground truth: <strong>B</strong> · Agent: <strong>B</strong></div>
+</div></div>
+</div>
+</div>
+
+  </main>
+  <footer class="site-footer">SpatialClaw — Supplementary Material</footer>
+  <script src="../../../static/app.js"></script>
+</body>
+</html>

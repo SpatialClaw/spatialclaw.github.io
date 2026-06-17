@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ERQA — Gemma4-31B — sample ERQA_186</title>
+  <link rel="stylesheet" href="../../../static/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="crumb"><a href="../../../index.html">Highlights</a> / ERQA / sample ERQA_186<span class="nav-hint" aria-hidden="true"><kbd>←</kbd> <kbd>→</kbd> to navigate</span></div>
+      <h1>ERQA — Gemma4-31B — sample ERQA_186</h1>
+      
+    </div>
+  </header>
+  <main class="container">
+
+<a class="sample-nav prev" href="../../sparbench/samples/2815__gemma3vl.html" aria-label="Previous sample" title="Previous sample">‹</a><a class="sample-nav next" href="../../mindcube/samples/among_group139_q0_5_1__gemma3vl.html" aria-label="Next sample" title="Next sample">›</a>
+<div class="qa-card">
+  <div class="keyframes"><div class="label">Keyframes</div><div class="img-row"><img loading="lazy" src="../../../assets/erqa/gemma3vl/ERQA_186/kf_input_00.jpg" alt=""><img loading="lazy" src="../../../assets/erqa/gemma3vl/ERQA_186/kf_input_01.jpg" alt=""></div></div>
+  <div class="label">Question</div>
+  <div class="q">&lt;image&gt; &lt;image&gt;
+How did the camera move to go from the first image to the second image? Choices:  A. translate right. B. translate left. C. pan left. D. pan right. Please answer directly with only the letter of the correct option and nothing else.
+
+This question is from the ERQA (Embodied Reasoning Question Answer) benchmark, which evaluates multimodal spatial reasoning and world knowledge in robotics scenarios.
+
+The question may contain &lt;image&gt; tags indicating where images should be viewed in context. Questions are multiple-choice with answer options embedded in the question text.
+
+Answer with ONLY the correct option letter (e.g., A, B, C, or D). Do not include any explanation or additional text in your final answer.</div>
+  <div class="pred-row" style="margin-top:14px">
+    <div class="pred-cell"><span class="label" style="margin:0">Ground truth</span>
+      <span class="gt-pill">D</span></div>
+    <div class="pred-cell"><span class="method-pill pill-agent">SpatialClaw</span>
+      <span style="font-family:ui-monospace,Menlo,monospace">D</span>
+      <span class="tick-ok">✓</span></div>
+    <div class="pred-cell"><span class="q-badge q-only_agent">Agent wins</span></div>
+  </div>
+</div>
+<div class="baseline-tabs" role="tablist" aria-label="Baseline comparison"><button type="button" class="baseline-tab" data-pane="cot">No-tool baseline</button><button type="button" class="baseline-tab" data-pane="single-pass">Single-pass code</button><button type="button" class="baseline-tab" data-pane="react">Structured tool-call</button><button type="button" class="baseline-tab" data-pane="spacetools">SpaceTools</button></div>
+<div class="split agent-only">
+  <div class="left-stack">
+    <div class="baseline-pane" data-pane="cot"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-cot">No-tool Baseline</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="cot-md markdown"><p>To determine the camera movement between the first and second images, we analyze the positions of static objects in the scene:</p>
+<ol>
+<li><strong>Door Frame:</strong> In the first image, the right edge of the brown door frame is positioned roughly in the center of the image. In the second image, this edge has shifted to the left, occupying a smaller portion of the left side of the frame.</li>
+<li><strong>Smoke Detector/Sensor:</strong> The small white circular object on the ceiling also shifts to the left when moving from the first image to the second.</li>
+<li><strong>Right-side Elements:</strong> In the first image, only a small portion of the light source (top right) and the patterned tiles (bottom right) are visible. In the second image, more of these elements have entered the frame from the right, meaning they have moved leftward across the field of view.</li>
+</ol>
+<p>When all objects in a scene shift to the left in the image, it indicates that the camera has moved to the right (translation) or rotated to the right (panning). Comparing the two images, the change in perspective is a consistent shift, which is characteristic of a translation to the right.</p>
+<p>Therefore, the camera moved to the right.</p>
+<p><span class="boxed">A</span></p>
+</div></div></div><div class="baseline-pane" data-pane="single-pass"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-spcode">Single-pass code</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="single-pass-card"><div class="label">Purpose</div><div class="body prose">Determine the camera movement from the first image to the second image.</div><div class="label">Reasoning</div><div class="body prose">1. **Visual Analysis**: 
+   - In the first image, the door frame is on the left, a small white sensor is in the center-right, and a ceiling light is at the top right.
+   - In the second image, all these elements have shifted to the left relative to the frame. The door frame has moved further left (partially out of frame), the sensor is more central, and the light is more visible and shifted left.
+2. **Interpreting Motion**: When objects in a scene shift to the left in the image plane, it indicates that the camera has either moved (translated) to the right or rotated (panned) to the right.
+3. **Translation vs. Pan**: Translation typically introduces parallax, where closer objects (like the door frame) move more across the image than distant objects (like the wall/sensor). In these images, the door frame moves significantly to the left, while the sensor and light also move left but the relative shift is consistent with a rightward translation of the camera.
+4. **Conclusion**: The movement is a translation to the right.</div><div class="label">Next Goal</div><div class="body prose">Return the final answer.</div><div class="label">Code</div><pre class="code py-hl"><span class="n">ReturnAnswer</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">[ReturnAnswer] Answer submitted: A
+</pre><div class="label">Final answer</div><div class="body prose">A</div></div></div></div><div class="baseline-pane" data-pane="react"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-react">Structured tool-call</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="timeline">
+<div class="tl-step tl-plan">
+  <div class="kind">Plan</div>
+  <div class="body markdown"><h3>Task Analysis</h3>
+<p>The objective is to determine the specific type of camera motion between two frames: translation (right/left) or panning (right/left).</p>
+<p><strong>Coordinate System Resolution:</strong></p>
+<ul>
+<li><strong>Translation Right/Left:</strong> Refers to the camera moving along its local X-axis (the axis pointing to the right of the image).</li>
+<li><strong>Pan Right/Left:</strong> Refers to the camera rotating around its local Y-axis (the axis pointing &quot;up&quot; relative to the camera sensor, though the world Y is gravity-aligned). A &quot;pan right&quot; means the camera's optical axis rotates toward the right.</li>
+</ul>
+<p>This is a 3D spatial reasoning task requiring the distinction between linear motion (translation) and angular motion (rotation).</p>
+<h3>Information Needs</h3>
+<p>To distinguish between translation and panning, I need:</p>
+<ol>
+<li><strong>Camera Poses:</strong> The 3D position and orientation (extrinsics) of the camera for both frames.</li>
+<li><strong>Trajectory Data:</strong> The displacement vector between the two camera centers.</li>
+<li><strong>Rotation Data:</strong> The change in the camera's forward-facing vector.</li>
+<li><strong>Visual Evidence of Parallax:</strong> Translation causes parallax (objects at different depths move at different speeds in the image), whereas panning causes a uniform rotation of the scene.</li>
+</ol>
+<h3>Computation Plan</h3>
+<ol>
+<li>
+<p><strong>3D Reconstruction:</strong></p>
+<ul>
+<li>Call <code>recon = tools.Reconstruct.Reconstruct(InputImages)</code> using both frames. This provides the camera-to-world (c2w) matrices.</li>
+</ul>
+</li>
+<li>
+<p><strong>Quantitative Pose Analysis:</strong></p>
+<ul>
+<li>Extract the camera positions: <code>pos0 = recon.extrinsics[0][:3, 3]</code> and <code>pos1 = recon.extrinsics[1][:3, 3]</code>.</li>
+<li>Extract the camera &quot;right&quot; vector for the first frame: <code>cam_right0 = recon.extrinsics[0][:3, 0]</code>.</li>
+<li>Calculate the translation vector: <code>delta_p = pos1 - pos0</code>.</li>
+<li>Compute the projection of the translation onto the right axis: <code>dist_right = np.dot(delta_p, cam_right0)</code>.
+<ul>
+<li>If <code>dist_right</code> is significantly positive, the camera translated right.</li>
+<li>If <code>dist_right</code> is significantly negative, the camera translated left.</li>
+</ul>
+</li>
+<li>Extract the camera &quot;forward&quot; vectors: <code>fwd0 = recon.extrinsics[0][:3, 2]</code> and <code>fwd1 = recon.extrinsics[1][:3, 2]</code>.</li>
+<li>Calculate the angle between <code>fwd0</code> and <code>fwd1</code> using <code>tools.Geometry.angle_between_vectors</code>.</li>
+<li>Determine the rotation direction: Use the cross product of <code>fwd0</code> and <code>fwd1</code> relative to the camera's &quot;up&quot; vector to see if it's a pan right or left.</li>
+</ul>
+</li>
+<li>
+<p><strong>Visual Trajectory Verification:</strong></p>
+<ul>
+<li>Render a BEV plot: <code>recon.render_bev(ego_trajectory=True)</code>.</li>
+<li>Inspect the green/yellow dashed line. A clear line indicates translation; a point with a change in orientation indicates a pan.</li>
+</ul>
+</li>
+<li>
+<p><strong>Visual Reasoner Cross-Check:</strong></p>
+<ul>
+<li>Call <code>vlm.ask_with_thinking([InputImages[0], InputImages[1]], &quot;Analyze the motion from the first image to the second. Does the scene exhibit parallax (objects shifting relative to each other based on depth), which indicates translation, or does it look like a rotation around a fixed point, which indicates panning? Based on this, did the camera move right, left, pan right, or pan left?&quot;)</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Synthesis:</strong></p>
+<ul>
+<li>Compare the magnitude of translation ($|delta_p|$) against the magnitude of rotation.</li>
+<li>If translation dominates and <code>dist_right &gt; 0</code> $\rightarrow$ Translate Right.</li>
+<li>If translation dominates and <code>dist_right &lt; 0</code> $\rightarrow$ Translate Left.</li>
+<li>If rotation dominates and it's a clockwise rotation around the Y-axis (from top view) $\rightarrow$ Pan Right.</li>
+<li>If rotation dominates and it's a counter-clockwise rotation around the Y-axis (from top view) $\rightarrow$ Pan Left.</li>
+</ul>
+</li>
+</ol>
+<h3>CHECKLIST</h3>
+<pre><code class="language-json">[
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Verify if the reconstruction succeeded and the camera poses are physically plausible&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Distinguish between translation and rotation by comparing the magnitude of position change vs orientation change&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Use BEV trajectory to visually confirm the direction of movement&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Cross-validate the geometric result with the VLM's analysis of parallax&quot;}
+]
+</code></pre>
+<h3>Fallbacks</h3>
+<ul>
+<li><strong>Reconstruction Failure:</strong> If the images have too little overlap for <code>tools.Reconstruct</code>, I will rely entirely on <code>vlm.ask_with_thinking</code> to identify parallax. Parallax is the definitive visual cue for translation over panning.</li>
+<li><strong>Ambiguous Motion:</strong> If both translation and rotation occur, I will determine which component is dominant in terms of the resulting image shift.</li>
+</ul>
+</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 0</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Reconstruct the 3D scene to obtain camera poses (extrinsics) and positions for both frames.</div><div class="label">Reasoning</div><div class="body prose">To distinguish between translation and panning, I need the precise camera-to-world (c2w) matrices. `tools.Reconstruct.Reconstruct` will provide the camera positions and orientations, allowing me to calculate the displacement vector and the change in the forward-facing vector.</div><div class="label">Next Goal</div><div class="body prose">Analyze the camera poses to determine if the motion was primarily translation or rotation and in which direction.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools.Reconstruct.Reconstruct&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;frames&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;InputImages&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 0 Execution Feedback ===
+
+[SUCCESS] Code executed in 27.63s.
+
+[Variables] New/changed:
+  result_0: Reconstruction, frames=[0, 1]
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 1</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Calculate the 3D distance between the camera centers of the two frames to quantify translation.</div><div class="label">Reasoning</div><div class="body prose">By computing the Euclidean distance between the camera positions (the translation component of the c2w matrices), I can determine if the camera physically moved in space. A significant distance suggests translation, while a near-zero distance suggests a pure pan.</div><div class="label">Next Goal</div><div class="body prose">Calculate the angle between the camera&#x27;s forward vectors to quantify rotation (panning).</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools.Geometry.euclidean_distance&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;p1&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;result_0.extrinsics[0][:3, 3]&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;p2&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;result_0.extrinsics[1][:3, 3]&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 1 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.00s.
+
+[Variables] New/changed:
+  result_1: float
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 2</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Calculate the angle between the camera&#x27;s forward-facing vectors to quantify rotation.
+**Reasoning**: A pure pan involves rotation around the camera&#x27;s center without translation. By calculating the angle between the forward vectors of the camera in the first and second frames, I can determine the magnitude of the rotation. Comparing this to the translation distance (from `result_1`) will help me decide if the motion was primarily a translation or a pan.
+**Next Goal**: Determine the direction of the motion (right/left) by projecting the translation onto the camera&#x27;s right axis or analyzing the rotation.
+**Tool Call (translated)**:
+```python
+result_2 = tools.Geometry.angle_between_vectors(v1=result_0.extrinsics[0][:3, 2], v2=result_0.extrinsics[1][:3, 2])
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 2 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 3</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Visualize the camera trajectory in BEV to distinguish between translation and panning.</div><div class="label">Reasoning</div><div class="body prose">`render_bev` with `ego_trajectory=True` draws the camera&#x27;s path. A clear line segment indicates translation, while a stationary point (or very short segment) with a change in orientation indicates a pan. This will provide a clear visual answer to whether the motion is translation or rotation and in which direction.</div><div class="label">Next Goal</div><div class="body prose">Based on the BEV, determine if the motion was primarily translation or rotation and identify the direction.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;show&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;result_0.render_bev(ego_trajectory=True)&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out"> [image: show_0001] 
+</pre><div class="label">show_0001</div><div class="img-row"><img loading="lazy" src="../../../assets/erqa/gemma3vl/ERQA_186/show_0001_img_0.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 3 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.17s.
+
+[Variables] New/changed:
+  result_3: NoneType
+
+[Inline Images] 1 image(s) attached below.
+  Labels: result_0.render_bev(ego_trajectory=True)
+[show() budget] 249/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 4</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Use the VLM to analyze the images for parallax to distinguish between translation and panning.
+**Reasoning**: Translation causes parallax, where closer objects (like the door frame) shift more than distant objects (like the smoke detector). Panning causes a uniform rotation where all objects shift in a way consistent with a rotation around the camera center. By analyzing the relative motion of the door frame and the smoke detector, I can definitively tell if the motion was translation or panning.
+**Next Goal**: Synthesize the VLM&#x27;s visual analysis with the BEV trajectory to select the final answer.
+**Tool Call (translated)**:
+```json
+{&quot;tool&quot;: &quot;vlm.ask_with_thinking&quot;, &quot;args&quot;: {&quot;visual_input&quot;: [&quot;InputImages[0]&quot;, &quot;InputImages[1]&quot;], &quot;question&quot;: &quot;Analyze the motion from the first image to the second. Does the scene exhibit parallax (objects shifting relative to each other based on depth), which indicates translation, or does it look like a rotation around a fixed point, which indicates panning? Specifically, compare the movement of the door frame on the left and the smoke detector on the ceiling. Based on this, did the camera move right, move left, pan right, or pan left?&quot;}}
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 4 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 5</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Analyze the visual evidence and reconstruction results to determine the camera motion.</div><div class="label">Reasoning</div><div class="body prose">1. **Visual Analysis**: Comparing Image 0 to Image 1, all objects (the door frame, the smoke detector, and the ceiling light) shift to the left. A shift of objects to the left in the image frame is caused by either the camera translating to the right or the camera panning to the right.
+2. **Parallax Check**: I observe that the door frame (which is closer to the camera) shifts more significantly to the left than the smoke detector (which is further away). This difference in apparent motion based on depth is called parallax, and it is a definitive indicator of translation rather than rotation (panning).
+3. **BEV Analysis**: The BEV plot (`result_3`) shows the camera trajectory. The red dot (Camera 0) is at the origin, and the blue triangle (Camera 1) is positioned to the right of the red dot. This confirms a physical displacement of the camera center in the positive X direction (right).
+4. **Conclusion**: The combination of the rightward shift in the BEV and the presence of parallax in the images confirms that the camera translated to the right.</div><div class="label">Next Goal</div><div class="body prose">Provide the final answer.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ReturnAnswer&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;answer&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;A&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out">[ReturnAnswer] Answer submitted: A
+</pre></div></div>
+</div>
+<div class="tl-step tl-answer">
+  <div class="kind">Answer</div>
+  <div class="body prose">A</div>
+</div></div></div></div><div class="baseline-pane" data-pane="spacetools"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-spacetools">SpaceTools</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="timeline"><div class="tl-step tl-st-decision"><div class="kind">Tool decision</div><div class="body markdown"><p>🛠️ Decided to use 2 tool(s)</p>
+</div><div class="label">tool_calls</div><pre class="code py-hl"><span class="p">[</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vlm__detect_one&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;arguments&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;image_index&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;obj_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;smoke detector&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vlm__detect_one&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;arguments&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;image_index&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;obj_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;smoke detector&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">]</span>
+</pre></div><div class="tl-step tl-st-exec"><div class="kind">Tool call</div><div class="body markdown"><p>⚡ Executing vlm__detect_one...</p>
+</div><div class="label">tool_name</div><div class="body prose">vlm__detect_one</div><div class="label">arguments</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;image_index&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;obj_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;smoke detector&quot;</span>
+<span class="p">}</span>
+</pre></div><div class="tl-step tl-st-result"><div class="kind">Tool result</div><div class="body markdown"><p>✅ vlm__detect_one completed (with generated image)</p>
+</div><div class="label">tool_name</div><div class="body prose">vlm__detect_one</div><div class="label">result</div><div class="body prose">Detected 1 instance(s) of &#x27;smoke detector&#x27;: [(0.7120000000000001, 0.41700000000000004)] Use $smoke_detector_detections to reference them.</div></div><div class="tl-step tl-st-exec"><div class="kind">Tool call</div><div class="body markdown"><p>⚡ Executing vlm__detect_one...</p>
+</div><div class="label">tool_name</div><div class="body prose">vlm__detect_one</div><div class="label">arguments</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;image_index&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;obj_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;smoke detector&quot;</span>
+<span class="p">}</span>
+</pre></div><div class="tl-step tl-st-result"><div class="kind">Tool result</div><div class="body markdown"><p>✅ vlm__detect_one completed (with generated image)</p>
+</div><div class="label">tool_name</div><div class="body prose">vlm__detect_one</div><div class="label">result</div><div class="body prose">Detected 1 instance(s) of &#x27;smoke detector&#x27;: [(0.621, 0.429)] Use $smoke_detector_detections to reference them.</div></div><div class="tl-step tl-st-synth"><div class="kind">Synthesizing</div><div class="body markdown"><p>🧠 Synthesizing results from 2 tool(s)...</p>
+</div></div><div class="tl-step tl-st-reasoning"><div class="kind">Reasoning</div><div class="body markdown"><p>B</p>
+</div></div><div class="tl-step tl-st-complete"><div class="kind">Final answer</div><div class="body markdown"><p>B</p>
+</div></div><div class="tl-step tl-st-final"><div class="kind">Final response</div><div class="body markdown"><p>B</p>
+</div></div></div></div></div>
+  </div>
+  
+<div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-agent">SpatialClaw</span></h2>
+    <div class="verdict"><span class='tick-ok'>✓ Correct</span></div>
+  </div>
+  <div class="timeline">
+<div class="tl-step tl-plan">
+  <div class="kind">Plan</div>
+  <div class="body markdown"><h3>Task Analysis</h3>
+<p>The goal is to determine the camera's movement between two consecutive frames. The options are translation (right or left) or panning (left or right).</p>
+<p><strong>Coordinate System Resolution:</strong></p>
+<ul>
+<li><strong>Translate Right:</strong> The camera's 3D position moves in the direction of its own local X-axis (right).</li>
+<li><strong>Translate Left:</strong> The camera's 3D position moves in the opposite direction of its local X-axis.</li>
+<li><strong>Pan Left:</strong> The camera rotates around its local Y-axis (yaw) to look toward its left.</li>
+<li><strong>Pan Right:</strong> The camera rotates around its local Y-axis (yaw) to look toward its right.</li>
+</ul>
+<p>This is a 3D spatial reasoning task requiring the analysis of the camera's extrinsic parameters (pose) and visual verification of the scene's motion.</p>
+<h3>Information Needs</h3>
+<ol>
+<li><strong>Camera Poses:</strong> The 4x4 camera-to-world matrices for both frames are needed to calculate the relative transformation.</li>
+<li><strong>Relative Transformation:</strong> The translation vector and rotation matrix between the two poses in the camera's local coordinate system.</li>
+<li><strong>Visual Evidence:</strong> Side-by-side images and a BEV trajectory plot to confirm whether the movement is a translation (characterized by parallax) or a pan (characterized by rotation around a point).</li>
+</ol>
+<h3>Computation Plan</h3>
+<ol>
+<li><strong>3D Reconstruction:</strong> Perform reconstruction on the two frames to extract camera extrinsics.
+<code>recon = tools.Reconstruct.Reconstruct(InputImages)</code></li>
+<li><strong>Pose Extraction:</strong> Get the camera-to-world matrices for the first and second frames.
+<code>pose0 = recon.extrinsics[recon.frame_indices[0]]</code>
+<code>pose1 = recon.extrinsics[recon.frame_indices[1]]</code></li>
+<li><strong>Relative Motion Calculation:</strong> Compute the relative transformation $T_{rel} = T_0^{-1} \cdot T_1$.
+<ul>
+<li>The translation component $t_{rel} = [x, y, z]$ describes the movement of the camera in its local frame at $t=0$.</li>
+<li>The rotation component $R_{rel}$ describes the change in orientation.</li>
+</ul>
+</li>
+<li><strong>Quantitative Analysis:</strong>
+<ul>
+<li><strong>Translation:</strong> Check the magnitude of $t_{rel}$. If $|x|$ is dominant and significantly larger than the rotation effect:
+<ul>
+<li>$x &gt; 0 \rightarrow$ Translate Right.</li>
+<li>$x &lt; 0 \rightarrow$ Translate Left.</li>
+</ul>
+</li>
+<li><strong>Rotation (Panning):</strong> If the rotation around the local Y-axis is dominant and translation is minimal:
+<ul>
+<li>Determine the direction of rotation (Yaw). A rotation that turns the camera's forward vector towards its local right is a Pan Right; towards local left is a Pan Left.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Visual Verification:</strong>
+<ul>
+<li><code>show(InputImages[0], InputImages[1])</code>: Inspect the images. Translation causes parallax (objects at different depths move at different speeds), while panning causes a more uniform shift of the scene.</li>
+<li><code>recon.render_bev(ego_trajectory=True)</code>: Visualize the camera's path in the world frame to see if it is a straight line (translation) or a pivot (rotation).</li>
+<li><code>vlm.ask_with_thinking([InputImages[0], InputImages[1]], &quot;Describe the camera movement between these two images. Did the camera shift its position sideways, or did it stay in place and rotate its view?&quot;)</code></li>
+</ul>
+</li>
+</ol>
+<h3>Verification Checklist</h3>
+<pre><code class="language-json">[
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Verify that the relative translation vector x-component matches the visual shift in the images.&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Distinguish between translation and panning by checking for parallax in the visual evidence.&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Ensure the correct frame indices are used for the relative pose calculation.&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Cross-check the geometric result with the VLM's qualitative description of the motion.&quot;}
+]
+</code></pre>
+<h3>Fallbacks</h3>
+<ul>
+<li><strong>Reconstruction Failure:</strong> If <code>tools.Reconstruct</code> fails due to insufficient overlap or motion, I will rely on <code>vlm.ask_with_thinking</code> and a manual analysis of feature point movement (using <code>vlm.locate</code> on static objects in both frames to see if they move consistently with a pan or translation).</li>
+<li><strong>Ambiguous Motion:</strong> If both translation and rotation are present, I will determine which component is dominant in terms of magnitude (meters vs. degrees) relative to typical camera movements.</li>
+</ul>
+</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 0</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Perform 3D reconstruction to extract camera extrinsics for the two frames.</div><div class="label">Reasoning</div><div class="body prose">To quantitatively determine if the camera translated or panned, I need its precise pose (position and orientation) in 3D space. The `tools.Reconstruct` tool provides these 4x4 camera-to-world matrices. I will also display the images to visually inspect the scene.</div><div class="label">Next Goal</div><div class="body prose">Extract the camera poses and compute the relative transformation between the first and second frames.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># Perform 3D reconstruction on all available frames</span>
+<span class="n">recon</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Reconstruct</span><span class="o">.</span><span class="n">Reconstruct</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)</span>
+
+<span class="c1"># Display the two images for visual reference</span>
+<span class="n">show</span><span class="p">([</span><span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">InputImages</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+<span class="c1"># Print basic reconstruction info</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reconstructed frames: </span><span class="si">{</span><span class="n">recon</span><span class="o">.</span><span class="n">frame_indices</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Metric scale: </span><span class="si">{</span><span class="n">recon</span><span class="o">.</span><span class="n">metric_scale</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out"> [image: show_0001] 
+Reconstructed frames: [0, 1]
+Metric scale: 1.0730397701263428
+</pre><div class="label">show_0001</div><div class="img-row"><img loading="lazy" src="../../../assets/erqa/gemma3vl/ERQA_186/show_0001_img_0.jpg" alt=""><img loading="lazy" src="../../../assets/erqa/gemma3vl/ERQA_186/show_0001_img_1.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 0 Execution Feedback ===
+
+[SUCCESS] Code executed in 5.11s.
+
+[Output]
+Reconstructed frames: [0, 1]
+Metric scale: 1.0730397701263428
+
+[Variables] New/changed:
+  recon: Reconstruction, frames=[0, 1]
+
+[Inline Images] 2 image(s) attached below.
+  Labels: [InputImages[0], InputImages[1]]
+
+[Tool Calls] 1 tool/VLM call(s) this step.
+[show() budget] 248/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 1</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Calculate the relative transformation between the camera poses of the first and second frames to determine the movement.</div><div class="label">Reasoning</div><div class="body prose">By computing $T_{rel} = T_0^{-1} T_1$, I can find the translation and rotation of the camera in its own local coordinate system. The translation component $(x, y, z)$ will tell me if the camera shifted (translate right/left), and the rotation will tell me if it panned.</div><div class="label">Next Goal</div><div class="body prose">Analyze the results to distinguish between translation and panning and determine the direction.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Get absolute frame indices</span>
+<span class="n">fi0</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">fi1</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Get camera-to-world matrices</span>
+<span class="n">pose0</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">extrinsics</span><span class="p">[</span><span class="n">fi0</span><span class="p">]</span>
+<span class="n">pose1</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">extrinsics</span><span class="p">[</span><span class="n">fi1</span><span class="p">]</span>
+
+<span class="c1"># Calculate relative transformation: T_rel = T0_inv * T1</span>
+<span class="c1"># T_rel represents the movement of camera 1 relative to camera 0, in camera 0&#39;s local frame.</span>
+<span class="n">pose0_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">pose0</span><span class="p">)</span>
+<span class="n">t_rel_mat</span> <span class="o">=</span> <span class="n">pose0_inv</span> <span class="o">@</span> <span class="n">pose1</span>
+
+<span class="c1"># Extract translation vector</span>
+<span class="n">t_rel</span> <span class="o">=</span> <span class="n">t_rel_mat</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Relative translation (x, y, z) in meters: </span><span class="si">{</span><span class="n">t_rel</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Extract rotation matrix</span>
+<span class="n">r_rel</span> <span class="o">=</span> <span class="n">t_rel_mat</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+
+<span class="c1"># Calculate the angle of rotation (yaw) around the local Y-axis (down vector)</span>
+<span class="c1"># In OpenCV/Reconstruct convention: Y is down.</span>
+<span class="c1"># A pan right is a positive rotation around Y (looking right).</span>
+<span class="c1"># The rotation angle can be found from the trace of the rotation matrix or specific elements.</span>
+<span class="c1"># For a pure yaw (rotation around Y), R[0,0] = cos(theta), R[0,2] = sin(theta), R[2,0] = -sin(theta), R[2,2] = cos(theta)</span>
+<span class="n">yaw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">r_rel</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">r_rel</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">yaw_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">yaw</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Relative yaw (rotation around local Y) in degrees: </span><span class="si">{</span><span class="n">yaw_deg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Visual verification: BEV trajectory</span>
+<span class="n">show</span><span class="p">(</span><span class="n">recon</span><span class="o">.</span><span class="n">render_bev</span><span class="p">(</span><span class="n">ego_trajectory</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre><div class="label">Output</div><pre class="out">Relative translation (x, y, z) in meters: [0.02013801 0.00985252 0.00288236]
+Relative yaw (rotation around local Y) in degrees: 7.973368881007472
+ [image: show_0002] 
+</pre><div class="label">show_0002</div><div class="img-row"><img loading="lazy" src="../../../assets/erqa/gemma3vl/ERQA_186/show_0002_img_0.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 1 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.24s.
+
+[Output]
+Relative translation (x, y, z) in meters: [0.02013801 0.00985252 0.00288236]
+Relative yaw (rotation around local Y) in degrees: 7.973368881007472
+
+[Variables] New/changed:
+  fi0: int
+  fi1: int
+  pose0: ndarray, shape=(4, 4), dtype=float64
+  pose1: ndarray, shape=(4, 4), dtype=float64
+  pose0_inv: ndarray, shape=(4, 4), dtype=float64
+  t_rel_mat: ndarray, shape=(4, 4), dtype=float64
+  t_rel: ndarray, shape=(3,), dtype=float64
+  r_rel: ndarray, shape=(3, 3), dtype=float64
+  yaw: float64, shape=(), dtype=float64
+  yaw_deg: float64, shape=(), dtype=float64
+
+[Inline Images] 1 image(s) attached below.
+  Labels: recon.render_bev(ego_trajectory=True)
+[show() budget] 247/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 2</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Analyze the computed relative transformation to determine the dominant camera movement.</div><div class="label">Reasoning</div><div class="body prose">1. **Quantitative Analysis**: 
+   - The relative translation is approximately `[0.02, 0.01, 0.003]` meters. The lateral shift (x-axis) is only 2 cm.
+   - The relative yaw (rotation around the local Y-axis) is `+7.97` degrees.
+   - In typical indoor environments, a rotation of $\sim 8^\circ$ produces a much more significant visual shift than a 2 cm translation. For an object 1 meter away, an $8^\circ$ pan shifts the image by about 14 cm, whereas a 2 cm translation only shifts it by 2 cm.
+2. **Visual Analysis**:
+   - Comparing `InputImages[0]` and `InputImages[1]`, the entire scene (the door frame and the ceiling fixture) shifts to the left. A scene shifting left corresponds to the camera moving or rotating to the right.
+   - The BEV plot shows the camera positions (red dot and blue triangle) are nearly coincident, but the orientation of the blue triangle is rotated relative to the red one. This confirms that the movement is primarily a rotation (pan) rather than a translation.
+3. **Direction**:
+   - A positive yaw (rotation around the local Y-axis in the provided convention) indicates the camera is turning its gaze toward its own right.
+   - Therefore, the dominant movement is a pan right.</div><div class="label">Next Goal</div><div class="body prose">Provide the final answer.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="n">ReturnAnswer</span><span class="p">(</span><span class="s2">&quot;D&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">[ReturnAnswer] Answer submitted: D
+</pre></div></div>
+</div>
+<div class="tl-step tl-answer">
+  <div class="kind">Answer</div>
+  <div class="body prose">D</div>
+</div>
+<div class="tl-step tl-evaluation">
+  <div class="kind">Evaluation</div>
+  <div class="body">Ground truth: <strong>D</strong> · Agent: <strong>D</strong></div>
+</div></div>
+</div>
+</div>
+
+  </main>
+  <footer class="site-footer">SpatialClaw — Supplementary Material</footer>
+  <script src="../../../static/app.js"></script>
+</body>
+</html>

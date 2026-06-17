@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SpatialClaw: Rethinking Action Interface for Agentic Spatial Reasoning</title>
+  <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div style="margin-bottom: 0.5rem; font-size: 0.92rem;">
+        <a href="../index.html#samples" style="color: #76B900; text-decoration: none; font-weight: 600;">← Back to project page</a>
+      </div>
+      <h1>SpatialClaw: Rethinking Action Interface for Agentic Spatial Reasoning</h1>
+      <p style="margin: 0.4rem 0 0; color: #666;">Sample trajectories — all 50 highlights across 20 benchmarks.</p>
+    </div>
+  </header>
+  <main class="container">
+
+<div class="lede">
+  <p>These <strong>50</strong> samples showcase what the SpatialClaw agent
+  is doing under the hood — composing perception tools, calling into
+  <code>numpy</code> / <code>scipy</code> / <code>matplotlib</code> on a
+  persistent Python kernel, and revising its analysis after inspecting
+  intermediate results. Click any tile to see the full trajectory.</p>
+</div>
+<div class="hl-grid" id="hl-grid">
+<a class="hl-tile is-on" data-page="1" data-tile-idx="0"
+   href="datasets/mmsi/samples/76__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Multi-view</span>
+      <span class="hl-tile-name">MMSI</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">Assuming that in Figure 4, the wall where the sink is located and the direction pointing outward from the wall is east, then in Figure 1, what is the position of the door relative to the sink in Figure 4? Options: A: No…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/mmsi/gemma3vl/76/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/mmsi/gemma3vl/76/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/mmsi/gemma3vl/76/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, decomposes via SVD. 63 cross-step variable references demonstrate state persistence across steps. 7 targeted VLM queries.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile is-on" data-page="1" data-tile-idx="1"
+   href="datasets/mmsi/samples/234__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Multi-view</span>
+      <span class="hl-tile-name">MMSI</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">The fireplace faces north; in which direction is the painting on the wall in the fitness area facing? Options: A: Southwest, B: East, C: Northwest, D: Northeast  Answer with the option&#x27;s letter from the given choices di…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/mmsi/gemma3vl/234/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/mmsi/gemma3vl/234/kf_input_01.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, decomposes via SVD.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile is-on" data-page="1" data-tile-idx="2"
+   href="datasets/omni3d/samples/146__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Single-image</span>
+      <span class="hl-tile-name">Omni3D</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">If the right-most chair is 0.2m wide, how tall is the wooden cabinet?  This is a spatial reasoning question about an indoor scene. Answer with a single value: a number (float or integer) or a short text answer. Do NOT i…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/omni3d/gemma3vl/146/kf_input_00.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, reaches into <code>scipy.spatial</code>. 76 cross-step variable references demonstrate state persistence across steps. 6 targeted VLM queries.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile is-on" data-page="1" data-tile-idx="3"
+   href="datasets/vsibench_unbiased/samples/918__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">VSI-Bench-U</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">Measuring from the closest point of each object, what is the distance between the sofa and the toilet (in meters)?  These are frames of a video. Answer the question. For multiple-choice, answer with the option&#x27;s letter …</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/918/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/918/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/918/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, reaches into <code>scipy.spatial</code>. Iterative visual inspection: 12 <code>show()</code> calls.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile is-on" data-page="1" data-tile-idx="4"
+   href="datasets/vsibench_unbiased/samples/2454__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">VSI-Bench-U</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">If I am standing by the ceiling light and facing the monitor, is the door to the left or the right of the monitor?  These are frames of a video. Answer the question. For multiple-choice, answer with the option&#x27;s letter …</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/2454/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/2454/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/2454/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, plots intermediate state with <code>matplotlib</code>, computes cross products.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile is-on" data-page="1" data-tile-idx="5"
+   href="datasets/vsibench_unbiased/samples/1636__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">VSI-Bench-U</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">Measuring from the closest point of each object, what is the distance between the computer tower and the heater (in meters)?  These are frames of a video. Answer the question. For multiple-choice, answer with the option…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/1636/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/1636/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/1636/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, reaches into <code>scipy.spatial</code>. 6 targeted VLM queries.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile is-on" data-page="1" data-tile-idx="6"
+   href="datasets/spbench/samples/MV_246__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Single-image</span>
+      <span class="hl-tile-name">SPBench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">If I am standing by the laptop and facing the chair, is the monitor to my left-front, left-back, right-front, or right-back? The directions refer to the quadrants of a Cartesian plane (if I am standing at the origin and…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/spbench/gemma3vl/MV_246/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/spbench/gemma3vl/MV_246/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/spbench/gemma3vl/MV_246/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, plots intermediate state with <code>matplotlib</code>, computes cross products.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile is-on" data-page="1" data-tile-idx="7"
+   href="datasets/viewspatial/samples/5449__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">General spatial</span>
+      <span class="hl-tile-name">ViewSpatial</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">Imagine standing at desk looking towards television, where is toilet?  A. back-left B. back-right C. front D. back  This question is from ViewSpatial-Bench. The task tests spatial localization either from the camera&#x27;s o…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/viewspatial/gemma3vl/5449/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/viewspatial/gemma3vl/5449/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/viewspatial/gemma3vl/5449/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, plots intermediate state with <code>matplotlib</code>, computes cross products.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile is-on" data-page="1" data-tile-idx="8"
+   href="datasets/spbench/samples/MV_244__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Single-image</span>
+      <span class="hl-tile-name">SPBench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">If I am standing by the monitor and facing the chair, is the laptop to my left, right, front, or back? The directions refer to the quadrants of a Cartesian plane (if I am standing at the origin and facing along the posi…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/spbench/gemma3vl/MV_244/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/spbench/gemma3vl/MV_244/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/spbench/gemma3vl/MV_244/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, plots intermediate state with <code>matplotlib</code>, computes cross products.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile is-on" data-page="1" data-tile-idx="9"
+   href="datasets/paibench/samples/712__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">PAI-Bench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">The overall goal is to &quot;Checkout and scan barcode in the supermarket&quot;. The agent in the video is currently performing one subtask out of many to complete this goal. For the agent in the video, what is the most plausible…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/paibench/gemma3vl/712/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/paibench/gemma3vl/712/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/paibench/gemma3vl/712/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, plots intermediate state with <code>matplotlib</code>.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="2" data-tile-idx="10"
+   href="datasets/spbench/samples/SI_374__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Single-image</span>
+      <span class="hl-tile-name">SPBench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">Measuring from the closest point of each object, what is the distance between the radiator and the chair (in meters)?  Answer the spatial reasoning question about the 3D scene. For multiple-choice, answer with the optio…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/spbench/gemma3vl/SI_374/kf_input_00.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, reaches into <code>scipy.spatial</code>.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="2" data-tile-idx="11"
+   href="datasets/mmsi/samples/840__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Multi-view</span>
+      <span class="hl-tile-name">MMSI</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">Which direction is the door relative to the socket? Options: A: Front left, B: Front right, C: Rear left, D: Rear right  Answer with the option&#x27;s letter from the given choices directly.</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/mmsi/gemma3vl/840/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/mmsi/gemma3vl/840/kf_input_01.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, decomposes via SVD.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="2" data-tile-idx="12"
+   href="datasets/mmsi/samples/433__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Multi-view</span>
+      <span class="hl-tile-name">MMSI</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">If the direction the iMac screen faces is considered the front, in which direction is the blackboard relative to the iMac? Options: A: Left, B: Back, C: Right, D: Front  Answer with the option&#x27;s letter from the given ch…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/mmsi/gemma3vl/433/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/mmsi/gemma3vl/433/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/mmsi/gemma3vl/433/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, decomposes via SVD.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="2" data-tile-idx="13"
+   href="datasets/vsibench_unbiased/samples/930__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">VSI-Bench-U</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">Measuring from the closest point of each object, what is the distance between the stool and the washer (in meters)?  These are frames of a video. Answer the question. For multiple-choice, answer with the option&#x27;s letter…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/930/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/930/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/930/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, reaches into <code>scipy.spatial</code>. 101 cross-step variable references demonstrate state persistence across steps. Iterative visual inspection: 18 <code>show()</code> calls. 17 targeted VLM queries.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="2" data-tile-idx="14"
+   href="datasets/vsibench_unbiased/samples/1418__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">VSI-Bench-U</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">Measuring from the closest point of each object, which of these objects (table, fireplace, bed, chair) is the closest to the tv?  These are frames of a video. Answer the question. For multiple-choice, answer with the op…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/1418/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/1418/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/1418/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, reaches into <code>scipy.spatial</code>. 7 targeted VLM queries.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="2" data-tile-idx="15"
+   href="datasets/mmsi/samples/953__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Multi-view</span>
+      <span class="hl-tile-name">MMSI</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">With the direction facing the wall from the first bulletin board as the front, in which direction is the fitness area relative to the bulletin board? Options: A: Right, B: Left, C: Back, D: Front  Answer with the option…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/mmsi/gemma3vl/953/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/mmsi/gemma3vl/953/kf_input_01.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, decomposes via SVD. 5 targeted VLM queries.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="2" data-tile-idx="16"
+   href="datasets/osibench/samples/3261__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">OSI-Bench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">Measuring from the closest point of each object, which of the following is closest to the green grass(id: 11): green park bench(id: 05), white signboard(id: 13), white pole(id: 08), or wooden bench(id: 09)?  These are f…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/osibench/gemma3vl/3261/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/osibench/gemma3vl/3261/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/osibench/gemma3vl/3261/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, reaches into <code>scipy.spatial</code>. 64 cross-step variable references demonstrate state persistence across steps. 5 targeted VLM queries.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="2" data-tile-idx="17"
+   href="datasets/omni3d/samples/180__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Single-image</span>
+      <span class="hl-tile-name">Omni3D</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">If the toilet paper falls direftly towards the toilet, will it hit the toilet or the floor first?  This is a spatial reasoning question about an indoor scene. Answer with a single value: a number (float or integer) or a…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/omni3d/gemma3vl/180/kf_input_00.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="2" data-tile-idx="18"
+   href="datasets/vsibench_unbiased/samples/5068__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">VSI-Bench-U</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">You are a robot beginning at the door and facing the lamp. You want to navigate to the bookshelf. You will perform the following actions (Note: for each [please fill in], choose either &#x27;turn back,&#x27; &#x27;turn left,&#x27; or &#x27;turn…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/5068/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/5068/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/vsibench_unbiased/gemma3vl/5068/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, plots intermediate state with <code>matplotlib</code>. 5 targeted VLM queries.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="2" data-tile-idx="19"
+   href="datasets/omni3d/samples/91__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Single-image</span>
+      <span class="hl-tile-name">Omni3D</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">I&#x27;m standing at the christmas tree and facing the camera. Call this direction north (N). What direction is the TV? Choose from N, NE, E, SE, S, SW, W, NW.  This is a spatial reasoning question about an indoor scene. Ans…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/omni3d/gemma3vl/91/kf_input_00.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="3" data-tile-idx="20"
+   href="datasets/dsibench/samples/reverse_hflip__row_000877__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">DSI-Bench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">In this video clip, relative to its starting orientation and location, how is the observer&#x27;s location moving?  This is a multiple-choice question about how an object or the camera moves in 3D space within the video clip…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/dsibench/gemma3vl/reverse_hflip__row_000877/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/dsibench/gemma3vl/reverse_hflip__row_000877/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/dsibench/gemma3vl/reverse_hflip__row_000877/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Builds a 3D reconstruction across frames, computes angles with <code>arctan2</code>.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="3" data-tile-idx="21"
+   href="datasets/mmsi/samples/538__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Multi-view</span>
+      <span class="hl-tile-name">MMSI</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">The images are taken continuously from a first-person perspective. Based on your observation, choose the correct description from the options (it is known that the shooting time is during the spring equinox, in the morn…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/mmsi/gemma3vl/538/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/mmsi/gemma3vl/538/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/mmsi/gemma3vl/538/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="3" data-tile-idx="22"
+   href="datasets/spbench/samples/SI_377__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Single-image</span>
+      <span class="hl-tile-name">SPBench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">Measuring from the closest point of each object, what is the distance between the oven and the refridgerator (in meters)?  Answer the spatial reasoning question about the 3D scene. For multiple-choice, answer with the o…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/spbench/gemma3vl/SI_377/kf_input_00.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, reaches into <code>scipy.spatial</code>.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="3" data-tile-idx="23"
+   href="datasets/mmsivideo/samples/question_0184__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">MMSI-Video</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">When I sit at the round dining table facing the floor-to-ceiling window, I am facing south. In what direction are the kitchen and living room relative to me?  Select the best answer from the given options. Answer with a…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/mmsivideo/gemma3vl/question_0184/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/mmsivideo/gemma3vl/question_0184/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/mmsivideo/gemma3vl/question_0184/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products. 85 cross-step variable references demonstrate state persistence across steps.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="3" data-tile-idx="24"
+   href="datasets/dsibench/samples/reverse__row_000051__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">DSI-Bench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">In this video clip, how is the runner&#x27;s location moving in the 3D scene relative to his/her/its starting orientation and location?  This is a multiple-choice question about how an object or the camera moves in 3D space …</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/dsibench/gemma3vl/reverse__row_000051/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/dsibench/gemma3vl/reverse__row_000051/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/dsibench/gemma3vl/reverse__row_000051/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="3" data-tile-idx="25"
+   href="datasets/spbench/samples/SI_365__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Single-image</span>
+      <span class="hl-tile-name">SPBench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">Measuring from the closest point of each object, what is the distance between the chair and the radiator (in meters)?  Answer the spatial reasoning question about the 3D scene. For multiple-choice, answer with the optio…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/spbench/gemma3vl/SI_365/kf_input_00.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, reaches into <code>scipy.spatial</code>.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="3" data-tile-idx="26"
+   href="datasets/paibench/samples/589__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">PAI-Bench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">Is there a moment in the video that shows a bright flash?  Answer with a single letter (A, B, C, or D) corresponding to the correct choice. A. no B. yes</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/paibench/gemma3vl/589/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/paibench/gemma3vl/589/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/paibench/gemma3vl/589/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Multi-step trajectory (5 steps), plots intermediate state with <code>matplotlib</code>.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="3" data-tile-idx="27"
+   href="datasets/spbench/samples/MV_142__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Single-image</span>
+      <span class="hl-tile-name">SPBench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">What is the length of the longest dimension (length, width, or height) of the telephone, measured in centimeters?  Answer the spatial reasoning question about the 3D scene. For multiple-choice, answer with the option&#x27;s …</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/spbench/gemma3vl/MV_142/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/spbench/gemma3vl/MV_142/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/spbench/gemma3vl/MV_142/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, reaches into <code>scipy.spatial</code>.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="3" data-tile-idx="28"
+   href="datasets/dsibench/samples/reverse__row_000348__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">DSI-Bench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">In this video clip, how is the boat&#x27;s location moving in the 3D scene relative to his/her/its starting orientation and location?  This is a multiple-choice question about how an object or the camera moves in 3D space wi…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/dsibench/gemma3vl/reverse__row_000348/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/dsibench/gemma3vl/reverse__row_000348/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/dsibench/gemma3vl/reverse__row_000348/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products. 6 targeted VLM queries.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="3" data-tile-idx="29"
+   href="datasets/vstibench/samples/4387__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">VSTI-Bench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">During the sequence between frame 16 and frame 31 of 32, what was the primary consistent direction of the camera&#x27;s movement relative to its orientation at the start? The options are Forward, Right, Backward, and Left.  …</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/vstibench/gemma3vl/4387/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/vstibench/gemma3vl/4387/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/vstibench/gemma3vl/4387/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Builds a 3D reconstruction across frames, plots intermediate state with <code>matplotlib</code>.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="4" data-tile-idx="30"
+   href="datasets/dsibench/samples/reverse__row_000109__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">DSI-Bench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">In this video clip, how is the character&#x27;s location moving in the 3D scene relative to his/her/its starting orientation and location?  This is a multiple-choice question about how an object or the camera moves in 3D spa…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/dsibench/gemma3vl/reverse__row_000109/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/dsibench/gemma3vl/reverse__row_000109/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/dsibench/gemma3vl/reverse__row_000109/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="4" data-tile-idx="31"
+   href="datasets/dsibench/samples/reverse__row_000627__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">DSI-Bench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">In this video clip, how is the race car&#x27;s location moving in the 3D scene relative to his/her/its starting orientation and location?  This is a multiple-choice question about how an object or the camera moves in 3D spac…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/dsibench/gemma3vl/reverse__row_000627/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/dsibench/gemma3vl/reverse__row_000627/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/dsibench/gemma3vl/reverse__row_000627/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products. 5 targeted VLM queries.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="4" data-tile-idx="32"
+   href="datasets/paibench/samples/203__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">PAI-Bench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">What can be said about the camera movement in the video?  Answer with a single letter (A, B, C, or D) corresponding to the correct choice. A. It zooms out B. It moves from bird&#x27;s eye to eye level C. It tilts D. It zooms…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/paibench/gemma3vl/203/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/paibench/gemma3vl/203/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/paibench/gemma3vl/203/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Builds a 3D reconstruction across frames, plots intermediate state with <code>matplotlib</code>.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="4" data-tile-idx="33"
+   href="datasets/dsibench/samples/reverse_hflip__row_000220__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">DSI-Bench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">In this video clip, how is the man&#x27;s location moving in the 3D scene relative to his/her/its starting orientation and location?  This is a multiple-choice question about how an object or the camera moves in 3D space wit…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/dsibench/gemma3vl/reverse_hflip__row_000220/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/dsibench/gemma3vl/reverse_hflip__row_000220/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/dsibench/gemma3vl/reverse_hflip__row_000220/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="4" data-tile-idx="34"
+   href="datasets/viewspatial/samples/5163__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">General spatial</span>
+      <span class="hl-tile-name">ViewSpatial</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">Standing at television, gazing at toilet, where should desk be?  A. front-right B. back-left C. front-left D. right  This question is from ViewSpatial-Bench. The task tests spatial localization either from the camera&#x27;s …</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/viewspatial/gemma3vl/5163/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/viewspatial/gemma3vl/5163/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/viewspatial/gemma3vl/5163/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products. 5 targeted VLM queries.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="4" data-tile-idx="35"
+   href="datasets/dsibench/samples/reverse_hflip__row_000197__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">DSI-Bench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">In this video clip, how is the horse&#x27;s location moving in the 3D scene relative to his/her/its starting orientation and location?  This is a multiple-choice question about how an object or the camera moves in 3D space w…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/dsibench/gemma3vl/reverse_hflip__row_000197/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/dsibench/gemma3vl/reverse_hflip__row_000197/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/dsibench/gemma3vl/reverse_hflip__row_000197/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="4" data-tile-idx="36"
+   href="datasets/omnispatial/samples/Perspective_Taking_Allocentric_298_0__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Single-image</span>
+      <span class="hl-tile-name">OmniSpatial</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">Seen from Car No.845, where is the man wearing the black hat?  Answer with the option letter (A, B, C, or D) corresponding to the correct choice. A. right B. can not determine C. left D. can not determine</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/omnispatial/gemma3vl/Perspective_Taking_Allocentric_298_0/kf_input_00.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="4" data-tile-idx="37"
+   href="datasets/viewspatial/samples/4770__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">General spatial</span>
+      <span class="hl-tile-name">ViewSpatial</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">Imagine standing at nightstand looking towards paper, where is clothes?  A. right B. back C. front D. front-left  This question is from ViewSpatial-Bench. The task tests spatial localization either from the camera&#x27;s own…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/viewspatial/gemma3vl/4770/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/viewspatial/gemma3vl/4770/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/viewspatial/gemma3vl/4770/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products. Iterative visual inspection: 10 <code>show()</code> calls. 5 targeted VLM queries.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="4" data-tile-idx="38"
+   href="datasets/viewspatial/samples/5155__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">General spatial</span>
+      <span class="hl-tile-name">ViewSpatial</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">When positioned at table facing window, where can you find whiteboard?  A. back-left B. front-right C. front-left D. back-right  This question is from ViewSpatial-Bench. The task tests spatial localization either from t…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/viewspatial/gemma3vl/5155/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/viewspatial/gemma3vl/5155/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/viewspatial/gemma3vl/5155/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="4" data-tile-idx="39"
+   href="datasets/viewspatial/samples/5116__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">General spatial</span>
+      <span class="hl-tile-name">ViewSpatial</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">When positioned at sink facing counter, where can you find box?  A. back-left B. back C. front-left D. right  This question is from ViewSpatial-Bench. The task tests spatial localization either from the camera&#x27;s own per…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/viewspatial/gemma3vl/5116/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/viewspatial/gemma3vl/5116/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/viewspatial/gemma3vl/5116/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="5" data-tile-idx="40"
+   href="datasets/perceptioncomp/samples/1001__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">General video</span>
+      <span class="hl-tile-name">PerceptComp</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">If a scene satisfies: ①There are two people in the scene, ②the woman is looking at the man, and ③a bright lamp is to the rear-left of the man. In what direction is the microphone relative to the man?  Answer the single-…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/perceptioncomp/gemma3vl/1001/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/perceptioncomp/gemma3vl/1001/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/perceptioncomp/gemma3vl/1001/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="5" data-tile-idx="41"
+   href="datasets/mmsivideo/samples/question_0057__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Video &amp; 4D</span>
+      <span class="hl-tile-name">MMSI-Video</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">The video captures the actions of a person, during which objects are moved. How are these objects moved? (Considering the direction from the staircase to the camera as north)  Select the best answer from the given optio…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/mmsivideo/gemma3vl/question_0057/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/mmsivideo/gemma3vl/question_0057/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/mmsivideo/gemma3vl/question_0057/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products. 11 targeted VLM queries.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="5" data-tile-idx="42"
+   href="datasets/sparbench/samples/2815__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Multi-view</span>
+      <span class="hl-tile-name">SPAR-Bench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">How does the relationship between trash bin (red bbox) and toilet (yellow bbox) evolve as the observer moves to toilet brush (green bbox) and orients towards toilet paper dispenser (blue bbox)? Calculate or judge based …</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/sparbench/gemma3vl/2815/kf_input_00.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation, computes cross products. 6 targeted VLM queries.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="5" data-tile-idx="43"
+   href="datasets/erqa/samples/ERQA_186__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Single-image</span>
+      <span class="hl-tile-name">ERQA</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">&lt;image&gt; &lt;image&gt; How did the camera move to go from the first image to the second image? Choices:  A. translate right. B. translate left. C. pan left. D. pan right. Please answer directly with only the letter of the corr…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/erqa/gemma3vl/ERQA_186/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/erqa/gemma3vl/ERQA_186/kf_input_01.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Builds a 3D reconstruction across frames, computes angles with <code>arctan2</code>.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="5" data-tile-idx="44"
+   href="datasets/mindcube/samples/among_group139_q0_5_1__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">Multi-view</span>
+      <span class="hl-tile-name">MindCube</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">Based on these four images (image 1, 2, 3, and 4) showing the green ball from different viewpoints (front, left, back, and right), with each camera aligned with room walls and partially capturing the surroundings: From …</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/mindcube/gemma3vl/among_group139_q0_5_1/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/mindcube/gemma3vl/among_group139_q0_5_1/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/mindcube/gemma3vl/among_group139_q0_5_1/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Composes 3D reconstruction with mask segmentation. 5 targeted VLM queries.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="5" data-tile-idx="45"
+   href="datasets/spatialtree/samples/588__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">General spatial</span>
+      <span class="hl-tile-name">SpatialTree</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">You are given several 2D points in an image, where (x, y) coordinates are normalized to [0, 1000]. A reference point is located at (457, 523).  The following are four other points: - p0: (14, 204) - p1: (601, 75) - p2: …</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/spatialtree/gemma3vl/588/kf_input_00.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Pairs 3D reconstruction with geometry primitives.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="5" data-tile-idx="46"
+   href="datasets/videommev2/samples/448-1__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">General video</span>
+      <span class="hl-tile-name">Video-MME-v2</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">At the beginning of the video, there are three little foxes: one stays still at the entrance of the den, while the other two are running. From the perspective of the stationary fox, in which direction are the other two …</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/videommev2/gemma3vl/448-1/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/videommev2/gemma3vl/448-1/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/videommev2/gemma3vl/448-1/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Combines SAM3 segmentation with geometry primitives. 5 targeted VLM queries.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="5" data-tile-idx="47"
+   href="datasets/blink/samples/val_Counting_31__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">General spatial</span>
+      <span class="hl-tile-name">BLINK</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">How many green train carts are in the picture?  Select the best answer from the given options. Answer with a single letter in parentheses, e.g. (A). A. 1 B. 0 C. 3 D. 2</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/blink/gemma3vl/val_Counting_31/kf_input_00.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Combines SAM3 segmentation with geometry primitives.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="5" data-tile-idx="48"
+   href="datasets/cvbench/samples/165__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">General video</span>
+      <span class="hl-tile-name">CV-Bench</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">In both videos, does the setting emphasize a vibrant and colorful environment with lively backgrounds? Yes. No.  This sample contains 2-4 separate videos, each exposed in the kernel as its own `InputImages_&lt;N&gt;` (1-index…</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/cvbench/gemma3vl/165/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/cvbench/gemma3vl/165/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/cvbench/gemma3vl/165/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Multi-step trajectory (5 steps).</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a><a class="hl-tile" data-page="5" data-tile-idx="49"
+   href="datasets/videomme/samples/019-2__gemma3vl.html">
+  <div class="hl-tile-top">
+    <div class="hl-tile-meta">
+      <span class="group-pill">General video</span>
+      <span class="hl-tile-name">Video-MME</span>
+      <span class="hl-tile-model">· Gemma4-31B</span>
+    </div>
+  </div>
+  <div class="hl-tile-label">Question</div>
+  <div class="hl-tile-q">What is the raven doing in the video?  Answer with a single letter (A, B, C, or D) corresponding to the correct choice. A. Eating. B. Flying. C. Walking. D. Sleeping.</div>
+  <div class="hl-tile-thumbs"><img loading="lazy" src="assets/videomme/gemma3vl/019-2/kf_input_00.jpg" alt=""><img loading="lazy" src="assets/videomme/gemma3vl/019-2/kf_input_01.jpg" alt=""><img loading="lazy" src="assets/videomme/gemma3vl/019-2/kf_input_02.jpg" alt=""></div>
+  <div class="hl-tile-label">Summary</div>
+  <div class="hl-tile-why">Uses targeted segmentation.</div>
+  <div class="hl-tile-cta">Open trajectory →</div>
+</a>
+</div>
+<nav class="pagination" data-pagination="hl">
+  <button class="page-btn page-prev" data-rel="prev">‹ Prev</button>
+  <button class="page-btn active" data-page="1">1</button><button class="page-btn" data-page="2">2</button><button class="page-btn" data-page="3">3</button><button class="page-btn" data-page="4">4</button><button class="page-btn" data-page="5">5</button>
+  <button class="page-btn page-next" data-rel="next">Next ›</button>
+</nav>
+  </main>
+  <footer class="site-footer">SpatialClaw — Supplementary Material</footer>
+  <script src="static/app.js"></script>
+</body>
+</html>

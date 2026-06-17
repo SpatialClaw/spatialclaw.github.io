@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VSTI-Bench — Gemma4-31B — sample 4387</title>
+  <link rel="stylesheet" href="../../../static/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="crumb"><a href="../../../index.html">Highlights</a> / VSTI-Bench / sample 4387<span class="nav-hint" aria-hidden="true"><kbd>←</kbd> <kbd>→</kbd> to navigate</span></div>
+      <h1>VSTI-Bench — Gemma4-31B — sample 4387</h1>
+      
+    </div>
+  </header>
+  <main class="container">
+
+<a class="sample-nav prev" href="../../dsibench/samples/reverse__row_000348__gemma3vl.html" aria-label="Previous sample" title="Previous sample">‹</a><a class="sample-nav next" href="../../dsibench/samples/reverse__row_000109__gemma3vl.html" aria-label="Next sample" title="Next sample">›</a>
+<div class="qa-card">
+  <div class="keyframes"><div class="label">Keyframes</div><div class="img-row"><img loading="lazy" src="../../../assets/vstibench/gemma3vl/4387/kf_input_00.jpg" alt=""><img loading="lazy" src="../../../assets/vstibench/gemma3vl/4387/kf_input_01.jpg" alt=""><img loading="lazy" src="../../../assets/vstibench/gemma3vl/4387/kf_input_02.jpg" alt=""><img loading="lazy" src="../../../assets/vstibench/gemma3vl/4387/kf_input_03.jpg" alt=""><img loading="lazy" src="../../../assets/vstibench/gemma3vl/4387/kf_input_04.jpg" alt=""><img loading="lazy" src="../../../assets/vstibench/gemma3vl/4387/kf_input_05.jpg" alt=""></div></div>
+  <div class="label">Question</div>
+  <div class="q">During the sequence between frame 16 and frame 31 of 32, what was the primary consistent direction of the camera&#x27;s movement relative to its orientation at the start? The options are Forward, Right, Backward, and Left.
+A. Forward
+B. Right
+C. Backward
+D. Left</div>
+  <div class="pred-row" style="margin-top:14px">
+    <div class="pred-cell"><span class="label" style="margin:0">Ground truth</span>
+      <span class="gt-pill">A</span></div>
+    <div class="pred-cell"><span class="method-pill pill-agent">SpatialClaw</span>
+      <span style="font-family:ui-monospace,Menlo,monospace">A</span>
+      <span class="tick-ok">✓</span></div>
+    <div class="pred-cell"><span class="q-badge q-only_agent">Agent wins</span></div>
+  </div>
+</div>
+<div class="baseline-tabs" role="tablist" aria-label="Baseline comparison"><button type="button" class="baseline-tab" data-pane="cot">No-tool baseline</button><button type="button" class="baseline-tab" data-pane="single-pass">Single-pass code</button><button type="button" class="baseline-tab" data-pane="react">Structured tool-call</button><button type="button" class="baseline-tab" data-pane="spacetools">SpaceTools</button></div>
+<div class="split agent-only">
+  <div class="left-stack">
+    <div class="baseline-pane" data-pane="cot"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-cot">No-tool Baseline</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="cot-md markdown"><p>To determine the primary consistent direction of the camera's movement between frame 16 and frame 31 of 32, let's analyze the sequence of images:</p>
+<ol>
+<li><strong>Frame 16 to 21:</strong> The camera is positioned facing a brown door with a black and grey backpack hanging on it. There is very little lateral movement during this short interval.</li>
+<li><strong>Frame 22 to 27:</strong> The camera begins to move and pan toward the right side of the room. We start to see a white sink and a mirror appearing on the right side of the frame.</li>
+<li><strong>Frame 28 to 31:</strong> The camera continues its rightward movement, panning across the room. By frame 31, the sink is on the left and the toilet (which was seen at the very beginning of the video) has come back into view on the right side of the frame.</li>
+</ol>
+<p>Throughout this sequence, the camera consistently shifts its perspective from the door on the left toward the fixtures on the right side of the restroom.</p>
+<p>The primary consistent direction of the camera's movement is to the right.</p>
+<p><span class="boxed">B</span></p>
+</div></div></div><div class="baseline-pane" data-pane="single-pass"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-spcode">Single-pass code</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="single-pass-card"><div class="label">Purpose</div><div class="body prose">Determine the primary consistent direction of the camera&#x27;s movement between frame 16 and frame 31 of 32.</div><div class="label">Reasoning</div><div class="body prose">1.  **Frame Conversion**: I will convert the relative frame indices (16 and 31 of 32) to absolute video frame indices and find the corresponding indices in `InputImages`.
+2.  **3D Reconstruction**: I will use `tools.Reconstruct` on a sampled range of frames between these two points to get the camera&#x27;s trajectory.
+3.  **Directional Analysis**: 
+    - I&#x27;ll identify the camera&#x27;s position and orientation at the start frame (frame 16).
+    - I&#x27;ll compute the displacement vector from the start position to the end position (frame 31).
+    - I&#x27;ll project this displacement vector onto the start camera&#x27;s local axes: forward (Z), right (X).
+    - The axis with the largest absolute projection will determine the primary direction (Forward, Backward, Right, or Left).
+4.  **Visual Confirmation**: I&#x27;ll inspect the key frames. At frame 16, the camera is facing the door. By frame 31, the camera has moved back towards the sink and toilet. Since the sink/toilet are opposite the door, moving from the door back to the sink/toilet while facing the door constitutes &quot;Backward&quot; movement.</div><div class="label">Next Goal</div><div class="body prose">Execute the reconstruction and compute the movement vector.</div><div class="label">Code</div><pre class="code py-hl"><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># 1. Convert relative frames to video frame indices</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">32</span>
+<span class="n">f1_rel</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">f2_rel</span> <span class="o">=</span> <span class="mi">31</span>
+
+<span class="n">fraction1</span> <span class="o">=</span> <span class="p">(</span><span class="n">f1_rel</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">target_v1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">fraction1</span> <span class="o">*</span> <span class="p">(</span><span class="n">Metadata</span><span class="o">.</span><span class="n">total_frames</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
+<span class="n">fraction2</span> <span class="o">=</span> <span class="p">(</span><span class="n">f2_rel</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">target_v2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">fraction2</span> <span class="o">*</span> <span class="p">(</span><span class="n">Metadata</span><span class="o">.</span><span class="n">total_frames</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
+
+<span class="c1"># Find closest indices in InputImages</span>
+<span class="n">i_start</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">j</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">InputImages</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">frame_index</span> <span class="o">-</span> <span class="n">target_v1</span><span class="p">))</span>
+<span class="n">i_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">j</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">InputImages</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">frame_index</span> <span class="o">-</span> <span class="n">target_v2</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Start: relative </span><span class="si">{</span><span class="n">f1_rel</span><span class="si">}</span><span class="s2">, video </span><span class="si">{</span><span class="n">target_v1</span><span class="si">}</span><span class="s2">, InputImages index </span><span class="si">{</span><span class="n">i_start</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;End: relative </span><span class="si">{</span><span class="n">f2_rel</span><span class="si">}</span><span class="s2">, video </span><span class="si">{</span><span class="n">target_v2</span><span class="si">}</span><span class="s2">, InputImages index </span><span class="si">{</span><span class="n">i_end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 2. Reconstruct camera path</span>
+<span class="c1"># Sample frames for reconstruction to stay under 64 frame limit</span>
+<span class="n">step</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="n">i_end</span> <span class="o">-</span> <span class="n">i_start</span><span class="p">)</span> <span class="o">//</span> <span class="mi">31</span><span class="p">)</span>
+<span class="n">frames_to_recon</span> <span class="o">=</span> <span class="n">InputImages</span><span class="p">[</span><span class="n">i_start</span> <span class="p">:</span> <span class="n">i_end</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">step</span><span class="p">]</span>
+<span class="n">recon</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Reconstruct</span><span class="o">.</span><span class="n">Reconstruct</span><span class="p">(</span><span class="n">frames_to_recon</span><span class="p">)</span>
+
+<span class="c1"># 3. Analyze movement relative to start orientation</span>
+<span class="c1"># Start frame data</span>
+<span class="n">start_frame_idx</span> <span class="o">=</span> <span class="n">InputImages</span><span class="p">[</span><span class="n">i_start</span><span class="p">]</span><span class="o">.</span><span class="n">frame_index</span>
+<span class="n">pose_start</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">extrinsics</span><span class="p">[</span><span class="n">start_frame_idx</span><span class="p">]</span>
+<span class="n">pos_start</span> <span class="o">=</span> <span class="n">pose_start</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">cam_fwd</span> <span class="o">=</span> <span class="n">pose_start</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>   <span class="c1"># +Z</span>
+<span class="n">cam_right</span> <span class="o">=</span> <span class="n">pose_start</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="c1"># +X</span>
+
+<span class="c1"># End frame data</span>
+<span class="n">end_frame_idx</span> <span class="o">=</span> <span class="n">InputImages</span><span class="p">[</span><span class="n">i_end</span><span class="p">]</span><span class="o">.</span><span class="n">frame_index</span>
+<span class="n">pose_end</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">extrinsics</span><span class="p">[</span><span class="n">end_frame_idx</span><span class="p">]</span>
+<span class="n">pos_end</span> <span class="o">=</span> <span class="n">pose_end</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="c1"># Displacement vector</span>
+<span class="n">vec</span> <span class="o">=</span> <span class="n">pos_end</span> <span class="o">-</span> <span class="n">pos_start</span>
+<span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total displacement: </span><span class="si">{</span><span class="n">dist</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">m&quot;</span><span class="p">)</span>
+
+<span class="c1"># Projections</span>
+<span class="n">dot_fwd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">cam_fwd</span><span class="p">)</span>
+<span class="n">dot_right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">cam_right</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Forward projection: </span><span class="si">{</span><span class="n">dot_fwd</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">m&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Right projection: </span><span class="si">{</span><span class="n">dot_right</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">m&quot;</span><span class="p">)</span>
+
+<span class="c1"># Determine primary direction</span>
+<span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dot_fwd</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dot_right</span><span class="p">):</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">if</span> <span class="n">dot_fwd</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;Backward&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;Right&quot;</span> <span class="k">if</span> <span class="n">dot_right</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;Left&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Primary direction: </span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Map direction to option</span>
+<span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Forward&quot;</span><span class="p">:</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;Right&quot;</span><span class="p">:</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;Backward&quot;</span><span class="p">:</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;Left&quot;</span><span class="p">:</span> <span class="s2">&quot;D&quot;</span><span class="p">}</span>
+<span class="n">ReturnAnswer</span><span class="p">(</span><span class="n">mapping</span><span class="p">[</span><span class="n">direction</span><span class="p">])</span>
+</pre><div class="label">Output</div><pre class="out">Start: relative 16, video 757, InputImages index 757
+End: relative 31, video 1515, InputImages index 1515
+</pre><div class="label">Error</div><pre class="err">---------------------------------------------------------------------------
+KeyError                                  Traceback (most recent call last)
+Cell In[22], line 36
+     34 # End frame data
+     35 end_frame_idx = InputImages[i_end].frame_index
+---&gt; 36 pose_end = recon.extrinsics[end_frame_idx]
+     37 pos_end = pose_end[:3, 3]
+     39 # Displacement vector
+
+File SpatialAgent/spatial_agent/kernel_types/per_frame_types.py:451, in PerFrameExtrinsics.__getitem__(self, frame_idx)
+    449 def __getitem__(self, frame_idx: int) -&gt; np.ndarray:
+    450     &quot;&quot;&quot;Get ``(4, 4)`` camera-to-world pose by absolute frame index.&quot;&quot;&quot;
+--&gt; 451     local = self.get_by_frame_index(frame_idx)
+    452     return self.camera_poses[local]
+
+File SpatialAgent/spatial_agent/kernel_types/per_frame_types.py:69, in PerFrameData.get_by_frame_index(self, abs_frame_idx)
+     64     if abs_frame_idx == 0 and 0 not in avail:
+     65         hint = (
+     66             f&quot;\n  Hint: Did you mean frame={avail[0]}? &quot;
+     67             f&quot;Use ABSOLUTE frame indices (from seg.frame_indices), not 0-based local indices.&quot;
+     68         )
+---&gt; 69     raise KeyError(
+     70         f&quot;Frame {abs_frame_idx} not found in {avail}. &quot;
+     71         f&quot;Available frames: {avail}{hint}&quot;
+     72     )
+     73 return self._frame_indices.index(abs_frame_idx)
+
+KeyError: &#x27;Frame 1515 not found in [757, 781, 805, 829, 853, 877, 901, 925, 949, 973, 997, 1021, 1045, 1069, 1093, 1117, 1141, 1165, 1189, 1213, 1237, 1261, 1285, 1309, 1333, 1357, 1381, 1405, 1429, 1453, 1477, 1501]. Available frames: [757, 781, 805, 829, 853, 877, 901, 925, 949, 973, 997, 1021, 1045, 1069, 1093, 1117, 1141, 1165, 1189, 1213, 1237, 1261, 1285, 1309, 1333, 1357, 1381, 1405, 1429, 1453, 1477, 1501]&#x27;</pre><div class="label">Final answer</div><div class="body prose">C</div></div></div></div><div class="baseline-pane" data-pane="react"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-react">Structured tool-call</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="timeline">
+<div class="tl-step tl-plan">
+  <div class="kind">Plan</div>
+  <div class="body markdown"><h3>Task Analysis</h3>
+<p>The goal is to determine the primary consistent direction of the camera's movement (Forward, Right, Backward, or Left) between frame 16 and frame 31 of the 32 sampled frames, relative to the camera's orientation at the start of that sequence (frame 16).</p>
+<p><strong>Coordinate System Resolution:</strong>
+The question asks for movement relative to the camera's orientation at a specific point in time. This is a <strong>camera-relative 3D</strong> problem.</p>
+<ul>
+<li><strong>Reference Frame:</strong> The camera pose at frame 16 (index 15 of <code>InputImages</code>).</li>
+<li><strong>Reference Axes:</strong> The camera's local &quot;forward&quot; (+Z in camera space) and &quot;right&quot; (+X in camera space) vectors at frame 16, mapped into world space.</li>
+<li><strong>Movement:</strong> The displacement of the camera center from frame 16 to frame 31.</li>
+</ul>
+<h3>Information Needs</h3>
+<ol>
+<li><strong>Camera Trajectory:</strong> Precise 3D world positions of the camera for all frames in the range [16, 31].</li>
+<li><strong>Reference Orientation:</strong> The rotation matrix (extrinsics) of the camera at frame 16 to define the local coordinate system.</li>
+<li><strong>Temporal Trend:</strong> The sign and magnitude of the displacement projected onto the reference axes over the sequence.</li>
+</ol>
+<h3>Computation Plan</h3>
+<ol>
+<li>
+<p><strong>3D Reconstruction:</strong></p>
+<ul>
+<li>Use <code>tools.Reconstruct.Reconstruct(InputImages)</code> to get the camera poses and world coordinates for the entire sequence. Since there are only 32 frames, this is within the 64-frame limit.</li>
+</ul>
+</li>
+<li>
+<p><strong>Establish Reference Frame (Frame 16 / Index 15):</strong></p>
+<ul>
+<li>Identify the absolute frame index for frame 16: <code>fi_start = InputImages.frame_indices[15]</code>.</li>
+<li>Extract the camera-to-world matrix: <code>pose_start = recon.extrinsics[fi_start]</code>.</li>
+<li>Extract the world-space reference vectors:
+<ul>
+<li><code>cam_pos_start = pose_start[:3, 3]</code></li>
+<li><code>cam_fwd_start = pose_start[:3, 2]</code> (Forward vector)</li>
+<li><code>cam_right_start = pose_start[:3, 0]</code> (Right vector)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Analyze Movement Sequence (Frames 16 to 31 / Indices 15 to 30):</strong></p>
+<ul>
+<li>For each index <code>i</code> from 15 to 30:
+<ul>
+<li>Get the absolute frame index: <code>fi = InputImages.frame_indices[i]</code>.</li>
+<li>Get the current camera position: <code>cam_pos_t = recon.extrinsics[fi][:3, 3]</code>.</li>
+<li>Calculate the displacement vector from the start: <code>vec_t = cam_pos_t - cam_pos_start</code>.</li>
+<li>Project the displacement onto the reference axes:
+<ul>
+<li><code>proj_fwd = np.dot(vec_t, cam_fwd_start)</code></li>
+<li><code>proj_right = np.dot(vec_t, cam_right_start)</code></li>
+</ul>
+</li>
+<li>Store <code>proj_fwd</code> and <code>proj_right</code> in arrays.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Quantitative Evaluation:</strong></p>
+<ul>
+<li>Use <code>tools.Graph.plot()</code> to plot <code>proj_fwd</code> and <code>proj_right</code> over the sequence.</li>
+<li>Analyze the trend:
+<ul>
+<li>Consistent increase in <code>proj_fwd</code> $\rightarrow$ <strong>Forward</strong>.</li>
+<li>Consistent decrease in <code>proj_fwd</code> $\rightarrow$ <strong>Backward</strong>.</li>
+<li>Consistent increase in <code>proj_right</code> $\rightarrow$ <strong>Right</strong>.</li>
+<li>Consistent decrease in <code>proj_right</code> $\rightarrow$ <strong>Left</strong>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Visual Cross-Validation:</strong></p>
+<ul>
+<li>Render a Bird's Eye View (BEV) of the trajectory: <code>recon.render_bev(ego_trajectory=True)</code>.</li>
+<li>Use <code>show()</code> to inspect the BEV. Identify the camera position at index 15 and follow the trajectory to index 30.</li>
+<li>Verify if the visual path matches the numerical projections (e.g., if the trajectory moves &quot;forward&quot; relative to the orientation of the camera at index 15).</li>
+</ul>
+</li>
+</ol>
+<h3>Verification Checklist</h3>
+<pre><code class="language-json">[
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Confirm that frame 16 (index 15) is used as the orientation reference for all projections&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Verify that the camera-to-world matrix columns are correctly mapped to Right (+X) and Forward (+Z)&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Cross-check the numerical dot-product trends with the visual camera path in the BEV render&quot;},
+  {&quot;priority&quot;: &quot;LOW&quot;, &quot;description&quot;: &quot;Ensure the reconstruction is stable and does not contain erratic pose jumps in the range [15, 30]&quot;}
+]
+</code></pre>
+<h3>Fallbacks</h3>
+<ul>
+<li><strong>Reconstruction Failure:</strong> If <code>tools.Reconstruct</code> produces noisy poses (detected via erratic jumps in the <code>tools.Graph</code> plots), I will use <code>vlm.ask_with_thinking</code> on a sampled set of frames (e.g., indices 15, 20, 25, 30) to qualitatively describe the camera's motion relative to the scene.</li>
+<li><strong>Ambiguous Motion:</strong> If the camera moves diagonally (e.g., both Forward and Right), I will compare the magnitudes of the total displacement along each axis to determine the &quot;primary&quot; direction.</li>
+</ul>
+</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 0</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Perform 3D reconstruction of the scene to obtain camera poses.</div><div class="label">Reasoning</div><div class="body prose">To determine camera movement relative to its starting orientation, I need the precise 3D world positions and orientations (extrinsics) of the camera for the frames in question. `tools.Reconstruct.Reconstruct` provides this data.</div><div class="label">Next Goal</div><div class="body prose">Establish the reference frame at index 15 (frame 16) and calculate the camera displacement projections.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools.Reconstruct.Reconstruct&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;frames&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;InputImages[:32]&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 0 Execution Feedback ===
+
+[SUCCESS] Code executed in 6.34s.
+
+[Variables] New/changed:
+  result_0: Reconstruction, frames=[0..31] (32 frames)
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 1</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Visually inspect the camera trajectory in Bird&#x27;s Eye View (BEV).</div><div class="label">Reasoning</div><div class="body prose">The BEV plot provides a top-down view of the camera&#x27;s path. By observing the trajectory from the position at index 15 to index 30, I can qualitatively determine the primary direction of movement relative to the camera&#x27;s heading at the start of that segment. This serves as a crucial sanity check before and alongside any quantitative calculations.</div><div class="label">Next Goal</div><div class="body prose">Analyze the BEV image and then perform a quantitative projection of the displacement vector from frame 16 to frame 31 onto the reference axes.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;show&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;result_0.render_bev(ego_trajectory=True)&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out"> [image: show_0001] 
+</pre><div class="label">show_0001</div><div class="img-row"><img loading="lazy" src="../../../assets/vstibench/gemma3vl/4387/show_0001_img_0.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 1 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.15s.
+
+[Variables] New/changed:
+  result_1: NoneType
+
+[Inline Images] 1 image(s) attached below.
+  Labels: result_0.render_bev(ego_trajectory=True)
+[show() budget] 249/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 2</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Quantitatively determine the camera&#x27;s movement direction relative to its orientation at frame 16.</div><div class="label">Reasoning</div><div class="body prose">Visual inspection of the frames suggests the camera starts facing a door (frame 16) and ends up near a sink/toilet (frame 31), moving away from the door. To confirm this and determine if the primary movement is Forward, Backward, Left, or Right relative to the start, I will calculate the displacement vector from the camera position at index 15 to index 30 and project it onto the camera&#x27;s local &quot;forward&quot; and &quot;right&quot; axes at index 15.</div><div class="label">Next Goal</div><div class="body prose">Compute the projections and determine the primary direction.
+**Tool Call (translated)**:
+```python
+# I need to perform a calculation. Since I can&#x27;t write free-form code with operators, 
+# I&#x27;ll use a tool if available or a sequence of tool calls. 
+# Actually, the prompt says I cannot use operators like &#x27;+&#x27;, &#x27;-&#x27;, etc. 
+# I must use tools.Geometry.
+# But I don&#x27;t have a tool for &#x27;vector subtraction&#x27; or &#x27;dot product&#x27;.
+# Wait, tools.Geometry.euclidean_distance exists, but not dot product.
+# I will use vlm.ask_with_thinking to analyze the motion across the specific frames.
+```
+
+Actually, I can use `vlm.ask_with_thinking` on the frames to confirm the relative motion.
+Frames 16 to 31 are `InputImages[15:31]`.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vlm.ask_with_thinking&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;visual_input&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;InputImages[15:31]&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;question&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;In frame 16 (the first image), the camera is facing a door. By frame 31 (the last image), the camera has moved to a position near a sink and toilet. Relative to the camera&#39;s orientation in frame 16, did the camera primarily move Forward, Backward, Left, or Right?&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out">[VLM Q | thinking] In frame 16 (the first image), the camera is facing a door. By frame 31 (the last image), the camera has moved to a position near a sink and toilet. Relative to the camera&#x27;s orientation in frame 16, did the camera primarily move Forward, Backward, Left, or Right?
+[VLM A | thinking] Cannot determine from the images.
+The provided images are all identical, showing no movement or a door in the first frame.
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 2 Execution Feedback ===
+
+[SUCCESS] Code executed in 356.19s.
+
+[Output]
+[VLM Q | thinking] In frame 16 (the first image), the camera is facing a door. By frame 31 (the last image), the camera has moved to a position near a sink and toilet. Relative to the camera&#x27;s orientation in frame 16, did the camera primarily move Forward, Backward, Left, or Right?
+[VLM A | thinking] Cannot determine from the images.
+The provided images are all identical, showing no movement or a door in the first frame.
+
+[Variables] New/changed:
+  result_2: str
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 3</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Determine the primary consistent direction of camera movement between frame 16 and frame 31.</div><div class="label">Reasoning</div><div class="body prose">1. **Analyze the scene layout**: Based on the provided key frames, the camera starts the video (frame 0) near a toilet and sink. By frame 16 (index 15), the camera has moved to a position where it is directly facing a door. By frame 31 (index 30), the camera has returned to the area near the sink and toilet.
+2. **Establish the reference orientation**: At frame 16, the camera is facing the door. This direction (facing the door) defines the &quot;Forward&quot; axis for the movement sequence.
+3. **Determine the displacement**: The camera moves from the door (frame 16) back toward the toilet/sink area (frame 31).
+4. **Relate displacement to orientation**: Since the camera was facing the door at the start of the sequence and moved away from the door to return to its previous location, the primary direction of movement is opposite to its forward-facing orientation.
+5. **Conclusion**: Movement opposite to the forward orientation is &quot;Backward&quot;.</div><div class="label">Next Goal</div><div class="body prose">Submit the final answer.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ReturnAnswer&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;answer&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;C&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out">[ReturnAnswer] Answer submitted: C
+</pre></div></div>
+</div>
+<div class="tl-step tl-answer">
+  <div class="kind">Answer</div>
+  <div class="body prose">C</div>
+</div></div></div></div><div class="baseline-pane" data-pane="spacetools"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-spacetools">SpaceTools</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="timeline"><div class="tl-step tl-st-reasoning"><div class="kind">Reasoning</div><div class="body markdown"><p>To determine the primary consistent direction of the camera's movement between frame 16 and frame 31 of 32, we examine the sequence of images:</p>
+<ol>
+<li><strong>Frame 16</strong>: The camera is facing a door with a backpack hanging on it.</li>
+<li><strong>Frames 17-19</strong>: The camera shifts slightly, maintaining a view of the door and the wall.</li>
+<li><strong>Frames 20-23</strong>: The camera pans and moves towards the right, bringing a white sink into view.</li>
+<li><strong>Frames 24-25</strong>: The camera continues moving right, revealing the toilet area next to the sink.</li>
+<li><strong>Frames 26-28</strong>: The camera moves further right/forward, showing the mirror and more of the wall.</li>
+<li><strong>Frames 29-31</strong>: The camera completes a movement that brings the view back to the toilet and the dispenser on the wall, having moved generally in a rightward direction across the room relative to its starting orientation.</li>
+</ol>
+<p>Looking at the progression from frame 16 (door) to frame 31 (toilet/dispenser), the camera consistently moves to the right side of the room.</p>
+<p>The primary consistent direction of movement is Right.</p>
+<p>B. Right</p>
+</div></div><div class="tl-step tl-st-complete"><div class="kind">Final answer</div><div class="body markdown"><p>To determine the primary consistent direction of the camera's movement between frame 16 and frame 31 of 32, we examine the sequence of images:</p>
+<ol>
+<li><strong>Frame 16</strong>: The camera is facing a door with a backpack hanging on it.</li>
+<li><strong>Frames 17-19</strong>: The camera shifts slightly, maintaining a view of the door and the wall.</li>
+<li><strong>Frames 20-23</strong>: The camera pans and moves towards the right, bringing a white sink into view.</li>
+<li><strong>Frames 24-25</strong>: The camera continues moving right, revealing the toilet area next to the sink.</li>
+<li><strong>Frames 26-28</strong>: The camera moves further right/forward, showing the mirror and more of the wall.</li>
+<li><strong>Frames 29-31</strong>: The camera completes a movement that brings the view back to the toilet and the dispenser on the wall, having moved generally in a rightward direction across the room relative to its starting orientation.</li>
+</ol>
+<p>Looking at the progression from frame 16 (door) to frame 31 (toilet/dispenser), the camera consistently moves to the right side of the room.</p>
+<p>The primary consistent direction of movement is Right.</p>
+<p>B. Right</p>
+</div></div><div class="tl-step tl-st-final"><div class="kind">Final response</div><div class="body markdown"><p>To determine the primary consistent direction of the camera's movement between frame 16 and frame 31 of 32, we examine the sequence of images:</p>
+<ol>
+<li><strong>Frame 16</strong>: The camera is facing a door with a backpack hanging on it.</li>
+<li><strong>Frames 17-19</strong>: The camera shifts slightly, maintaining a view of the door and the wall.</li>
+<li><strong>Frames 20-23</strong>: The camera pans and moves towards the right, bringing a white sink into view.</li>
+<li><strong>Frames 24-25</strong>: The camera continues moving right, revealing the toilet area next to the sink.</li>
+<li><strong>Frames 26-28</strong>: The camera moves further right/forward, showing the mirror and more of the wall.</li>
+<li><strong>Frames 29-31</strong>: The camera completes a movement that brings the view back to the toilet and the dispenser on the wall, having moved generally in a rightward direction across the room relative to its starting orientation.</li>
+</ol>
+<p>Looking at the progression from frame 16 (door) to frame 31 (toilet/dispenser), the camera consistently moves to the right side of the room.</p>
+<p>The primary consistent direction of movement is Right.</p>
+<p>B. Right</p>
+</div></div></div></div></div>
+  </div>
+  
+<div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-agent">SpatialClaw</span></h2>
+    <div class="verdict"><span class='tick-ok'>✓ Correct</span></div>
+  </div>
+  <div class="timeline">
+<div class="tl-step tl-plan">
+  <div class="kind">Plan</div>
+  <div class="body markdown"><h3>Task Analysis</h3>
+<p>The goal is to determine the primary consistent direction of the camera's movement between frame 16 and frame 31 of 32, relative to the camera's orientation at the start of that sequence (frame 16).</p>
+<p><strong>Coordinate System Resolution:</strong>
+The question asks for movement relative to the camera's orientation at the start. This requires a camera-relative 3D coordinate system anchored at the first frame of the sequence.</p>
+<ul>
+<li><strong>Forward:</strong> Along the camera's Z-axis (viewing direction) at frame 16.</li>
+<li><strong>Backward:</strong> Opposite to the camera's Z-axis at frame 16.</li>
+<li><strong>Right:</strong> Along the camera's X-axis at frame 16.</li>
+<li><strong>Left:</strong> Opposite to the camera's X-axis at frame 16.</li>
+</ul>
+<p>The target variable is a categorical direction (Forward, Right, Backward, or Left).</p>
+<h3>Information Needs</h3>
+<ol>
+<li><strong>Frame Mapping:</strong> Conversion of &quot;frame 16 of 32&quot; and &quot;frame 31 of 32&quot; to absolute video frame indices and their corresponding indices in the <code>InputImages</code> list.</li>
+<li><strong>Camera Poses:</strong> The 3D camera-to-world (c2w) matrices for the frames in the specified range to extract position and orientation.</li>
+<li><strong>Trajectory Data:</strong> The sequence of 3D positions of the camera.</li>
+<li><strong>Reference Vectors:</strong> The forward and right vectors of the camera at the start frame (frame 16).</li>
+</ol>
+<h3>Computation Plan</h3>
+<ol>
+<li>
+<p><strong>Frame Identification:</strong></p>
+<ul>
+<li>Calculate the absolute video frame indices for &quot;frame 16 of 32&quot; and &quot;frame 31 of 32&quot; using the formula: <code>fraction = (X - 1) / (32 - 1)</code>, <code>target_video_frame = round(fraction * (Metadata.total_frames - 1))</code>.</li>
+<li>Identify the slice of <code>InputImages</code> whose <code>frame_indices</code> fall between these two absolute indices. Let this range be <code>InputImages[idx_start : idx_end + 1]</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>3D Reconstruction:</strong></p>
+<ul>
+<li>Call <code>recon = tools.Reconstruct.Reconstruct(InputImages[idx_start : idx_end + 1])</code> to obtain camera poses.</li>
+</ul>
+</li>
+<li>
+<p><strong>Reference Frame Establishment:</strong></p>
+<ul>
+<li>Get the camera pose at the start frame: <code>fi_start = recon.frame_indices[0]</code>.</li>
+<li>Extract the reference position: <code>pos_start = recon.extrinsics[fi_start][:3, 3]</code>.</li>
+<li>Extract the reference orientation vectors:
+<ul>
+<li><code>fwd_start = recon.extrinsics[fi_start][:3, 2]</code> (Z-axis)</li>
+<li><code>right_start = recon.extrinsics[fi_start][:3, 0]</code> (X-axis)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Quantitative Trajectory Analysis:</strong></p>
+<ul>
+<li>For every frame <code>fi</code> in <code>recon.frame_indices</code>:
+<ul>
+<li>Get the current position: <code>pos_current = recon.extrinsics[fi][:3, 3]</code>.</li>
+<li>Calculate the displacement vector: <code>vec = pos_current - pos_start</code>.</li>
+<li>Compute projections:
+<ul>
+<li><code>dot_fwd = np.dot(vec, fwd_start)</code></li>
+<li><code>dot_right = np.dot(vec, right_start)</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Store these values in arrays to analyze the trend.</li>
+</ul>
+</li>
+<li>
+<p><strong>Direction Determination:</strong></p>
+<ul>
+<li>Compare the magnitudes and signs of the average or final <code>dot_fwd</code> and <code>dot_right</code>.</li>
+<li>If <code>dot_fwd</code> is the dominant component and positive $\rightarrow$ Forward.</li>
+<li>If <code>dot_fwd</code> is the dominant component and negative $\rightarrow$ Backward.</li>
+<li>If <code>dot_right</code> is the dominant component and positive $\rightarrow$ Right.</li>
+<li>If <code>dot_right</code> is the dominant component and negative $\rightarrow$ Left.</li>
+</ul>
+</li>
+<li>
+<p><strong>Visual Verification:</strong></p>
+<ul>
+<li>Call <code>recon.render_bev(ego_trajectory=True)</code> to visualize the path.</li>
+<li>Since the reconstruction is anchored to the first frame of the sequence, the BEV plot's world axes align with the start camera's orientation (specifically, the first camera looks toward -Z in the world frame).</li>
+<li>Verify that the trajectory's primary direction in the BEV plot matches the numerical result.</li>
+</ul>
+</li>
+</ol>
+<h3>Verification Checklist</h3>
+<pre><code class="language-json">[
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Correctly map 'frame 16 of 32' and 'frame 31 of 32' to InputImages indices&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Ensure the reference orientation (fwd/right vectors) is taken strictly from the start frame of the sequence&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Cross-validate numerical dot products with the BEV trajectory visualization&quot;},
+  {&quot;priority&quot;: &quot;LOW&quot;, &quot;description&quot;: &quot;Check for significant camera rotation that might make 'consistent direction' ambiguous&quot;}
+]
+</code></pre>
+<h3>Fallbacks</h3>
+<ul>
+<li><strong>Poor Reconstruction:</strong> If the reconstruction fails or produces noisy poses (e.g., very small displacement), use <code>vlm.ask_with_thinking</code> on the frames in the range, asking specifically about the camera's movement relative to the first frame.</li>
+<li><strong>Ambiguous Motion:</strong> If the camera moves in a complex curve, calculate the net displacement vector from the first to the last frame to determine the primary overall direction.</li>
+</ul>
+</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 0</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Map the requested frame range (&quot;frame 16 of 32&quot; to &quot;frame 31 of 32&quot;) to absolute video frame indices and identify the corresponding slice in `InputImages`.</div><div class="label">Reasoning</div><div class="body prose">The question uses a uniform sampling protocol (X of N). I must convert these relative indices into absolute video frame numbers based on the total number of frames in the video, and then locate the nearest available frames in the `InputImages` list to ensure I&#x27;m analyzing the correct temporal window.</div><div class="label">Next Goal</div><div class="body prose">Perform 3D reconstruction of the identified frame range to extract camera poses and trajectories.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># Parameters from the question</span>
+<span class="n">X_start</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">X_end</span> <span class="o">=</span> <span class="mi">31</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">32</span>
+
+<span class="c1"># Total frames in the video</span>
+<span class="n">total_frames</span> <span class="o">=</span> <span class="n">Metadata</span><span class="o">.</span><span class="n">total_frames</span>
+
+<span class="c1"># Convert relative frames to absolute video frame indices</span>
+<span class="n">fraction_start</span> <span class="o">=</span> <span class="p">(</span><span class="n">X_start</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">target_start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">fraction_start</span> <span class="o">*</span> <span class="p">(</span><span class="n">total_frames</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
+
+<span class="n">fraction_end</span> <span class="o">=</span> <span class="p">(</span><span class="n">X_end</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">N</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">target_end</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">fraction_end</span> <span class="o">*</span> <span class="p">(</span><span class="n">total_frames</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Target start video frame: </span><span class="si">{</span><span class="n">target_start</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Target end video frame: </span><span class="si">{</span><span class="n">target_end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Find the indices in InputImages that are closest to these target video frames</span>
+<span class="n">idx_start</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">j</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">InputImages</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">frame_index</span> <span class="o">-</span> <span class="n">target_start</span><span class="p">))</span>
+<span class="n">idx_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">j</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">InputImages</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">frame_index</span> <span class="o">-</span> <span class="n">target_end</span><span class="p">))</span>
+
+<span class="c1"># Ensure indices are in the correct order and get the slice</span>
+<span class="k">if</span> <span class="n">idx_start</span> <span class="o">&gt;</span> <span class="n">idx_end</span><span class="p">:</span>
+    <span class="n">idx_start</span><span class="p">,</span> <span class="n">idx_end</span> <span class="o">=</span> <span class="n">idx_end</span><span class="p">,</span> <span class="n">idx_start</span>
+
+<span class="c1"># We take the slice from idx_start to idx_end inclusive</span>
+<span class="n">frames_to_use</span> <span class="o">=</span> <span class="n">InputImages</span><span class="p">[</span><span class="n">idx_start</span> <span class="p">:</span> <span class="n">idx_end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;InputImages index range: </span><span class="si">{</span><span class="n">idx_start</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">idx_end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Absolute video frame range: </span><span class="si">{</span><span class="n">InputImages</span><span class="p">[</span><span class="n">idx_start</span><span class="p">]</span><span class="o">.</span><span class="n">frame_index</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">InputImages</span><span class="p">[</span><span class="n">idx_end</span><span class="p">]</span><span class="o">.</span><span class="n">frame_index</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of frames in slice: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">frames_to_use</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Visual check of the start and end frames of the sequence</span>
+<span class="n">show</span><span class="p">([</span><span class="n">InputImages</span><span class="p">[</span><span class="n">idx_start</span><span class="p">],</span> <span class="n">InputImages</span><span class="p">[</span><span class="n">idx_end</span><span class="p">]])</span>
+</pre><div class="label">Output</div><pre class="out">Target start video frame: 757
+Target end video frame: 1515
+InputImages index range: 757 to 1515
+Absolute video frame range: 757 to 1515
+Number of frames in slice: 759
+ [image: show_0001] 
+</pre><div class="label">show_0001</div><div class="img-row"><img loading="lazy" src="../../../assets/vstibench/gemma3vl/4387/show_0001_img_0.jpg" alt=""><img loading="lazy" src="../../../assets/vstibench/gemma3vl/4387/show_0001_img_1.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 0 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.24s.
+
+[Output]
+Target start video frame: 757
+Target end video frame: 1515
+InputImages index range: 757 to 1515
+Absolute video frame range: 757 to 1515
+Number of frames in slice: 759
+
+[Variables] New/changed:
+  X_start: int
+  X_end: int
+  N: int
+  total_frames: int
+  fraction_start: float
+  target_start: int
+  fraction_end: float
+  target_end: int
+  idx_start: int
+  idx_end: int
+  frames_to_use: InputImages, len=759, frames=[757..1515] (759 frames)
+
+[Inline Images] 2 image(s) attached below.
+  Labels: [InputImages[idx_start], InputImages[idx_end]]
+[show() budget] 248/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 1</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Perform 3D reconstruction of the camera trajectory between the identified frames.</div><div class="label">Reasoning</div><div class="body prose">To quantitatively determine the camera&#x27;s movement direction, I need the 3D camera poses (position and orientation) over time. Since `tools.Reconstruct.Reconstruct` has a limit of 64 frames, I will subsample the 759 frames in the range [757, 1515] to a uniform set of 64 frames. This will provide a representative trajectory while staying within the tool&#x27;s limits.</div><div class="label">Next Goal</div><div class="body prose">Extract the reference orientation from the first frame and compute the displacement projections (Forward/Right) for the rest of the trajectory.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># Subsample frames to fit the 64-frame limit of tools.Reconstruct</span>
+<span class="n">num_to_sample</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">frames_to_use</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_to_sample</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">subsampled_frames</span> <span class="o">=</span> <span class="p">[</span><span class="n">frames_to_use</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">]</span>
+
+<span class="c1"># Perform 3D reconstruction</span>
+<span class="n">recon</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Reconstruct</span><span class="o">.</span><span class="n">Reconstruct</span><span class="p">(</span><span class="n">subsampled_frames</span><span class="p">)</span>
+
+<span class="c1"># Basic sanity check on reconstruction</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reconstructed </span><span class="si">{</span><span class="n">recon</span><span class="o">.</span><span class="n">num_frames</span><span class="si">}</span><span class="s2"> frames.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Metric scale: </span><span class="si">{</span><span class="n">recon</span><span class="o">.</span><span class="n">metric_scale</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Visualize the trajectory in BEV to get a qualitative sense</span>
+<span class="c1"># Since we have no masks, we use ego_trajectory=True to see the camera path</span>
+<span class="n">bev_vis</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">render_bev</span><span class="p">(</span><span class="n">ego_trajectory</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">bev_vis</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">Reconstructed 64 frames.
+Metric scale: 1.515516996383667
+ [image: show_0002] 
+</pre><div class="label">show_0002</div><div class="img-row"><img loading="lazy" src="../../../assets/vstibench/gemma3vl/4387/show_0002_img_0.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 1 Execution Feedback ===
+
+[SUCCESS] Code executed in 16.77s.
+
+[Output]
+Reconstructed 64 frames.
+Metric scale: 1.515516996383667
+
+[Variables] New/changed:
+  num_to_sample: int
+  indices: ndarray, shape=(64,), dtype=int64
+  subsampled_frames: list, len=64
+  recon: Reconstruction, frames=[757..1515] (64 frames)
+  bev_vis: VisualFeedback
+
+[Inline Images] 1 image(s) attached below.
+  Labels: bev_vis
+
+[Tool Calls] 1 tool/VLM call(s) this step.
+[show() budget] 247/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 2</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Quantitatively analyze the camera&#x27;s movement direction relative to its initial orientation.</div><div class="label">Reasoning</div><div class="body prose">While the BEV plot qualitatively suggests a primary &quot;Forward&quot; motion, I must verify this with precise calculations. I will project the displacement of the camera from its starting position onto the starting camera&#x27;s forward (Z-axis) and right (X-axis) vectors. This removes any ambiguity caused by camera rotation and provides a metric for &quot;Forward&quot;, &quot;Backward&quot;, &quot;Left&quot;, and &quot;Right&quot; relative to the start.</div><div class="label">Next Goal</div><div class="body prose">Determine the primary direction based on the dominant projection and submit the final answer.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># Reference frame: the first frame of the reconstructed sequence</span>
+<span class="n">fi_start</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">pose_start</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">extrinsics</span><span class="p">[</span><span class="n">fi_start</span><span class="p">]</span>
+<span class="n">pos_start</span> <span class="o">=</span> <span class="n">pose_start</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">fwd_start</span> <span class="o">=</span> <span class="n">pose_start</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>   <span class="c1"># Camera forward vector (Z)</span>
+<span class="n">right_start</span> <span class="o">=</span> <span class="n">pose_start</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="c1"># Camera right vector (X)</span>
+
+<span class="n">dot_fwd_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">dot_right_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">recon</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">:</span>
+    <span class="n">pos_current</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">extrinsics</span><span class="p">[</span><span class="n">fi</span><span class="p">][:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">vec</span> <span class="o">=</span> <span class="n">pos_current</span> <span class="o">-</span> <span class="n">pos_start</span>
+    
+    <span class="n">dot_fwd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">fwd_start</span><span class="p">)</span>
+    <span class="n">dot_right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="n">right_start</span><span class="p">)</span>
+    
+    <span class="n">dot_fwd_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dot_fwd</span><span class="p">)</span>
+    <span class="n">dot_right_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dot_right</span><span class="p">)</span>
+
+<span class="n">dot_fwd_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dot_fwd_list</span><span class="p">)</span>
+<span class="n">dot_right_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dot_right_list</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Start position: </span><span class="si">{</span><span class="n">pos_start</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Final displacement projection - Forward: </span><span class="si">{</span><span class="n">dot_fwd_arr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, Right: </span><span class="si">{</span><span class="n">dot_right_arr</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Average displacement projection - Forward: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dot_fwd_arr</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, Right: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dot_right_arr</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Plotting the projections over time to see the trend</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dot_fwd_arr</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Forward Projection&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dot_right_arr</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Right Projection&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Sampled Frame Index&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre><div class="label">Output</div><pre class="out">Start position: [0.15476985 1.30526135 0.5826965 ]
+Final displacement projection - Forward: 1.164, Right: 0.411
+Average displacement projection - Forward: 0.338, Right: -0.081
+ [image: matplotlib figure] 
+</pre><div class="label">matplotlib figure</div><div class="img-row"><img loading="lazy" src="../../../assets/vstibench/gemma3vl/4387/show_0003_img_0.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 2 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.23s.
+
+[Output]
+Start position: [0.15476985 1.30526135 0.5826965 ]
+Final displacement projection - Forward: 1.164, Right: 0.411
+Average displacement projection - Forward: 0.338, Right: -0.081
+
+[Variables] New/changed:
+  fi_start: int
+  pose_start: ndarray, shape=(4, 4), dtype=float64
+  pos_start: ndarray, shape=(3,), dtype=float64
+  fwd_start: ndarray, shape=(3,), dtype=float64
+  right_start: ndarray, shape=(3,), dtype=float64
+  dot_fwd_list: list, len=64
+  dot_right_list: list, len=64
+  fi: int
+  pos_current: ndarray, shape=(3,), dtype=float64
+  vec: ndarray, shape=(3,), dtype=float64
+  dot_fwd: float64, shape=(), dtype=float64
+  dot_right: float64, shape=(), dtype=float64
+  dot_fwd_arr: ndarray, shape=(64,), dtype=float64
+  dot_right_arr: ndarray, shape=(64,), dtype=float64
+  fig: Figure
+  ax1: Axes
+  ax2: Axes
+
+[Inline Images] 1 image(s) attached below.
+  Labels: matplotlib figure
+[show() budget] 246/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 3</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Determine the primary consistent direction of the camera&#x27;s movement based on the quantitative trajectory analysis.</div><div class="label">Reasoning</div><div class="body prose">1.  **Reference Frame**: I established the coordinate system based on the camera&#x27;s orientation at the start of the sequence (frame 16 of 32).
+2.  **Quantitative Evidence**:
+    *   The **Forward projection** (`dot_fwd`) shows a clear overall increasing trend, ending at approximately $1.164$ meters.
+    *   The **Right projection** (`dot_right`) oscillates and ends at a much smaller value of $0.411$ meters.
+    *   Comparing the final displacements, the forward component ($1.164$) is nearly 3 times larger than the right component ($0.411$).
+3.  **Visual Evidence**: The BEV trajectory plot clearly shows the camera moving primarily in the direction labeled &quot;FORWARD (away from camera)&quot;.
+4.  **Consistency**: Both the numerical projections and the BEV visualization independently confirm that the dominant and most consistent direction of movement is Forward.</div><div class="label">Next Goal</div><div class="body prose">Submit the final answer.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="n">ReturnAnswer</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">[ReturnAnswer] Answer submitted: A
+</pre></div></div>
+</div>
+<div class="tl-step tl-answer">
+  <div class="kind">Answer</div>
+  <div class="body prose">A</div>
+</div>
+<div class="tl-step tl-evaluation">
+  <div class="kind">Evaluation</div>
+  <div class="body">Ground truth: <strong>A</strong> · Agent: <strong>A</strong></div>
+</div></div>
+</div>
+</div>
+
+  </main>
+  <footer class="site-footer">SpatialClaw — Supplementary Material</footer>
+  <script src="../../../static/app.js"></script>
+</body>
+</html>

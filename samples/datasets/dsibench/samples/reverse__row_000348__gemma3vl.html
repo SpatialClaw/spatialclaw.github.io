@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DSI-Bench — Gemma4-31B — sample reverse__row_000348</title>
+  <link rel="stylesheet" href="../../../static/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="crumb"><a href="../../../index.html">Highlights</a> / DSI-Bench / sample reverse__row_000348<span class="nav-hint" aria-hidden="true"><kbd>←</kbd> <kbd>→</kbd> to navigate</span></div>
+      <h1>DSI-Bench — Gemma4-31B — sample reverse__row_000348</h1>
+      
+    </div>
+  </header>
+  <main class="container">
+
+<a class="sample-nav prev" href="../../spbench/samples/MV_142__gemma3vl.html" aria-label="Previous sample" title="Previous sample">‹</a><a class="sample-nav next" href="../../vstibench/samples/4387__gemma3vl.html" aria-label="Next sample" title="Next sample">›</a>
+<div class="qa-card">
+  <div class="keyframes"><div class="label">Keyframes</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/kf_input_00.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/kf_input_01.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/kf_input_02.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/kf_input_03.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/kf_input_04.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/kf_input_05.jpg" alt=""></div></div>
+  <div class="label">Question</div>
+  <div class="q">In this video clip, how is the boat&#x27;s location moving in the 3D scene relative to his/her/its starting orientation and location?
+
+This is a multiple-choice question about how an object or the camera moves in 3D space within the video clip. Choose the option that best matches the motion you observe and respond with only the option letter (A, B, C, or D).
+A. Moving forward
+B. Moving backward
+C. Moving left
+D. Moving right</div>
+  <div class="pred-row" style="margin-top:14px">
+    <div class="pred-cell"><span class="label" style="margin:0">Ground truth</span>
+      <span class="gt-pill">B</span></div>
+    <div class="pred-cell"><span class="method-pill pill-agent">SpatialClaw</span>
+      <span style="font-family:ui-monospace,Menlo,monospace">B</span>
+      <span class="tick-ok">✓</span></div>
+    <div class="pred-cell"><span class="q-badge q-only_agent">Agent wins</span></div>
+  </div>
+</div>
+<div class="baseline-tabs" role="tablist" aria-label="Baseline comparison"><button type="button" class="baseline-tab" data-pane="cot">No-tool baseline</button><button type="button" class="baseline-tab" data-pane="single-pass">Single-pass code</button><button type="button" class="baseline-tab" data-pane="react">Structured tool-call</button><button type="button" class="baseline-tab" data-pane="spacetools">SpaceTools</button></div>
+<div class="split agent-only">
+  <div class="left-stack">
+    <div class="baseline-pane" data-pane="cot"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-cot">No-tool Baseline</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="cot-md markdown"><p>To determine the movement of the boat in the video clip, let's analyze the visual cues across the frames:</p>
+<ol>
+<li><strong>Initial Position:</strong> In the first few frames, the boat is positioned on the right side of the frame, relatively still near the riverbank.</li>
+<li><strong>Onset of Motion:</strong> Around frames 6 to 10, we begin to see white water (a wake) forming at the bow and along the sides of the boat, indicating that it has started to move.</li>
+<li><strong>Direction of Motion:</strong> As the video progresses from frame 11 to 25, the boat continues to move further into the scene, moving away from the camera and deeper into the river valley. The increasing wake and the change in the boat's relative position to the background elements (the mountains and the riverbank) confirm it is moving ahead in its own orientation.</li>
+<li><strong>Conclusion:</strong> Since the boat is moving away from its starting point in the direction it is facing, it is moving forward.</li>
+</ol>
+<p>Comparing this to the given options:</p>
+<ul>
+<li><strong>A. Moving forward:</strong> This matches our observation.</li>
+<li><strong>B. Moving backward:</strong> Incorrect; the wake is at the bow, and it's moving away from the camera.</li>
+<li><strong>C. Moving left:</strong> Incorrect; while it may have a slight leftward angle, the primary motion is forward.</li>
+<li><strong>D. Moving right:</strong> Incorrect; it is moving away from the right bank.</li>
+</ul>
+<p>The boat is moving forward.</p>
+<p><span class="boxed">A</span></p>
+</div></div></div><div class="baseline-pane" data-pane="single-pass"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-spcode">Single-pass code</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="single-pass-card"><div class="label">Purpose</div><div class="body prose">Determine the 3D movement of the boat relative to its starting orientation.</div><div class="label">Reasoning</div><div class="body prose">1.  **Visual Inspection**: The boat is clearly moving along the river. From the visual sequence, it appears to be moving forward (in the direction its bow is pointing).
+2.  **Quantitative Verification**: I will use `tools.Reconstruct` to obtain the 3D geometry and `tools.SAM3` to track the boat&#x27;s position. By calculating the boat&#x27;s trajectory in world space and comparing it to its initial facing direction (which can be inferred from the boat&#x27;s geometry or its motion vector), I can definitively determine if it&#x27;s moving forward, backward, left, or right.
+3.  **Coordinate System**: The boat&#x27;s &quot;forward&quot; direction is the direction of its bow. If the trajectory vector aligns with this direction, the answer is &quot;Moving forward&quot;.</div><div class="label">Next Goal</div><div class="body prose">Segment the boat, reconstruct the scene, and analyze the 3D trajectory.</div><div class="label">Code</div><pre class="code py-hl"><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># 1. Segment the boat in the first and last frames to track it</span>
+<span class="c1"># Using text segmentation for the boat</span>
+<span class="n">seg</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">SAM3</span><span class="o">.</span><span class="n">segment_video_by_text</span><span class="p">([</span><span class="s2">&quot;boat&quot;</span><span class="p">],</span> <span class="n">start_frame</span><span class="o">=</span><span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">frame_index</span><span class="p">,</span> <span class="n">end_frame</span><span class="o">=</span><span class="n">InputImages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">frame_index</span><span class="p">)</span>
+
+<span class="c1"># 2. Reconstruct the scene to get 3D coordinates</span>
+<span class="c1"># Using a subset of frames for reconstruction to be efficient and accurate</span>
+<span class="n">recon</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Reconstruct</span><span class="o">.</span><span class="n">Reconstruct</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)</span>
+
+<span class="c1"># 3. Extract 3D centroids of the boat across frames</span>
+<span class="n">centroids</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">frame_indices</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span>
+<span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">frame_indices</span><span class="p">:</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">get_centroid_3d</span><span class="p">(</span><span class="n">recon</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">fi</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">centroids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+<span class="n">centroids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">centroids</span><span class="p">)</span>
+
+<span class="c1"># 4. Calculate the overall motion vector</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">centroids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="n">motion_vector</span> <span class="o">=</span> <span class="n">centroids</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">centroids</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Motion vector: </span><span class="si">{</span><span class="n">motion_vector</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># To determine &quot;forward&quot;, we look at the boat&#39;s orientation.</span>
+    <span class="c1"># The boat is moving in the direction of its bow.</span>
+    <span class="c1"># In the video, the boat is moving generally from the right-middle towards the center-left of the scene,</span>
+    <span class="c1"># but relative to its own axis, it&#39;s moving in the direction it&#39;s facing.</span>
+    
+    <span class="c1"># Let&#39;s check the BEV to be sure.</span>
+    <span class="n">bev_vis</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">render_bev</span><span class="p">(</span><span class="n">masks</span><span class="o">=</span><span class="n">seg</span><span class="p">)</span>
+    <span class="n">show</span><span class="p">(</span><span class="n">bev_vis</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Could not track boat centroids.&quot;</span><span class="p">)</span>
+
+<span class="c1"># Based on visual inspection and the trajectory, the boat is moving forward.</span>
+<span class="n">ReturnAnswer</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">)</span>
+</pre><div class="label">Error</div><pre class="err">---------------------------------------------------------------------------
+KeyError                                  Traceback (most recent call last)
+Cell In[238], line 15
+     13 frame_indices = seg.frame_indices
+     14 for fi in frame_indices:
+---&gt; 15     c = seg.get_centroid_3d(recon, frame=fi, object=0)
+     16     if c is not None:
+     17         centroids.append(c)
+
+File SpatialAgent/spatial_agent/kernel_types/per_frame_types.py:203, in PerFrameMask.get_centroid_3d(self, recon, frame, object, conf_threshold)
+    190 &quot;&quot;&quot;Get ``(3,)`` median 3D position of confidence-filtered masked points.
+    191 
+    192 Args:
+   (...)    200     is empty (safe for arithmetic; use ``np.isnan()`` to check).
+    201 &quot;&quot;&quot;
+    202 mask_2d = self.get_mask(frame, object)
+--&gt; 203 local_r = recon.points.get_by_frame_index(frame)
+    204 pts = recon.points.points[local_r][mask_2d]
+    205 if len(pts) == 0:
+
+File SpatialAgent/spatial_agent/kernel_types/per_frame_types.py:69, in PerFrameData.get_by_frame_index(self, abs_frame_idx)
+     64     if abs_frame_idx == 0 and 0 not in avail:
+     65         hint = (
+     66             f&quot;\n  Hint: Did you mean frame={avail[0]}? &quot;
+     67             f&quot;Use ABSOLUTE frame indices (from seg.frame_indices), not 0-based local indices.&quot;
+     68         )
+---&gt; 69     raise KeyError(
+     70         f&quot;Frame {abs_frame_idx} not found in {avail}. &quot;
+     71         f&quot;Available frames: {avail}{hint}&quot;
+     72     )
+     73 return self._frame_indices.index(abs_frame_idx)
+
+KeyError: &#x27;Frame 1 not found in [0, 5, 10, 14, 19, 24, 29, 34, 38, 43, 48, 53, 58, 62, 67, 72, 77, 82, 86, 91, 96, 101]. Available frames: [0, 5, 10, 14, 19, 24, 29, 34, 38, 43, 48, 53, 58, 62, 67, 72, 77, 82, 86, 91, 96, 101]&#x27;</pre><div class="label">Final answer</div><div class="body prose">A</div></div></div></div><div class="baseline-pane" data-pane="react"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-react">Structured tool-call</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="timeline">
+<div class="tl-step tl-plan">
+  <div class="kind">Plan</div>
+  <div class="body markdown"><h3>Task Analysis</h3>
+<p>The goal is to determine the 3D motion of a boat relative to its own starting orientation and location. This is an object-centric motion problem.</p>
+<ul>
+<li><strong>Target Variable</strong>: Direction of the boat's displacement vector relative to its initial heading.</li>
+<li><strong>Coordinate System</strong>: Object-centric. &quot;Forward&quot; is defined by the boat's initial facing direction (the vector from stern to bow at the start of the clip). &quot;Right&quot; and &quot;Left&quot; are perpendicular to this heading in the horizontal plane.</li>
+<li><strong>Answer Format</strong>: Multiple choice (A, B, C, or D).</li>
+</ul>
+<h3>Information Needs</h3>
+<ol>
+<li><strong>Object Identification and Tracking</strong>: I need to identify the boat and track its 3D position across the video.</li>
+<li><strong>Initial Orientation</strong>: I need to determine the boat's heading at the start of the clip to establish the reference frame.</li>
+<li><strong>3D Trajectory</strong>: I need the boat's 3D coordinates at the start and end of the clip to calculate the displacement vector.</li>
+<li><strong>Geometric Projection</strong>: I need to project the displacement vector onto the boat's initial forward and right axes.</li>
+</ol>
+<h3>Computation Plan</h3>
+<ol>
+<li>
+<p><strong>Boat Identification</strong>:</p>
+<ul>
+<li>Use <code>vlm.ask_with_thinking</code> on the first and last frames to confirm the boat's presence and general appearance.</li>
+<li>Use <code>tools.SAM3.segment_video_by_text</code> with the prompt <code>&quot;boat&quot;</code> to create masks across all frames.</li>
+<li>Visually verify the masks using <code>show([InputImages[0], seg.visualize(seg.frame_indices[0])])</code> and similar for the last frame.</li>
+</ul>
+</li>
+<li>
+<p><strong>3D Reconstruction</strong>:</p>
+<ul>
+<li>Perform a 3D reconstruction of the scene using <code>tools.Reconstruct.Reconstruct(InputImages)</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Trajectory Extraction</strong>:</p>
+<ul>
+<li>Extract the boat's 3D centroids for the first and last frames using <code>seg.get_centroid_3d(recon, frame=fi, object='boat')</code>.</li>
+<li>Calculate the total displacement vector: $\vec{d} = \text{centroid}<em>{end} - \text{centroid}</em>{start}$.</li>
+</ul>
+</li>
+<li>
+<p><strong>Initial Orientation Grounding</strong>:</p>
+<ul>
+<li>In the first frame where the boat is clearly visible, use <code>vlm.locate</code> to find the center coordinates of the <strong>bow</strong> (front) and the <strong>stern</strong> (back) of the boat.</li>
+<li>Convert these normalized coordinates to pixels using <code>tools.Geometry.normalized_to_pixel</code>.</li>
+<li>Retrieve the 3D world coordinates of the bow and stern from <code>recon.points[fi]</code> at those pixel locations.</li>
+<li>Define the initial forward vector: $\vec{f}<em>{start} = \text{normalize}(\text{point3D}</em>{bow} - \text{point3D}_{stern})$.</li>
+<li>Define the initial right vector: $\vec{r}<em>{start} = \text{normalize}(\vec{f}</em>{start} \times [0, 1, 0])$ (assuming Y is up).</li>
+</ul>
+</li>
+<li>
+<p><strong>Directional Analysis</strong>:</p>
+<ul>
+<li>Compute the dot product of the displacement vector $\vec{d}$ with the reference vectors:
+<ul>
+<li>$\text{score}<em>{fwd} = \vec{d} \cdot \vec{f}</em>{start}$</li>
+<li>$\text{score}<em>{right} = \vec{d} \cdot \vec{r}</em>{start}$</li>
+</ul>
+</li>
+<li>Compare the absolute values of these scores to determine the dominant direction:
+<ul>
+<li>If $|\text{score}<em>{fwd}|$ is dominant and $\text{score}</em>{fwd} &gt; 0 \rightarrow$ <strong>Forward (A)</strong>.</li>
+<li>If $|\text{score}<em>{fwd}|$ is dominant and $\text{score}</em>{fwd} &lt; 0 \rightarrow$ <strong>Backward (B)</strong>.</li>
+<li>If $|\text{score}<em>{right}|$ is dominant and $\text{score}</em>{right} &gt; 0 \rightarrow$ <strong>Right (D)</strong>.</li>
+<li>If $|\text{score}<em>{right}|$ is dominant and $\text{score}</em>{right} &lt; 0 \rightarrow$ <strong>Left (C)</strong>.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3>CHECKLIST</h3>
+<pre><code class="language-json">[
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Verify that the SAM3 mask accurately tracks the boat throughout the clip without drifting to other objects.&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Ensure the bow and stern are correctly identified by the VLM to avoid mirroring the forward/backward direction.&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Cross-validate the computed displacement vector with the trajectory shown in a BEV render.&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Check that the 3D centroids are not NaN and are physically plausible given the scene scale.&quot;}
+]
+</code></pre>
+<h3>Verification</h3>
+<ol>
+<li><strong>Visual Trajectory Check</strong>: Call <code>recon.render_bev(masks=seg)</code> to visualize the boat's path from a top-down perspective. I will compare the direction of the trajectory line (red to blue) against the boat's initial orientation seen in the first frame.</li>
+<li><strong>Consistency Check</strong>: If the boat's motion is significant, I will calculate the displacement between several intermediate frames to ensure the motion is consistent and not a result of a single noisy centroid.</li>
+<li><strong>Orientation Sanity Check</strong>: I will use <code>vlm.ask_with_thinking</code> on the first frame to describe the boat's orientation relative to the camera (e.g., &quot;Is the boat facing towards the camera or away?&quot;) and check if this matches the calculated $\vec{f}_{start}$.</li>
+</ol>
+<h3>Fallbacks</h3>
+<ul>
+<li><strong>Segmentation Failure</strong>: If text-based segmentation fails, I will use <code>vlm.locate</code> to get a bounding box for the boat in the first frame and use <code>tools.SAM3.segment_video_by_box</code>.</li>
+<li><strong>Orientation Ambiguity</strong>: If the bow and stern are not clearly distinguishable, I will use <code>vlm.ask_with_thinking</code> to identify the boat's facing direction based on its overa</li>
+</ul>
+</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 0</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Confirm the boat&#x27;s presence and general appearance in the first and last frames.</div><div class="label">Reasoning</div><div class="body prose">Before performing segmentation and 3D reconstruction, I need to visually confirm that the target object (the boat) is present and identifiable in the video clip. This establishes a baseline for the tracking and motion analysis.</div><div class="label">Next Goal</div><div class="body prose">Segment the boat across the video using SAM3.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vlm.ask_with_thinking&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;visual_input&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;InputImages[0]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;InputImages[21]&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;question&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Is there a boat in these frames? Please describe its appearance and position in the first and last frames.&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out">[VLM Q | thinking] Is there a boat in these frames? Please describe its appearance and position in the first and last frames.
+[VLM A | thinking] Yes, there is a boat in these frames.
+
+*   **First frame:** The boat is positioned on the far right side of the frame, partially visible. It appears to be a rugged, dark-colored military-style vessel with equipment and structures on its deck.
+*   **Last frame:** The boat is more fully visible on the right side of the frame, moving forward and creating a wake in the water. It is a dark, utilitarian vessel with several people on board.
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 0 Execution Feedback ===
+
+[SUCCESS] Code executed in 19.65s.
+
+[Output]
+[VLM Q | thinking] Is there a boat in these frames? Please describe its appearance and position in the first and last frames.
+[VLM A | thinking] Yes, there is a boat in these frames.
+
+*   **First frame:** The boat is positioned on the far right side of the frame, partially visible. It appears to be a rugged, dark-colored military-style vessel with equipment and structures on its deck.
+*   **Last frame:** The boat is more fully visible on the right side of the frame, moving forward and creating a wake in the water. It is a dark, utilitarian vessel with several people on board.
+
+[Variables] New/changed:
+  result_0: str
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 1</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Segment the boat across the entire video clip.</div><div class="label">Reasoning</div><div class="body prose">To track the boat&#x27;s 3D position and compute its displacement, I first need accurate segmentation masks for the boat in every frame.</div><div class="label">Next Goal</div><div class="body prose">Visually verify the segmentation masks for the boat.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools.SAM3.segment_video_by_text&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;prompts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;boat&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;labels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;boat&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 1 Execution Feedback ===
+
+[SUCCESS] Code executed in 8.76s.
+
+[Variables] New/changed:
+  result_1: PerFrameMask, frames=[0..106] (107 frames)
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 2</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Visually verify the segmentation masks for the boat in the first and last frames.</div><div class="label">Reasoning</div><div class="body prose">It&#x27;s critical to ensure the SAM3 masks are accurately tracking the boat and not drifting to other objects or the water before proceeding to 3D reconstruction and centroid calculation.</div><div class="label">Next Goal</div><div class="body prose">Perform 3D reconstruction of the scene.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;show&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;InputImages[0]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;result_1.visualize(0)&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;InputImages[21]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;result_1.visualize(101)&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out"> [image: show_0001] 
+</pre><div class="label">show_0001</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/show_0001_img_0.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/show_0001_img_1.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/show_0001_img_2.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/show_0001_img_3.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 2 Execution Feedback ===
+
+[SUCCESS] Code executed in 1.93s.
+
+[Variables] New/changed:
+  result_2: NoneType
+
+[Inline Images] 4 image(s) attached below.
+  Labels: [InputImages[0], result_1.visualize(0), InputImages[21], result_1.visualize(101)]
+[show() budget] 246/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 3</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Perform 3D reconstruction of the scene to obtain metric spatial information.
+**Reasoning**: To calculate the boat&#x27;s 3D displacement and determine its motion relative to its starting orientation, I need a 3D point cloud and camera poses.
+**Next Goal**: Extract the boat&#x27;s 3D centroids for the first and last frames.
+**Tool Call (translated)**:
+```python
+result_3 = tools.Reconstruct.Reconstruct(InputImages)
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 3 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 4</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Perform 3D reconstruction of the scene.</div><div class="label">Reasoning</div><div class="body prose">To calculate the boat&#x27;s 3D displacement and determine its motion relative to its initial orientation, I need a 3D world coordinate system. Reconstruction provides the camera poses and point clouds needed to map 2D masks to 3D centroids.</div><div class="label">Next Goal</div><div class="body prose">Extract the boat&#x27;s 3D centroids for the first and last frames to calculate displacement.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools.Reconstruct.Reconstruct&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;frames&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;InputImages&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 4 Execution Feedback ===
+
+[SUCCESS] Code executed in 114.95s.
+
+[Variables] New/changed:
+  result_4: Reconstruction, frames=[0..101] (22 frames)
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 5</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Visualize the boat&#x27;s 3D trajectory from a top-down perspective.
+**Reasoning**: A BEV render provides an immediate visual confirmation of the boat&#x27;s path and direction of motion, which I can cross-validate with the quantitative centroid calculations. It helps ensure that the calculated displacement vector is physically plausible.
+**Next Goal**: Extract the boat&#x27;s 3D centroids for the first and last frames.
+**Tool Call (translated)**:
+```json
+{&quot;tool&quot;: &quot;show&quot;, &quot;args&quot;: {&quot;image&quot;: &quot;result_4.render_bev(masks=result_1)&quot;}}
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 5 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 6</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Extract the boat&#x27;s 3D centroids for the first and last frames of the reconstruction.</div><div class="label">Reasoning</div><div class="body prose">I need the 3D coordinates of the boat at the start and end of the clip to compute the displacement vector. I&#x27;ll use the absolute frame indices from the reconstruction object.</div><div class="label">Next Goal</div><div class="body prose">Calculate the displacement vector and visualize the trajectory using a BEV render.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vlm.ask_with_thinking&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;visual_input&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;InputImages[0]&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;question&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Give the (x, y) center coordinates in 0-1000 normalized scale for the bow (front) and stern (back) of the boat. Reply with &#39;Bow: x, y; Stern: x, y&#39;.&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out">[VLM Q | thinking] Give the (x, y) center coordinates in 0-1000 normalized scale for the bow (front) and stern (back) of the boat. Reply with &#x27;Bow: x, y; Stern: x, y&#x27;.
+[VLM A | thinking] Bow: 576, 650; Stern: 998, 700
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 6 Execution Feedback ===
+
+[SUCCESS] Code executed in 6.65s.
+
+[Output]
+[VLM Q | thinking] Give the (x, y) center coordinates in 0-1000 normalized scale for the bow (front) and stern (back) of the boat. Reply with &#x27;Bow: x, y; Stern: x, y&#x27;.
+[VLM A | thinking] Bow: 576, 650; Stern: 998, 700
+
+[Variables] New/changed:
+  result_6: str
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 7</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Convert the normalized bow and stern coordinates to pixels for the first frame.</div><div class="label">Reasoning</div><div class="body prose">To find the 3D positions of the bow and stern, I first need their pixel coordinates in the image.</div><div class="label">Next Goal</div><div class="body prose">Retrieve the 3D world coordinates of the bow and stern to define the boat&#x27;s initial forward vector.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools.Geometry.normalized_to_pixel&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;coords&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="mi">576</span><span class="p">,</span>
+<span class="w">      </span><span class="mi">650</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;InputImages[0].width&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;InputImages[0].height&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 7 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.00s.
+
+[Variables] New/changed:
+  result_7: list, len=2
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 8</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Convert the normalized stern coordinates to pixels for the first frame.</div><div class="label">Reasoning</div><div class="body prose">I need the pixel coordinates for both the bow and the stern to retrieve their 3D world positions from the reconstruction.</div><div class="label">Next Goal</div><div class="body prose">Retrieve the 3D world coordinates of the bow and stern to define the boat&#x27;s initial forward vector.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools.Geometry.normalized_to_pixel&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;coords&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="mi">998</span><span class="p">,</span>
+<span class="w">      </span><span class="mi">700</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;InputImages[0].width&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;InputImages[0].height&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 8 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.02s.
+
+[Variables] New/changed:
+  result_8: list, len=2
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 9</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Visualize the boat&#x27;s 3D trajectory from a top-down perspective.
+**Reasoning**: A BEV render provides an intuitive view of the boat&#x27;s motion relative to the scene and its initial orientation. By seeing the trajectory line (red to blue), I can qualitatively determine if the boat is moving forward, backward, or sideways relative to its initial heading.
+**Next Goal**: Extract 3D centroids for the first and last frames to quantitatively confirm the direction.
+**Tool Call (translated)**:
+```python
+result_9 = result_4.render_bev(masks=result_1, labels=[&#x27;boat&#x27;], ego_trajectory=True)
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 9 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 10</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Visualize the boat&#x27;s 3D trajectory from a top-down perspective.
+**Reasoning**: A BEV (Bird&#x27;s Eye View) rendering will show the boat&#x27;s path as a trajectory line. By comparing this path to the boat&#x27;s initial orientation (which I can see in the first frame), I can qualitatively determine if it&#x27;s moving forward, backward, or sideways. This serves as a crucial cross-validation for any quantitative calculations.
+**Next Goal**: Extract the boat&#x27;s 3D centroids for the first and last frames to quantitatively compute the displacement vector.
+**Tool Call (translated)**:
+```json
+{&quot;tool&quot;: &quot;show&quot;, &quot;args&quot;: {&quot;image&quot;: &quot;result_4.render_bev(masks=result_1, labels=[&#x27;boat&#x27;], ego_trajectory=True)&quot;}}
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 10 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 11</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Visualize the boat&#x27;s trajectory from a top-down perspective.</div><div class="label">Reasoning</div><div class="body prose">A BEV render will provide a clear visual of the boat&#x27;s path and its initial orientation, allowing me to cross-validate the quantitative results I will compute.</div><div class="label">Next Goal</div><div class="body prose">Extract the 3D centroids of the boat at the start and end of the clip to calculate the displacement vector.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;show&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;result_4.render_bev(masks=result_1)&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out"> [image: show_0002] 
+</pre><div class="label">show_0002</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/show_0002_img_0.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 11 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.39s.
+
+[Variables] New/changed:
+  result_11: NoneType
+
+[Inline Images] 1 image(s) attached below.
+  Labels: result_4.render_bev(masks=result_1)
+[show() budget] 245/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 12</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Analyze the boat&#x27;s 3D motion based on the BEV render and visual evidence from the frames.</div><div class="label">Reasoning</div><div class="body prose">1. **Visual Evidence**: In the first frame (`InputImages[0]`), the boat is positioned on the far right and is facing towards the left of the image (the bow is at x=576, stern at x=998). In the last frame (`InputImages[21]`), the boat has moved towards the center of the frame and appears larger, indicating it is moving closer to the camera. The wake is trailing behind the boat to the right, confirming its motion is generally to the left. Since the boat is facing left, this motion is &quot;Forward&quot; relative to its own orientation.
+2. **BEV Analysis**: The BEV render (`result_11`) shows the boat&#x27;s trajectory (red to blue) moving from approximately (0.5, 5.3) to (1.5, 4.5). While the automatic label says &quot;backward+right&quot;, this contradicts the clear visual evidence in the frames where the boat is moving forward in the water and getting closer to the camera. Reconstructions can sometimes have scale or orientation flips; however, the physical evidence of the bow wave and the boat&#x27;s progress across the scene strongly support forward motion.
+3. **Conclusion**: The boat is moving in the direction it is facing.</div><div class="label">Next Goal</div><div class="body prose">Return the final answer.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ReturnAnswer&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;answer&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;A&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out">[ReturnAnswer] Answer submitted: A
+</pre></div></div>
+</div>
+<div class="tl-step tl-answer">
+  <div class="kind">Answer</div>
+  <div class="body prose">A</div>
+</div></div></div></div><div class="baseline-pane" data-pane="spacetools"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-spacetools">SpaceTools</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="timeline"><div class="tl-step tl-st-reasoning"><div class="kind">Reasoning</div><div class="body markdown"><p>A</p>
+</div></div><div class="tl-step tl-st-complete"><div class="kind">Final answer</div><div class="body markdown"><p>A</p>
+</div></div><div class="tl-step tl-st-final"><div class="kind">Final response</div><div class="body markdown"><p>A</p>
+</div></div></div></div></div>
+  </div>
+  
+<div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-agent">SpatialClaw</span></h2>
+    <div class="verdict"><span class='tick-ok'>✓ Correct</span></div>
+  </div>
+  <div class="timeline">
+<div class="tl-step tl-plan">
+  <div class="kind">Plan</div>
+  <div class="body markdown"><p><strong>Task Analysis</strong>
+The goal is to determine the 3D motion of a boat relative to its own starting orientation and location. This is an object-centric spatial reasoning task. The target variable is the direction of displacement (Forward, Backward, Left, or Right) relative to the boat's initial heading.</p>
+<p><strong>Coordinate System Resolution</strong>
+The question specifies &quot;relative to his/her/its starting orientation and location,&quot; which necessitates an object-perspective coordinate system. I must first establish the boat's initial facing direction (the &quot;forward&quot; vector) and then project the boat's 3D displacement vector onto the boat's local axes (Forward/Backward and Left/Right).</p>
+<p><strong>Information Needs</strong></p>
+<ol>
+<li><strong>Object Segmentation</strong>: Precise masks for the boat across the video to track its position.</li>
+<li><strong>3D Geometry</strong>: A 3D reconstruction of the scene to obtain metric world coordinates for the boat's centroid.</li>
+<li><strong>Initial Orientation</strong>: The direction the boat's bow is pointing in the first frame.</li>
+<li><strong>Trajectory Data</strong>: The sequence of 3D centroids to calculate the total displacement vector.</li>
+</ol>
+<p><strong>Computation Plan</strong></p>
+<ol>
+<li>
+<p><strong>Boat Identification and Segmentation</strong>:</p>
+<ul>
+<li>Use <code>tools.SAM3.segment_video_by_text</code> with the prompt &quot;boat&quot; across all available frames to generate a <code>PerFrameMask</code>.</li>
+<li>Perform a programmatic check on mask areas and use <code>show()</code> on the first, middle, and last frames to visually verify that the masks accurately cover the boat.</li>
+</ul>
+</li>
+<li>
+<p><strong>3D Scene Reconstruction</strong>:</p>
+<ul>
+<li>Run <code>tools.Reconstruct.Reconstruct(InputImages)</code> to build the 3D point cloud and extract camera extrinsics.</li>
+</ul>
+</li>
+<li>
+<p><strong>3D Trajectory Extraction</strong>:</p>
+<ul>
+<li>For every frame in the <code>PerFrameMask</code>, compute the 3D centroid of the boat using <code>seg.get_centroid_3d(recon, frame=fi, object='boat')</code>.</li>
+<li>Store these centroids in a list. If any frames produce <code>None</code> or extreme outliers, filter them out.</li>
+<li>Calculate the total displacement vector: $\vec{D} = \text{Centroid}<em>{\text{final}} - \text{Centroid}</em>{\text{initial}}$.</li>
+</ul>
+</li>
+<li>
+<p><strong>Establishing Initial Orientation</strong>:</p>
+<ul>
+<li>Use <code>vlm.ask_with_thinking</code> on the first frame where the boat is clearly visible to determine the direction the bow is pointing relative to the camera (e.g., &quot;Is the boat pointing toward the left, right, or center of the image?&quot;).</li>
+<li>To convert this to a 3D world vector $\vec{F}$ (Forward):
+<ul>
+<li>Identify the pixel coordinates of the bow and stern using <code>vlm.locate</code>.</li>
+<li>Use <code>seg.get_masked_points</code> to find the 3D world coordinates of the bow and stern.</li>
+<li>Define $\vec{F} = \text{Point}<em>{\text{bow}} - \text{Point}</em>{\text{stern}}$, then normalize it.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Motion Analysis</strong>:</p>
+<ul>
+<li><strong>Forward/Backward</strong>: Calculate the dot product $\vec{D} \cdot \vec{F}$. A positive value indicates forward motion; a negative value indicates backward motion.</li>
+<li><strong>Left/Right</strong>: Define the boat's local right vector $\vec{R}$ by taking the cross product of the world up vector $(0, 1, 0)$ and the forward vector $\vec{F}$ (or using the boat's width in the image). Calculate the dot product $\vec{D} \cdot \vec{R}$. A positive value indicates rightward motion; a negative value indicates leftward motion.</li>
+</ul>
+</li>
+<li>
+<p><strong>Visual Validation</strong>:</p>
+<ul>
+<li>Render a BEV map using <code>recon.render_bev(masks=seg)</code> to visually inspect the trajectory line relative to the boat's starting position and orientation.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Verification</strong></p>
+<ul>
+<li><strong>Mask Verification</strong>: Visually inspect segmentation overlays to ensure the boat is consistently tracked.</li>
+<li><strong>Trajectory Sanity Check</strong>: Use <code>tools.Graph.plot</code> to plot the X, Y, and Z coordinates of the centroid over time to ensure there are no erratic jumps.</li>
+<li><strong>Cross-Validation</strong>: Compare the result of the dot product computation with the visual trajectory seen in the BEV render.</li>
+<li><strong>Orientation Check</strong>: Ensure the bow and stern were correctly identified by the VLM before calculating the forward vector.</li>
+</ul>
+<p><strong>Fallbacks</strong></p>
+<ul>
+<li>If <code>segment_video_by_text</code> fails, I will use <code>vlm.locate</code> to find the boat in the first frame, then use <code>tools.SAM3.segment_video_by_box</code> to track it.</li>
+<li>If 3D reconstruction is too noisy for precise vectors, I will rely on <code>vlm.ask_with_thinking</code> across multiple frames to qualitatively describe the motion relative to the boat's bow, using the BEV plot as a supporting reference.</li>
+</ul>
+<h3>CHECKLIST</h3>
+<pre><code class="language-json">[
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Verify that the SAM3 masks correctly and consistently cover the boat across the video&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Confirm the initial forward vector (bow direction) is correctly identified in 3D world space&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Ensure the displacement vector is calculated using absolute world coordinates from the reconstruction&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Cross-check the quantitative dot-product result with the visual trajectory in the BEV render&quot;},
+  {&quot;priority&quot;: &quot;LOW&quot;, &quot;description&quot;: &quot;Sanity-check the magnitude of the boat's movement to ensure it</code></pre>
+</div>
+</div>
+<div class="tl-step tl-condense">
+  <div class="kind">Condense · step 0</div>
+  <div class="body prose">**Purpose**: Identify and segment the boat across all video frames to track its 3D position.
+**Reasoning**: [errored — condensed]
+**Next Goal**: [errored — condensed]
+**Code**:
+```python
+# Segment the boat across all frames
+seg = tools.SAM3.segment_video_by_text([&quot;boat&quot;], labels=[&quot;boat&quot;])
+
+# Programmatic check: print mask areas for a few frames
+fi_list = seg.frame_indices
+for i in [0, len(fi_list)//2, len(fi_list)-1]:
+    fi = fi_list[i]
+    mask = seg.get_mask(frame=fi, object=&#x27;boat&#x27;)
+    area = mask.sum()
+    print(f&quot;Frame {fi}: boat mask area = {area} pixels&quot;)
+
+# Visual verification: show the original and the mask overlay for first, middle, and last frames
+vis_frames = []
+for i in [0, len(fi_list)//2, len(fi_list)-1]:
+    fi = fi_list[i]
+    # Find the corresponding InputImage index
+    # InputImages is a list, we need the one where .frame_index == fi
+    img = next(img for img in InputImages if img.frame_index == fi)  # &lt;-- ERROR
+# ---------------------------------------------------------------------------
+# StopIteration                             Traceback (most recent call last)
+# Cell In[171], line 18
+#      15 fi = fi_list[i]
+#      16 # Find the corresponding InputImage index
+#      17 # InputImages is a list, we need the one where .frame_index == fi
+# ---&gt; 18 img = next(img for img in InputImages if img.frame_index == fi)
+#      19 vis_frames.append(img)
+#      20 vis_frames.append(seg.visualize(fi))
+# 
+# StopIteration: 
+```</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 1</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Visually verify the boat segmentation masks using frames available in `InputImages`.</div><div class="label">Reasoning</div><div class="body prose">The previous attempt failed because I tried to access frames in `InputImages` that weren&#x27;t there. `InputImages` is a sampled subset of the video. I will now select frames from `InputImages.frame_indices` and visualize the masks for those specific frames to ensure the &quot;boat&quot; segmentation is accurate.</div><div class="label">Next Goal</div><div class="body prose">Run 3D scene reconstruction to obtain world coordinates.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># Select a few frames that are actually in InputImages for verification</span>
+<span class="c1"># Use indices from InputImages.frame_indices</span>
+<span class="n">sample_indices</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">vis_frames</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">sample_indices</span><span class="p">:</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">InputImages</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+    <span class="n">fi</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">frame_index</span>
+    <span class="c1"># Get the mask for this absolute frame index</span>
+    <span class="n">mask_vis</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">fi</span><span class="p">)</span>
+    <span class="n">vis_frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+    <span class="n">vis_frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mask_vis</span><span class="p">)</span>
+
+<span class="n">show</span><span class="p">(</span><span class="n">vis_frames</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out"> [image: show_0001] 
+</pre><div class="label">show_0001</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/show_0001_img_0.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/show_0001_img_1.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/show_0001_img_2.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/show_0001_img_3.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/show_0001_img_4.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/show_0001_img_5.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 1 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.89s.
+
+[Variables] New/changed:
+  sample_indices: list, len=3
+  idx: int
+  mask_vis: VisualFeedback
+  vis_frames: list, len=6
+
+[Inline Images] 6 image(s) attached below.
+  Labels: vis_frames
+[show() budget] 244/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 2</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Reconstruct the 3D scene to obtain metric world coordinates and camera poses.</div><div class="label">Reasoning</div><div class="body prose">To determine the boat&#x27;s motion in 3D space, I need a global coordinate system. `tools.Reconstruct.Reconstruct` provides the 3D point cloud and camera extrinsics necessary to compute the boat&#x27;s centroid in world coordinates across frames.</div><div class="label">Next Goal</div><div class="body prose">Extract the boat&#x27;s 3D trajectory and determine its initial forward orientation.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># Reconstruct the 3D scene using the available InputImages</span>
+<span class="n">recon</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Reconstruct</span><span class="o">.</span><span class="n">Reconstruct</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)</span>
+
+<span class="c1"># Verify reconstruction by rendering a BEV map with the boat masks</span>
+<span class="c1"># This will give a qualitative view of the boat&#39;s movement</span>
+<span class="n">bev_vis</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">render_bev</span><span class="p">(</span><span class="n">masks</span><span class="o">=</span><span class="n">seg</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">bev_vis</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out"> [image: show_0002] 
+</pre><div class="label">show_0002</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000348/show_0002_img_0.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 2 Execution Feedback ===
+
+[SUCCESS] Code executed in 150.11s.
+
+[Variables] New/changed:
+  recon: Reconstruction, frames=[0..101] (22 frames)
+  bev_vis: VisualFeedback
+
+[Inline Images] 1 image(s) attached below.
+  Labels: bev_vis
+
+[Tool Calls] 1 tool/VLM call(s) this step.
+[show() budget] 243/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-step tl-condense">
+  <div class="kind">Condense · step 3</div>
+  <div class="body prose">**Purpose**: Quantitatively determine the boat&#x27;s motion relative to its starting orientation.
+**Reasoning**: [errored — condensed]
+**Next Goal**: [errored — condensed]
+**Code**:
+```python
+# 1. Calculate displacement vector D
+fi_start = seg.frame_indices[0]
+fi_end = seg.frame_indices[-1]
+
+c_start = seg.get_centroid_3d(recon, frame=fi_start, object=&#x27;boat&#x27;)
+c_end = seg.get_centroid_3d(recon, frame=fi_end, object=&#x27;boat&#x27;)
+
+print(f&quot;Start centroid: {c_start}&quot;)
+print(f&quot;End centroid: {c_end}&quot;)
+
+displacement = c_end - c_start
+print(f&quot;Displacement vector: {displacement}&quot;)
+
+# 2. Establish initial orientation vector F
+# Use the first frame to find bow and stern
+img_start = InputImages[0]
+W, H = img_start.width, img_start.height
+
+# Locate bow and stern
+bow_coords_norm = vlm.locate(img_start, &quot;Give the (x, y) center coordinates in 0-1000 normalized scale for the bow (front tip) of the boat. Reply with ONLY the numbers.&quot;)
+stern_coords_norm = vlm.locate(img_start, &quot;Give the (x, y) center coordinates in 0-1000 normalized scale for the stern (back part) of the boat. Reply with ONLY the numbers.&quot;)
+
+print(f&quot;Bow norm: {bow_coords_norm}&quot;)
+print(f&quot;Stern norm: {stern_coords_norm}&quot;)
+
+# Convert to pixels
+bow_px = tools.Geometry.normalized_to_pixel(eval(bow_coords_norm), W, H)  # &lt;-- ERROR
+# Security violation: Forbidden builtin call: &#x27;eval()&#x27;. This operation is not allowed.
+```</div>
+</div>
+<div class="tl-step tl-condense">
+  <div class="kind">Condense · step 4</div>
+  <div class="body prose">**Purpose**: Quantitatively determine the boat&#x27;s motion relative to its starting orientation.
+**Reasoning**: [errored — condensed]
+**Next Goal**: [errored — condensed]
+**Code**:
+```python
+# 1. Calculate displacement vector D
+fi_start = seg.frame_indices[0]
+fi_end = seg.frame_indices[-1]
+
+c_start = seg.get_centroid_3d(recon, frame=fi_start, object=&#x27;boat&#x27;)
+c_end = seg.get_centroid_3d(recon, frame=fi_end, object=&#x27;boat&#x27;)  # &lt;-- ERROR
+# KeyError: &#x27;Frame 106 not found in [0, 5, 10, 14, 19, 24, 29, 34, 38, 43, 48, 53, 58, 62, 67, 72, 77, 82, 86, 91, 96, 101]. Available frames: [0, 5, 10, 14, 19, 24, 29, 34, 38, 43, 48, 53, 58, 62, 67, 72, 77, 82, 86, 91, 96, 101]&#x27;
+```</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 5</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Quantitatively determine the boat&#x27;s motion relative to its starting orientation.</div><div class="label">Reasoning</div><div class="body prose">I need to calculate the displacement vector $\vec{D}$ and the boat&#x27;s initial forward vector $\vec{F}$. I must ensure I use frame indices present in the reconstruction (`recon.frame_indices`). I will use `vlm.locate` to find the bow and stern in the first frame, then map these to 3D world coordinates to define the boat&#x27;s local axes.</div><div class="label">Next Goal</div><div class="body prose">Calculate the dot product of the displacement and the forward/right vectors to determine the direction of motion.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># 1. Calculate displacement vector D using frames present in recon</span>
+<span class="n">fi_start</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">fi_end</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">c_start</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">get_centroid_3d</span><span class="p">(</span><span class="n">recon</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">fi_start</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="s1">&#39;boat&#39;</span><span class="p">)</span>
+<span class="n">c_end</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">get_centroid_3d</span><span class="p">(</span><span class="n">recon</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">fi_end</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="s1">&#39;boat&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Start centroid (frame </span><span class="si">{</span><span class="n">fi_start</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">c_start</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;End centroid (frame </span><span class="si">{</span><span class="n">fi_end</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">c_end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">displacement</span> <span class="o">=</span> <span class="n">c_end</span> <span class="o">-</span> <span class="n">c_start</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Displacement vector: </span><span class="si">{</span><span class="n">displacement</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 2. Establish initial orientation vector F (Forward)</span>
+<span class="n">img_start</span> <span class="o">=</span> <span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">W</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="n">img_start</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">img_start</span><span class="o">.</span><span class="n">height</span>
+
+<span class="c1"># Locate bow and stern</span>
+<span class="n">bow_resp</span> <span class="o">=</span> <span class="n">vlm</span><span class="o">.</span><span class="n">locate</span><span class="p">(</span><span class="n">img_start</span><span class="p">,</span> <span class="s2">&quot;Give the (x, y) center coordinates in 0-1000 normalized scale for the bow (front tip) of the boat. Reply with ONLY the numbers.&quot;</span><span class="p">)</span>
+<span class="n">stern_resp</span> <span class="o">=</span> <span class="n">vlm</span><span class="o">.</span><span class="n">locate</span><span class="p">(</span><span class="n">img_start</span><span class="p">,</span> <span class="s2">&quot;Give the (x, y) center coordinates in 0-1000 normalized scale for the stern (back part) of the boat. Reply with ONLY the numbers.&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bow response: </span><span class="si">{</span><span class="n">bow_resp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stern response: </span><span class="si">{</span><span class="n">stern_resp</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_coords</span><span class="p">(</span><span class="n">resp</span><span class="p">):</span>
+    <span class="c1"># Handle potential &quot;Not visible&quot; or other text</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">resp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+<span class="n">bow_norm</span> <span class="o">=</span> <span class="n">parse_coords</span><span class="p">(</span><span class="n">bow_resp</span><span class="p">)</span>
+<span class="n">stern_norm</span> <span class="o">=</span> <span class="n">parse_coords</span><span class="p">(</span><span class="n">stern_resp</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">bow_norm</span> <span class="ow">and</span> <span class="n">stern_norm</span><span class="p">:</span>
+    <span class="n">bow_px</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">normalized_to_pixel</span><span class="p">(</span><span class="n">bow_norm</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+    <span class="n">stern_px</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Geometry</span><span class="o">.</span><span class="n">normalized_to_pixel</span><span class="p">(</span><span class="n">stern_norm</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+    
+    <span class="c1"># Get 3D points under these pixels for the first frame</span>
+    <span class="c1"># Use get_masked_points and find the point closest to the pixel, </span>
+    <span class="c1"># or more simply, use the depth map if available.</span>
+    <span class="c1"># Since we have a mask, we can find the 3D point at that pixel.</span>
+    <span class="n">points_3d</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="n">fi_start</span><span class="p">]</span>
+    <span class="c1"># bow_px is (x, y)</span>
+    <span class="n">p_bow</span> <span class="o">=</span> <span class="n">points_3d</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">bow_px</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">bow_px</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+    <span class="n">p_stern</span> <span class="o">=</span> <span class="n">points_3d</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">stern_px</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">stern_px</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bow 3D: </span><span class="si">{</span><span class="n">p_bow</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Stern 3D: </span><span class="si">{</span><span class="n">p_stern</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Forward vector F = Bow - Stern</span>
+    <span class="n">forward_vec</span> <span class="o">=</span> <span class="n">p_bow</span> <span class="o">-</span> <span class="n">p_stern</span>
+    <span class="n">forward_vec</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">forward_vec</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Normalized Forward Vector: </span><span class="si">{</span><span class="n">forward_vec</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Right vector R = Forward x Up (assuming Y is up)</span>
+    <span class="n">up_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">right_vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">forward_vec</span><span class="p">,</span> <span class="n">up_vec</span><span class="p">)</span>
+    <span class="n">right_vec</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">right_vec</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Normalized Right Vector: </span><span class="si">{</span><span class="n">right_vec</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># 3. Project displacement onto local axes</span>
+    <span class="n">dot_fwd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">displacement</span><span class="p">,</span> <span class="n">forward_vec</span><span class="p">)</span>
+    <span class="n">dot_right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">displacement</span><span class="p">,</span> <span class="n">right_vec</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dot product with Forward: </span><span class="si">{</span><span class="n">dot_fwd</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dot product with Right: </span><span class="si">{</span><span class="n">dot_right</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dot_fwd</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">dot_right</span><span class="p">):</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">if</span> <span class="n">dot_fwd</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;Backward&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;Right&quot;</span> <span class="k">if</span> <span class="n">dot_right</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;Left&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Primary motion direction: </span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Failed to locate bow or stern.&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">Start centroid (frame 0): [ 0.52666974  0.72795874 -5.4799547 ]
+End centroid (frame 101): [ 1.0063361   0.54890156 -4.863613  ]
+Displacement vector: [ 0.47966635 -0.17905718  0.6163416 ]
+[VLM Q | locate] Before answering, first check whether what the question describes is clearly visible in the provided image(s). If it is absent or ambiguous, reply EXACTLY `Not visible` on its own line (optionally followed by one short line explaining what you saw instead) — do NOT return coordinates in that case. Only if the requested target is clearly and unambiguously present, answer the request below.
+
+Request: Give the (x, y) center coordinates in 0-1000 normalized scale for the bow (front tip) of the boat. Reply with ONLY the numbers.
+[VLM A | locate] 575 550
+[VLM Q | locate] Before answering, first check whether what the question describes is clearly visible in the provided image(s). If it is absent or ambiguous, reply EXACTLY `Not visible` on its own line (optionally followed by one short line explaining what you saw instead) — do NOT return coordinates in that case. Only if the requested target is clearly and unambiguously present, answer the request below.
+
+Request: Give the (x, y) center coordinates in 0-1000 normalized scale for the stern (back part) of the boat. Reply with ONLY the numbers.
+[VLM A | locate] 925 635
+Bow response: 575 550
+Stern response: 925 635
+Bow 3D: [-0.06975297  0.9009471  -6.7074294 ]
+Stern 3D: [ 0.5958265   0.84380686 -5.229158  ]
+Normalized Forward Vector: [-0.4102932   0.03522382 -0.9112732 ]
+Normalized Right Vector: [ 0.91183901  0.         -0.41054795]
+Dot product with Forward: -0.7647665143013
+Dot product with Right: 0.18434071431321558
+Primary motion direction: Backward
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 5 Execution Feedback ===
+
+[SUCCESS] Code executed in 7.89s.
+
+[Output]
+Start centroid (frame 0): [ 0.52666974  0.72795874 -5.4799547 ]
+End centroid (frame 101): [ 1.0063361   0.54890156 -4.863613  ]
+Displacement vector: [ 0.47966635 -0.17905718  0.6163416 ]
+[VLM Q | locate] Before answering, first check whether what the question describes is clearly visible in the provided image(s). If it is absent or ambiguous, reply EXACTLY `Not visible` on its own line (optionally followed by one short line explaining what you saw instead) — do NOT return coordinates in that case. Only if the requested target is clearly and unambiguously present, answer the request below.
+
+Request: Give the (x, y) center coordinates in 0-1000 normalized scale for the bow (front tip) of the boat. Reply with ONLY the numbers.
+[VLM A | locate] 575 550
+[VLM Q | locate] Before answering, first check whether what the question describes is clearly visible in the provided image(s). If it is absent or ambiguous, reply EXACTLY `Not visible` on its own line (optionally followed by one short line explaining what you saw instead) — do NOT return coordinates in that case. Only if the requested target is clearly and unambiguously present, answer the request below.
+
+Request: Give the (x, y) center coordinates in 0-1000 normalized scale for the stern (back part) of the boat. Reply with ONLY the numbers.
+[VLM A | locate] 925 635
+Bow response: 575 550
+Stern response: 925 635
+Bow 3D: [-0.06975297  0.9009471  -6.7074294 ]
+Stern 3D: [ 0.5958265   0.84380686 -5.229158  ]
+Normalized Forward Vector: [-0.4102932   0.03522382 -0.9112732 ]
+Normalized Right Vector: [ 0.91183901  0.         -0.41054795]
+Dot product with Forward: -0.7647665143013
+Dot product with Right: 0.18434071431321558
+Primary motion direction: Backward
+
+[Variables] New/changed:
+  c_end: ndarray, shape=(3,), dtype=float32
+  displacement: ndarray, shape=(3,), dtype=float32
+  img_start: FrameImage
+  W: int
+  H: int
+  bow_resp: str
+  stern_resp: str
+  bow_norm: list, len=2
+  stern_norm: list, len=2
+  bow_px: list, len=2
+  stern_px: list, len=2
+  points_3d: ndarray, shape=(432, 768, 3), dtype=float32, size=4.0MB
+  p_bow: ndarray, shape=(3,), dtype=float32
+  p_stern: ndarray, shape=(3,), dtype=float32
+  forward_vec: ndarray, shape=(3,), dtype=float32
+  up_vec: ndarray, shape=(3,), dtype=int64
+  right_vec: ndarray, shape=(3,), dtype=float64
+  dot_fwd: float32, shape=(), dtype=float32
+  dot_right: float64, shape=(), dtype=float64
+  direction: str
+
+[Tool Calls] 4 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 6</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Finalize the analysis of the boat&#x27;s 3D motion relative to its starting orientation.</div><div class="label">Reasoning</div><div class="body prose">1.  **Displacement Vector**: The computed displacement vector $\vec{D}$ is $[0.48, -0.18, 0.62]$.
+2.  **Forward Vector**: The boat&#x27;s initial forward vector $\vec{F}$ (from stern to bow) is $[-0.41, 0.04, -0.91]$.
+3.  **Projection**: The dot product $\vec{D} \cdot \vec{F} \approx -0.765$. A negative value indicates that the motion is primarily in the opposite direction of the boat&#x27;s heading.
+4.  **Visual Confirmation (BEV)**: In the BEV render, the boat&#x27;s trajectory moves from a higher Y value (further &quot;Forward&quot; from the camera) to a lower Y value (closer to the camera), while the boat&#x27;s bow is oriented away from the camera. This confirms the boat is moving backward relative to its own orientation.
+5.  **Conclusion**: The primary motion is backward.</div><div class="label">Next Goal</div><div class="body prose">Return the final answer.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="n">ReturnAnswer</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">[ReturnAnswer] Answer submitted: B
+</pre></div></div>
+</div>
+<div class="tl-step tl-answer">
+  <div class="kind">Answer</div>
+  <div class="body prose">B</div>
+</div>
+<div class="tl-step tl-evaluation">
+  <div class="kind">Evaluation</div>
+  <div class="body">Ground truth: <strong>B</strong> · Agent: <strong>B</strong></div>
+</div></div>
+</div>
+</div>
+
+  </main>
+  <footer class="site-footer">SpatialClaw — Supplementary Material</footer>
+  <script src="../../../static/app.js"></script>
+</body>
+</html>

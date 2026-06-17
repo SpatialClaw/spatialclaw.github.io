@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DSI-Bench — Gemma4-31B — sample reverse__row_000109</title>
+  <link rel="stylesheet" href="../../../static/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="crumb"><a href="../../../index.html">Highlights</a> / DSI-Bench / sample reverse__row_000109<span class="nav-hint" aria-hidden="true"><kbd>←</kbd> <kbd>→</kbd> to navigate</span></div>
+      <h1>DSI-Bench — Gemma4-31B — sample reverse__row_000109</h1>
+      
+    </div>
+  </header>
+  <main class="container">
+
+<a class="sample-nav prev" href="../../vstibench/samples/4387__gemma3vl.html" aria-label="Previous sample" title="Previous sample">‹</a><a class="sample-nav next" href="../../dsibench/samples/reverse__row_000627__gemma3vl.html" aria-label="Next sample" title="Next sample">›</a>
+<div class="qa-card">
+  <div class="keyframes"><div class="label">Keyframes</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/kf_input_00.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/kf_input_01.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/kf_input_02.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/kf_input_03.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/kf_input_04.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/kf_input_05.jpg" alt=""></div></div>
+  <div class="label">Question</div>
+  <div class="q">In this video clip, how is the character&#x27;s location moving in the 3D scene relative to his/her/its starting orientation and location?
+
+This is a multiple-choice question about how an object or the camera moves in 3D space within the video clip. Choose the option that best matches the motion you observe and respond with only the option letter (A, B, C, or D).
+A. Moving backward
+B. Moving forward
+C. Moving right
+D. Moving left</div>
+  <div class="pred-row" style="margin-top:14px">
+    <div class="pred-cell"><span class="label" style="margin:0">Ground truth</span>
+      <span class="gt-pill">A</span></div>
+    <div class="pred-cell"><span class="method-pill pill-agent">SpatialClaw</span>
+      <span style="font-family:ui-monospace,Menlo,monospace">A</span>
+      <span class="tick-ok">✓</span></div>
+    <div class="pred-cell"><span class="q-badge q-only_agent">Agent wins</span></div>
+  </div>
+</div>
+<div class="baseline-tabs" role="tablist" aria-label="Baseline comparison"><button type="button" class="baseline-tab" data-pane="cot">No-tool baseline</button><button type="button" class="baseline-tab" data-pane="single-pass">Single-pass code</button><button type="button" class="baseline-tab" data-pane="react">Structured tool-call</button><button type="button" class="baseline-tab" data-pane="spacetools">SpaceTools</button></div>
+<div class="split agent-only">
+  <div class="left-stack">
+    <div class="baseline-pane" data-pane="cot"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-cot">No-tool Baseline</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="cot-md markdown"><p>To determine the character's movement in the 3D scene, let's analyze the sequence of images:</p>
+<ol>
+<li><strong>Initial Position:</strong> In the first few frames, the character is a small figure located in the distance, centered in the frame.</li>
+<li><strong>Observation of Motion:</strong> As the sequence progresses (from frame 1 through frame 18), the character's size increases relative to the frame. In visual perspective, an object that increases in size while remaining centrally located typically indicates it is moving closer to the viewer (the camera).</li>
+<li><strong>Relative Orientation:</strong> The character is facing the camera from the beginning. Since the character is moving towards the camera, it is moving in the direction it is facing.</li>
+<li><strong>Conclusion:</strong> Moving in the direction one is facing is defined as moving forward.</li>
+</ol>
+<p>Therefore, the character is moving forward relative to its starting orientation and location.</p>
+<p><span class="boxed">B</span></p>
+</div></div></div><div class="baseline-pane" data-pane="single-pass"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-spcode">Single-pass code</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="single-pass-card"><div class="label">Purpose</div><div class="body prose">Analyze the 3D motion of the character relative to its starting orientation.</div><div class="label">Reasoning</div><div class="body prose">1. I will segment the character across the video to track its position.
+2. I will reconstruct the 3D scene to get world coordinates and camera poses.
+3. I will use a BEV (Bird&#x27;s Eye View) plot to visualize the trajectories of both the camera and the character.
+4. By comparing the character&#x27;s 3D trajectory with its starting orientation (facing the camera), I can determine if it is moving forward, backward, left, or right.</div><div class="label">Next Goal</div><div class="body prose">Segment the character, reconstruct the scene, and visualize the trajectories in BEV.</div><div class="label">Code</div><pre class="code py-hl"><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># 1. Segment the character across the video</span>
+<span class="c1"># The character looks like a small brown monkey/creature.</span>
+<span class="n">seg</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">SAM3</span><span class="o">.</span><span class="n">segment_video_by_text</span><span class="p">(</span><span class="n">prompts</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;monkey&quot;</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;monkey&quot;</span><span class="p">])</span>
+
+<span class="c1"># 2. Reconstruct the 3D scene</span>
+<span class="c1"># Use a subset of frames for reconstruction to stay within limits and maintain quality.</span>
+<span class="n">recon</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Reconstruct</span><span class="o">.</span><span class="n">Reconstruct</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)</span>
+
+<span class="c1"># 3. Render BEV to see trajectories</span>
+<span class="c1"># We&#39;ll use the masks from SAM3.</span>
+<span class="n">bev_vis</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">render_bev</span><span class="p">(</span><span class="n">masks</span><span class="o">=</span><span class="n">seg</span><span class="p">,</span> <span class="n">ego_trajectory</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">show</span><span class="p">(</span><span class="n">bev_vis</span><span class="p">)</span>
+
+<span class="c1"># 4. Quantitatively analyze the motion</span>
+<span class="c1"># Get the 3D centroids for the first and last frames where the character is present.</span>
+<span class="n">frame_indices</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span>
+<span class="n">first_fi</span> <span class="o">=</span> <span class="n">frame_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">last_fi</span> <span class="o">=</span> <span class="n">frame_indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">c_start</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">get_centroid_3d</span><span class="p">(</span><span class="n">recon</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">first_fi</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">c_end</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">get_centroid_3d</span><span class="p">(</span><span class="n">recon</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">last_fi</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Start centroid: </span><span class="si">{</span><span class="n">c_start</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;End centroid: </span><span class="si">{</span><span class="n">c_end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># The character is facing the camera at the start.</span>
+<span class="c1"># Camera pose at start:</span>
+<span class="n">pose_start</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">extrinsics</span><span class="p">[</span><span class="n">first_fi</span><span class="p">]</span>
+<span class="n">cam_pos_start</span> <span class="o">=</span> <span class="n">pose_start</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+<span class="n">cam_fwd_start</span> <span class="o">=</span> <span class="n">pose_start</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="c1"># Forward direction of camera</span>
+
+<span class="c1"># Vector of character motion in world space</span>
+<span class="n">motion_vec</span> <span class="o">=</span> <span class="n">c_end</span> <span class="o">-</span> <span class="n">c_start</span>
+
+<span class="c1"># The character is facing the camera, so its &quot;forward&quot; is opposite to the camera&#39;s forward.</span>
+<span class="n">char_fwd_start</span> <span class="o">=</span> <span class="o">-</span><span class="n">cam_fwd_start</span>
+
+<span class="c1"># Projection of motion onto character&#39;s forward vector</span>
+<span class="n">dot_fwd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">motion_vec</span><span class="p">,</span> <span class="n">char_fwd_start</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dot product with character forward: </span><span class="si">{</span><span class="n">dot_fwd</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Projection of motion onto character&#39;s right vector</span>
+<span class="c1"># Camera right is the same as character&#39;s left (since they face each other)</span>
+<span class="n">cam_right_start</span> <span class="o">=</span> <span class="n">pose_start</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">char_right_start</span> <span class="o">=</span> <span class="o">-</span><span class="n">cam_right_start</span>
+<span class="n">dot_right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">motion_vec</span><span class="p">,</span> <span class="n">char_right_start</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dot product with character right: </span><span class="si">{</span><span class="n">dot_right</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">dot_fwd</span> <span class="o">&gt;</span> <span class="mf">0.1</span><span class="p">:</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="s2">&quot;B&quot;</span> <span class="c1"># Forward</span>
+<span class="k">elif</span> <span class="n">dot_fwd</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">:</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span> <span class="c1"># Backward</span>
+<span class="k">elif</span> <span class="n">dot_right</span> <span class="o">&gt;</span> <span class="mf">0.1</span><span class="p">:</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span> <span class="c1"># Right</span>
+<span class="k">elif</span> <span class="n">dot_right</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">:</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="s2">&quot;D&quot;</span> <span class="c1"># Left</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">ans</span> <span class="o">=</span> <span class="s2">&quot;B&quot;</span> <span class="c1"># Default to forward if motion is small but visual suggests it</span>
+
+<span class="n">ReturnAnswer</span><span class="p">(</span><span class="n">ans</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out"> [image: show_0001] 
+[WARNING] get_centroid_3d: mask for &#x27;monkey&#x27; at frame 0 is empty — returning [nan, nan, nan]
+</pre><div class="label">Error</div><pre class="err">---------------------------------------------------------------------------
+KeyError                                  Traceback (most recent call last)
+Cell In[4], line 23
+     20 last_fi = frame_indices[-1]
+     22 c_start = seg.get_centroid_3d(recon, frame=first_fi, object=0)
+---&gt; 23 c_end = seg.get_centroid_3d(recon, frame=last_fi, object=0)
+     25 print(f&quot;Start centroid: {c_start}&quot;)
+     26 print(f&quot;End centroid: {c_end}&quot;)
+
+File SpatialAgent/spatial_agent/kernel_types/per_frame_types.py:203, in PerFrameMask.get_centroid_3d(self, recon, frame, object, conf_threshold)
+    190 &quot;&quot;&quot;Get ``(3,)`` median 3D position of confidence-filtered masked points.
+    191 
+    192 Args:
+   (...)    200     is empty (safe for arithmetic; use ``np.isnan()`` to check).
+    201 &quot;&quot;&quot;
+    202 mask_2d = self.get_mask(frame, object)
+--&gt; 203 local_r = recon.points.get_by_frame_index(frame)
+    204 pts = recon.points.points[local_r][mask_2d]
+    205 if len(pts) == 0:
+
+File SpatialAgent/spatial_agent/kernel_types/per_frame_types.py:69, in PerFrameData.get_by_frame_index(self, abs_frame_idx)
+     64     if abs_frame_idx == 0 and 0 not in avail:
+     65         hint = (
+     66             f&quot;\n  Hint: Did you mean frame={avail[0]}? &quot;
+     67             f&quot;Use ABSOLUTE frame indices (from seg.frame_indices), not 0-based local indices.&quot;
+     68         )
+---&gt; 69     raise KeyError(
+     70         f&quot;Frame {abs_frame_idx} not found in {avail}. &quot;
+     71         f&quot;Available frames: {avail}{hint}&quot;
+     72     )
+     73 return self._frame_indices.index(abs_frame_idx)
+
+KeyError: &#x27;Frame 71 not found in [0, 5, 10, 14, 19, 24, 29, 34, 38, 43, 48, 53, 58, 62, 67]. Available frames: [0, 5, 10, 14, 19, 24, 29, 34, 38, 43, 48, 53, 58, 62, 67]&#x27;</pre><div class="label">show_0001</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/show_0001_img_0.jpg" alt=""></div><div class="label">Final answer</div><div class="body prose">B</div></div></div></div><div class="baseline-pane" data-pane="react"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-react">Structured tool-call</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="timeline">
+<div class="tl-step tl-plan">
+  <div class="kind">Plan</div>
+  <div class="body markdown"><p><strong>Task Analysis</strong>
+The objective is to determine the 3D movement of a character relative to their own starting orientation and location. This is an object-perspective motion problem. I need to identify the character, track their 3D position over time, determine their initial facing direction (forward vector), and then project their total displacement vector onto this local coordinate system.</p>
+<ul>
+<li><strong>Target Variable:</strong> Direction of 3D displacement (Forward, Backward, Left, Right).</li>
+<li><strong>Coordinate System:</strong> Object-relative (Local) 3D space. The origin is the character's starting position, and the axes are defined by the character's starting orientation.</li>
+<li><strong>Answer Format:</strong> Multiple choice (A, B, C, or D).</li>
+</ul>
+<p><strong>Information Needs</strong></p>
+<ol>
+<li><strong>Character Identification:</strong> Which object in the scene is the &quot;character&quot;?</li>
+<li><strong>3D Trajectory:</strong> A sequence of 3D world coordinates for the character's center of mass across the clip.</li>
+<li><strong>Starting Orientation:</strong> The world-space vector representing the direction the character is facing at the first frame.</li>
+<li><strong>Displacement Vector:</strong> The vector from the character's starting 3D position to their ending 3D position.</li>
+</ol>
+<p><strong>Computation Plan</strong></p>
+<ol>
+<li>
+<p><strong>Character Identification and Segmentation:</strong></p>
+<ul>
+<li>Use <code>show(InputImages[0])</code> and <code>vlm.ask_with_thinking(InputImages[0], &quot;Identify the main character in this image. Describe their appearance.&quot;)</code> to confirm the target.</li>
+<li>Use <code>tools.SAM3.segment_video_by_text(prompts=[&quot;character&quot;], labels=[&quot;character&quot;])</code> to track the character across all frames.</li>
+<li>Verify the segmentation quality by calling <code>show(seg.visualize(fi))</code> for the first, middle, and last frames of the sequence.</li>
+</ul>
+</li>
+<li>
+<p><strong>3D Scene Reconstruction:</strong></p>
+<ul>
+<li>Call <code>recon = tools.Reconstruct.Reconstruct(InputImages)</code> to generate the 3D point cloud and camera poses.</li>
+</ul>
+</li>
+<li>
+<p><strong>Trajectory Extraction:</strong></p>
+<ul>
+<li>For every frame index <code>fi</code> in <code>seg.frame_indices</code>, compute the 3D centroid: <code>pos = seg.get_centroid_3d(recon, frame=fi, object='character')</code>.</li>
+<li>Store these as a list of coordinates <code>trajectory_3d</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Orientation Grounding:</strong></p>
+<ul>
+<li>Use <code>vlm.ask_with_thinking(InputImages[0], &quot;In the first frame, which direction is the character facing? Describe it relative to the camera (e.g., facing away from camera, facing left, etc.).&quot;)</code>.</li>
+<li>Convert this qualitative direction into a world-space vector <code>char_fwd</code>.
+<ul>
+<li><em>Method:</em> Get the camera pose at frame 0 (<code>pose = recon.extrinsics[InputImages.frame_indices[0]]</code>). Use <code>cam_fwd = pose[:3, 2]</code> and <code>cam_right = pose[:3, 0]</code>. If the VLM says &quot;facing away&quot;, <code>char_fwd</code> is roughly <code>cam_fwd</code>. If &quot;facing right&quot;, <code>char_fwd</code> is roughly <code>cam_right</code>.</li>
+</ul>
+</li>
+<li>Define the local right vector <code>char_right</code> as the cross product of the world-up vector <code>[0, 1, 0]</code> and <code>char_fwd</code> (or simply orthogonal to <code>char_fwd</code> in the ground plane).</li>
+</ul>
+</li>
+<li>
+<p><strong>Motion Analysis:</strong></p>
+<ul>
+<li>Calculate the total displacement vector: <code>motion_vec = trajectory_3d[-1] - trajectory_3d[0]</code>.</li>
+<li>Compute the projection of <code>motion_vec</code> onto the local axes:
+<ul>
+<li><code>dot_fwd = np.dot(motion_vec, char_fwd)</code></li>
+<li><code>dot_right = np.dot(motion_vec, char_right)</code></li>
+</ul>
+</li>
+<li><strong>Classification:</strong>
+<ul>
+<li>If <code>dot_fwd</code> is the dominant component and positive $\rightarrow$ <strong>Moving forward (B)</strong>.</li>
+<li>If <code>dot_fwd</code> is the dominant component and negative $\rightarrow$ <strong>Moving backward (A)</strong>.</li>
+<li>If <code>dot_right</code> is the dominant component and positive $\rightarrow$ <strong>Moving right (C)</strong>.</li>
+<li>If <code>dot_right</code> is the dominant component and negative $\rightarrow$ <strong>Moving left (D)</strong>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Visual Cross-Validation:</strong></p>
+<ul>
+<li>Render a BEV plot: <code>recon.render_bev(masks=seg)</code>.</li>
+<li>Inspect the trajectory line (red $\rightarrow$ blue) and compare its direction with the character's initial facing direction observed in the first frame.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Verification Checklist</strong></p>
+<h3>CHECKLIST</h3>
+<pre><code class="language-json">[
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Verify that the SAM3 masks accurately track the character throughout the video without drifting to other objects.&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Confirm the starting orientation vector (char_fwd) correctly reflects the character's facing direction in the first frame.&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Check for 3D centroid stability; ensure no sudden jumps in trajectory_3d that would skew the displacement vector.&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Cross-reference the quantitative dot-product result with the qualitative trajectory seen in the BEV render.&quot;}
+]
+</code></pre>
+<p><strong>Fallbacks</strong></p>
+<ul>
+<li><strong>Segmentation Failure:</strong> If <code>segment_video_by_text</code> fails to produce masks, use <code>vlm.locate</code> on the first frame to get a bounding box and use <code>tools.SAM3.segment_video_by_box</code>.</li>
+<li><strong>Reconstruction Noise:</strong> If the 3D centroids are too noisy, use <code>vlm.ask_with_thinking</code> on a sequence of frames (e.g., first, middle, last) to describe the character's movement relative to the environment (e.g., &quot;The character starts at the door and walk</li>
+</ul>
+</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 0</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Identify the main character in the scene to ensure correct segmentation.</div><div class="label">Reasoning</div><div class="body prose">Before performing video segmentation, I need to confirm what the &quot;character&quot; is. Looking at the provided key frames, there is a small, brownish, humanoid/animal-like figure in the center of the scene. I will use the VLM to describe this character to ensure I have a clear target for the `segment_video_by_text` tool.</div><div class="label">Next Goal</div><div class="body prose">Segment the character across the entire video.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vlm.ask_with_thinking&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;visual_input&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;InputImages[0]&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;question&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Identify the main character in this image. Describe their appearance.&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out">[VLM Q | thinking] Identify the main character in this image. Describe their appearance.
+[VLM A | thinking] The main character is a small figure standing in the distance in the center of the image. They appear to be wearing olive green or brown tactical/military-style clothing, though specific details are not visible due to the distance.
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 0 Execution Feedback ===
+
+[SUCCESS] Code executed in 10.32s.
+
+[Output]
+[VLM Q | thinking] Identify the main character in this image. Describe their appearance.
+[VLM A | thinking] The main character is a small figure standing in the distance in the center of the image. They appear to be wearing olive green or brown tactical/military-style clothing, though specific details are not visible due to the distance.
+
+[Variables] New/changed:
+  result_0: str
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 1</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Segment and track the character across all frames of the video.</div><div class="label">Reasoning</div><div class="body prose">To determine the 3D movement, I first need precise segmentation masks for the character in every frame. I&#x27;ll use `segment_video_by_text` with the label &quot;character&quot;, as the VLM confirmed there is one main character in the scene.</div><div class="label">Next Goal</div><div class="body prose">Verify the segmentation quality and reconstruct the 3D scene.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools.SAM3.segment_video_by_text&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;prompts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;character&quot;</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;labels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;character&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 1 Execution Feedback ===
+
+[SUCCESS] Code executed in 23.15s.
+
+[Variables] New/changed:
+  result_1: PerFrameMask, frames=[0..71] (72 frames)
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 2</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Verify the quality of the character segmentation masks.</div><div class="label">Reasoning</div><div class="body prose">Before proceeding to 3D reconstruction and trajectory analysis, I must ensure that the masks correctly track the character without drifting or becoming empty. I will visualize the masks on the first, middle, and last frames and compare them to the original images.</div><div class="label">Next Goal</div><div class="body prose">Reconstruct the 3D scene to obtain 3D coordinates and camera poses.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;show&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="s2">&quot;InputImages[0]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;result_1.visualize(0)&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;InputImages[7]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;result_1.visualize(36)&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;InputImages[14]&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="s2">&quot;result_1.visualize(71)&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out"> [image: show_0001] 
+</pre><div class="label">show_0001</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/show_0001_img_0.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/show_0001_img_1.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/show_0001_img_2.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/show_0001_img_3.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/show_0001_img_4.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/show_0001_img_5.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 2 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.81s.
+
+[Variables] New/changed:
+  result_2: NoneType
+
+[Inline Images] 6 image(s) attached below.
+  Labels: [InputImages[0], result_1.visualize(0), InputImages[7], result_1.visualize(36), InputImages[14], result_1.visualize(71)]
+[show() budget] 244/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 3</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Reconstruct the 3D scene to enable 3D trajectory analysis.
+**Reasoning**: To calculate the movement of the character in 3D space, I need a reconstructed point cloud and camera poses. I will use the `InputImages` to create this reconstruction.
+**Next Goal**: Extract the 3D trajectory of the character and determine their starting orientation.
+**Tool Call (translated)**:
+```python
+result_3 = tools.Reconstruct.Reconstruct(InputImages)
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 3 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 4</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Reconstruct the 3D scene to obtain metric spatial data and camera poses.</div><div class="label">Reasoning</div><div class="body prose">To analyze the character&#x27;s movement in 3D world space, I need a reconstruction that provides depth maps and camera extrinsics. I will use all available key frames in `InputImages` (15 frames) for the reconstruction.</div><div class="label">Next Goal</div><div class="body prose">Extract the 3D trajectory of the character using the reconstructed point cloud and segmentation masks.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;tools.Reconstruct.Reconstruct&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;frames&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;InputImages&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 4 Execution Feedback ===
+
+[SUCCESS] Code executed in 3.97s.
+
+[Variables] New/changed:
+  result_4: Reconstruction, frames=[0..67] (15 frames)
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 5</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Visualize the character&#x27;s 3D trajectory from a top-down perspective.
+**Reasoning**: A Bird&#x27;s-Eye View (BEV) rendering will show the character&#x27;s path in world space, with the trajectory color-coded from red (start) to blue (end). This provides a direct visual of the displacement and direction of motion, which I can then compare with the character&#x27;s starting orientation.
+**Next Goal**: Determine the character&#x27;s starting orientation in the first frame.
+**Tool Call (translated)**:
+```python
+result_5 = result_4.render_bev(masks=result_1)
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 5 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 6</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Visualize the character&#x27;s 3D trajectory from a top-down perspective.</div><div class="label">Reasoning</div><div class="body prose">A BEV (Bird&#x27;s Eye View) plot will show the character&#x27;s movement path (red to blue) relative to the scene. This provides a strong qualitative baseline for the direction of motion before I perform precise vector calculations.</div><div class="label">Next Goal</div><div class="body prose">Determine the character&#x27;s starting orientation to define the local coordinate system.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;show&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;result_4.render_bev(masks=result_1)&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out"> [image: show_0002] 
+</pre><div class="label">show_0002</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/show_0002_img_0.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 6 Execution Feedback ===
+
+[SUCCESS] Code executed in 0.44s.
+
+[Variables] New/changed:
+  result_6: NoneType
+
+[Inline Images] 1 image(s) attached below.
+  Labels: result_4.render_bev(masks=result_1)
+[show() budget] 243/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 7</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="body prose">**Purpose**: Determine the character&#x27;s starting orientation and overall movement relative to the camera.
+**Reasoning**: The BEV plot failed to show the character&#x27;s trajectory, likely due to a mask/reconstruction alignment issue. However, visual inspection of the key frames shows the character getting larger over time, indicating they are moving toward the camera. To answer the question &quot;relative to his/her/its starting orientation&quot;, I need to confirm which way the character was facing in the first frame. If they were facing the camera and moved toward it, the motion is &quot;Forward&quot;.
+**Next Goal**: Confirm the character&#x27;s starting orientation using the VLM.
+**Tool Call (translated)**:
+```python
+result_7 = vlm.ask_with_thinking(visual_input=InputImages[0], question=&#x27;In the first frame, which direction is the character facing? Are they facing toward the camera, away from the camera, or to the side?&#x27;)
+```</div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 7 Execution Feedback ===
+
+[ERROR] Skipped: LLM response was not in the required format.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 8</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM · Tool Call</div><div class="label">Purpose</div><div class="body prose">Determine the character&#x27;s 3D movement relative to their starting orientation.</div><div class="label">Reasoning</div><div class="body prose">1.  **Analyze Camera Motion**: The BEV plot (`result_6`) shows the camera trajectory (green $\rightarrow$ yellow dashed line). The camera starts at Camera 0 (red triangle, top of the plot) and moves toward the bottom of the plot. The Y-axis is labeled &quot;FORWARD (away from camera)&quot; at the top and &quot;BEHIND (toward camera)&quot; at the bottom. Thus, the camera is moving backward relative to its initial orientation.
+2.  **Analyze Character Motion**: In the key frames, the character remains roughly in the center of the frame but becomes visibly larger from frame 0 to frame 14. This indicates that the distance between the camera and the character is decreasing. Since the camera is moving backward (downward in the BEV), the character must also be moving in that same general direction (downward in the BEV) and at a higher speed to close the gap.
+3.  **Determine Character Orientation**: In the images (especially the later frames like `InputImages[14]`), the character is clearly facing the camera.
+4.  **Relative Motion**: The character is facing the camera (which corresponds to the &quot;downward&quot; direction in the BEV) and is moving toward the camera (also the &quot;downward&quot; direction in the BEV). Moving in the direction one is facing is defined as moving forward.
+
+Therefore, the character is moving forward relative to their starting orientation.</div><div class="label">Next Goal</div><div class="body prose">Return the final answer.</div><div class="label">Tool Call</div><pre class="code py-hl"><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tool&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ReturnAnswer&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;args&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;answer&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;B&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Output</div><pre class="out">[ReturnAnswer] Answer submitted: B
+</pre></div></div>
+</div>
+<div class="tl-step tl-answer">
+  <div class="kind">Answer</div>
+  <div class="body prose">B</div>
+</div></div></div></div><div class="baseline-pane" data-pane="spacetools"><div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-spacetools">SpaceTools</span></h2>
+    <div class="verdict"><span class='tick-bad'>✗ Incorrect</span></div>
+  </div><div class="timeline"><div class="tl-step tl-st-reasoning"><div class="kind">Reasoning</div><div class="body markdown"><p>B</p>
+</div></div><div class="tl-step tl-st-complete"><div class="kind">Final answer</div><div class="body markdown"><p>B</p>
+</div></div><div class="tl-step tl-st-final"><div class="kind">Final response</div><div class="body markdown"><p>B</p>
+</div></div></div></div></div>
+  </div>
+  
+<div class="column">
+  <div class="header-bar">
+    <h2><span class="method-pill pill-agent">SpatialClaw</span></h2>
+    <div class="verdict"><span class='tick-ok'>✓ Correct</span></div>
+  </div>
+  <div class="timeline">
+<div class="tl-step tl-plan">
+  <div class="kind">Plan</div>
+  <div class="body markdown"><h3>Task Analysis</h3>
+<p>The objective is to determine the 3D movement of a character relative to their own starting orientation and location. This is a motion analysis problem in <strong>Object Perspective</strong>.</p>
+<p><strong>Coordinate System Resolution:</strong>
+The question asks for movement relative to the character's &quot;starting orientation.&quot; This means the frame of reference is the object's local coordinate system at $t=0$.</p>
+<ul>
+<li><strong>Forward</strong>: The direction the character is facing at the first frame.</li>
+<li><strong>Backward</strong>: Opposite to the starting facing direction.</li>
+<li><strong>Right</strong>: Perpendicular to the facing direction, to the character's right.</li>
+<li><strong>Left</strong>: Perpendicular to the facing direction, to the character's left.</li>
+</ul>
+<p>The target variable is the primary direction of the 3D displacement vector $\vec{D} = P_{end} - P_{start}$, projected onto the character's local axes.</p>
+<h3>Information Needs</h3>
+<ol>
+<li><strong>Character Identification</strong>: Identify which entity in the scene is &quot;the character.&quot;</li>
+<li><strong>3D Trajectory</strong>: The 3D world coordinates of the character's centroid across the clip.</li>
+<li><strong>Starting Orientation</strong>: The 3D world vector $\vec{F}$ representing the direction the character is facing at the first frame.</li>
+<li><strong>World Geometry</strong>: A 3D reconstruction to map image-space masks to world-space coordinates.</li>
+</ol>
+<h3>Computation Plan</h3>
+<ol>
+<li>
+<p><strong>Identification and Grounding</strong>:</p>
+<ul>
+<li>Use <code>vlm.ask_with_thinking</code> on <code>InputImages[0]</code> and <code>InputImages[-1]</code> to identify the character and describe their appearance.</li>
+<li>Use <code>tools.SAM3.segment_video_by_text</code> with the identified description to track the character across all 15 frames.</li>
+<li>Verify the segmentation masks using <code>seg.visualize()</code> and <code>show()</code> on a few key frames (start, middle, end).</li>
+</ul>
+</li>
+<li>
+<p><strong>3D Scene Reconstruction</strong>:</p>
+<ul>
+<li>Perform a 3D reconstruction of the scene using <code>tools.Reconstruct.Reconstruct(InputImages)</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Determining Starting Orientation ($\vec{F}$)</strong>:</p>
+<ul>
+<li>Use <code>vlm.ask_with_thinking</code> on <code>InputImages[0]</code> to determine the character's facing direction relative to the camera (e.g., &quot;facing the camera&quot;, &quot;facing 45 degrees to the right of the camera&quot;).</li>
+<li>Convert this relative direction into a world-space vector $\vec{F}$ using the camera pose at frame 0 (<code>recon.extrinsics[0]</code>).
+<ul>
+<li>Example: If facing the camera, $\vec{F} \approx -\text{cam_fwd}$.</li>
+</ul>
+</li>
+<li>Define the starting right vector $\vec{R} = \vec{F} \times [0, 1, 0]$ (assuming $+Y$ is up).</li>
+</ul>
+</li>
+<li>
+<p><strong>Quantitative Motion Analysis</strong>:</p>
+<ul>
+<li>Extract the 3D centroids of the character for the first frame ($P_{start}$) and the last frame ($P_{end}$) using <code>seg.get_centroid_3d(recon, frame=fi, object=0)</code>.</li>
+<li>Compute the total displacement vector: $\vec{D} = P_{end} - P_{start}$.</li>
+<li>Calculate the projections of $\vec{D}$ onto the local axes:
+<ul>
+<li>$\text{Forward/Backward Component} = \vec{D} \cdot \vec{F}$</li>
+<li>$\text{Right/Left Component} = \vec{D} \cdot \vec{R}$</li>
+</ul>
+</li>
+<li>Determine the dominant direction based on the sign and magnitude of these dot products.</li>
+</ul>
+</li>
+<li>
+<p><strong>Visual Cross-Validation</strong>:</p>
+<ul>
+<li>Render a BEV plot using <code>recon.render_bev(masks=seg)</code>.</li>
+<li>Inspect the trajectory line (red to blue). Compare the direction of the line relative to the character's starting orientation observed in the first frame.</li>
+</ul>
+</li>
+</ol>
+<h3>Verification Checklist</h3>
+<pre><code class="language-json">[
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Verify that the SAM3 mask accurately tracks the character across the entire video without drifting to other objects.&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Ensure the starting orientation vector F is correctly derived from the VLM's description and the camera pose.&quot;},
+  {&quot;priority&quot;: &quot;HIGH&quot;, &quot;description&quot;: &quot;Confirm that the 3D centroids used for displacement are not NaN and are physically plausible.&quot;},
+  {&quot;priority&quot;: &quot;MEDIUM&quot;, &quot;description&quot;: &quot;Cross-check the quantitative dot-product result with the visual trajectory in the BEV plot.&quot;},
+  {&quot;priority&quot;: &quot;LOW&quot;, &quot;description&quot;: &quot;Check if the character's orientation changes significantly during the clip, though the question asks relative to the *starting* orientation.&quot;}
+]
+</code></pre>
+<h3>Fallbacks</h3>
+<ul>
+<li><strong>Segmentation Failure</strong>: If <code>segment_video_by_text</code> fails or is noisy, I will use <code>vlm.locate</code> on the first frame to get a bounding box and use <code>tools.SAM3.segment_video_by_box</code>.</li>
+<li><strong>Orientation Ambiguity</strong>: If the VLM cannot clearly determine the facing direction, I will look for visual cues (e.g., the direction of the character's gaze or the orientation of their body/vehicle) across multiple frames to infer the starting heading.</li>
+<li><strong>Reconstruction Noise</strong>: If the 3D centroids are erratic, I will use <code>np.median()</code> over a window of frames at the start and end to get more stable $P_{start}$ and $P_{end}$ values.</li>
+</ul>
+</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 0</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Identify the character and track it across the video.</div><div class="label">Reasoning</div><div class="body prose">I need to identify the character to create a segmentation mask for tracking. Looking at the provided key frames, there is a small, brown, monkey-like character dancing in an open field. I will use `vlm.ask_with_thinking` to confirm the character&#x27;s description and then use `tools.SAM3.segment_video_by_text` to track it through the video. Finally, I&#x27;ll visually verify the masks.</div><div class="label">Next Goal</div><div class="body prose">Perform 3D reconstruction of the scene.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># Identify the character</span>
+<span class="n">description</span> <span class="o">=</span> <span class="n">vlm</span><span class="o">.</span><span class="n">ask_with_thinking</span><span class="p">([</span><span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">InputImages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="s2">&quot;Identify the main character in this video. Describe their appearance briefly.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Character description: </span><span class="si">{</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Segment and track the character across all frames</span>
+<span class="c1"># Using a prompt based on the visual evidence: &quot;small brown monkey-like character&quot;</span>
+<span class="n">seg</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">SAM3</span><span class="o">.</span><span class="n">segment_video_by_text</span><span class="p">([</span><span class="s2">&quot;small brown monkey-like character&quot;</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;character&quot;</span><span class="p">])</span>
+
+<span class="c1"># Verify segmentation</span>
+<span class="c1"># Check a few frames: start, middle, end</span>
+<span class="n">fi_start</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">fi_mid</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">fi_end</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Programmatic check for mask area</span>
+<span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="p">[</span><span class="n">fi_start</span><span class="p">,</span> <span class="n">fi_mid</span><span class="p">,</span> <span class="n">fi_end</span><span class="p">]:</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">fi</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">area</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Frame </span><span class="si">{</span><span class="n">fi</span><span class="si">}</span><span class="s2"> mask area: </span><span class="si">{</span><span class="n">area</span><span class="si">}</span><span class="s2"> pixels&quot;</span><span class="p">)</span>
+
+<span class="c1"># Visual verification</span>
+<span class="n">vis_start</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">fi_start</span><span class="p">)</span>
+<span class="n">vis_mid</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">fi_mid</span><span class="p">)</span>
+<span class="n">vis_end</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">fi_end</span><span class="p">)</span>
+
+<span class="n">show</span><span class="p">([</span>
+    <span class="n">InputImages</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vis_start</span><span class="p">,</span>
+    <span class="n">InputImages</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">],</span> <span class="n">vis_mid</span><span class="p">,</span>
+    <span class="n">InputImages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">vis_end</span>
+<span class="p">])</span>
+</pre><div class="label">Output</div><pre class="out">[VLM Q | thinking] Identify the main character in this video. Describe their appearance briefly.
+[VLM A | thinking] The main character is a small, brown, furry creature that resembles a monkey or a small ape.
+Character description: The main character is a small, brown, furry creature that resembles a monkey or a small ape.
+Frame 0 mask area: 438 pixels
+Frame 36 mask area: 1016 pixels
+Frame 71 mask area: 2726 pixels
+ [image: show_0001] 
+</pre><div class="label">show_0001</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/show_0001_img_0.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/show_0001_img_1.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/show_0001_img_2.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/show_0001_img_3.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/show_0001_img_4.jpg" alt=""><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/show_0001_img_5.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 0 Execution Feedback ===
+
+[SUCCESS] Code executed in 49.47s.
+
+[Output]
+[VLM Q | thinking] Identify the main character in this video. Describe their appearance briefly.
+[VLM A | thinking] The main character is a small, brown, furry creature that resembles a monkey or a small ape.
+Character description: The main character is a small, brown, furry creature that resembles a monkey or a small ape.
+Frame 0 mask area: 438 pixels
+Frame 36 mask area: 1016 pixels
+Frame 71 mask area: 2726 pixels
+
+[Variables] New/changed:
+  description: str
+  seg: PerFrameMask, frames=[0..71] (72 frames)
+  fi_start: int
+  fi_mid: int
+  fi_end: int
+  fi: int
+  mask: ndarray, shape=(512, 768), dtype=bool
+  area: int64, shape=(), dtype=int64
+  vis_start: VisualFeedback
+  vis_mid: VisualFeedback
+  vis_end: VisualFeedback
+
+[Inline Images] 6 image(s) attached below.
+  Labels: [
+    InputImages[0], vis_start,
+    InputImages[len(InputImages)//2], vis_mid,
+    InputImages[-1], vis_end
+]
+
+[Tool Calls] 2 tool/VLM call(s) this step.
+[show() budget] 244/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 1</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Perform 3D reconstruction of the scene to obtain world coordinates and camera poses.</div><div class="label">Reasoning</div><div class="body prose">To analyze the character&#x27;s movement in 3D space, I need a metric reconstruction of the scene. This will allow me to map the 2D segmentation masks to 3D world coordinates and determine the camera&#x27;s position and orientation.</div><div class="label">Next Goal</div><div class="body prose">Determine the character&#x27;s starting orientation and calculate the 3D displacement.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="c1"># Perform 3D reconstruction using the provided InputImages</span>
+<span class="n">recon</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">Reconstruct</span><span class="o">.</span><span class="n">Reconstruct</span><span class="p">(</span><span class="n">InputImages</span><span class="p">)</span>
+
+<span class="c1"># Print some basic reconstruction info to verify</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reconstructed frames: </span><span class="si">{</span><span class="n">recon</span><span class="o">.</span><span class="n">frame_indices</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Metric scale: </span><span class="si">{</span><span class="n">recon</span><span class="o">.</span><span class="n">metric_scale</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">Reconstructed frames: [0, 5, 10, 14, 19, 24, 29, 34, 38, 43, 48, 53, 58, 62, 67]
+Metric scale: 34.034507751464844
+</pre></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 1 Execution Feedback ===
+
+[SUCCESS] Code executed in 4.67s.
+
+[Output]
+Reconstructed frames: [0, 5, 10, 14, 19, 24, 29, 34, 38, 43, 48, 53, 58, 62, 67]
+Metric scale: 34.034507751464844
+
+[Variables] New/changed:
+  recon: Reconstruction, frames=[0..67] (15 frames)
+
+[Tool Calls] 1 tool/VLM call(s) this step.</pre></div></div>
+</div>
+<div class="tl-step tl-condense">
+  <div class="kind">Condense · step 2</div>
+  <div class="body prose">**Purpose**: Determine the character&#x27;s starting orientation and calculate its 3D displacement to find the movement direction.
+**Reasoning**: [errored — condensed]
+**Next Goal**: [errored — condensed]
+**Code**:
+```python
+# 1. Determine starting orientation using VLM
+facing_desc = vlm.ask_with_thinking([InputImages[0]], &quot;In the first frame, which direction is the character facing relative to the camera? (e.g., facing the camera, facing away from the camera, facing left/right)&quot;)
+print(f&quot;Facing description: {facing_desc}&quot;)
+
+# 2. Get 3D centroids for start and end
+fi_start = seg.frame_indices[0]
+fi_end = seg.frame_indices[-1]
+
+# Use median of a few frames at start and end for stability
+start_frames = seg.frame_indices[:3]
+end_frames = seg.frame_indices[-3:]
+
+p_starts = []
+for fi in start_frames:
+    p = seg.get_centroid_3d(recon, frame=fi, object=0)  # &lt;-- ERROR
+# KeyError: &#x27;Frame 1 not found in [0, 5, 10, 14, 19, 24, 29, 34, 38, 43, 48, 53, 58, 62, 67]. Available frames: [0, 5, 10, 14, 19, 24, 29, 34, 38, 43, 48, 53, 58, 62, 67]&#x27;
+```</div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 3</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Calculate the character&#x27;s 3D displacement relative to its starting orientation and visually verify with a BEV plot.</div><div class="label">Reasoning</div><div class="body prose">1. **Orientation**: The VLM confirmed the character is facing the camera in the first frame. In the reconstruction&#x27;s camera-to-world (c2w) convention, the camera&#x27;s forward vector is `pose[:3, 2]`. Therefore, the character&#x27;s starting forward vector $\vec{F} \approx -\text{cam\_fwd}$.
+2. **Displacement**: I will compute the 3D centroids at the start and end of the clip. To avoid the previous `KeyError`, I will only use frame indices that are present in `recon.frame_indices`.
+3. **Local Coordinates**:
+   - $\vec{D} = P_{end} - P_{start}$
+   - Forward/Backward component: $\vec{D} \cdot \vec{F}$ (Positive $\implies$ Forward)
+   - Right/Left component: $\vec{D} \cdot \vec{R}$ (Positive $\implies$ Right, where $\vec{R} = \vec{F} \times [0, 1, 0]$)
+4. **Verification**: I&#x27;ll render a BEV plot to see the trajectory visually.</div><div class="label">Next Goal</div><div class="body prose">Finalize the direction and return the answer.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># 1. Define starting orientation vector F and right vector R</span>
+<span class="n">pose_0</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">extrinsics</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">cam_fwd</span> <span class="o">=</span> <span class="n">pose_0</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="c1"># Character faces camera, so character&#39;s forward is opposite to camera&#39;s forward</span>
+<span class="n">F</span> <span class="o">=</span> <span class="o">-</span><span class="n">cam_fwd</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">cam_fwd</span><span class="p">)</span>
+<span class="c1"># Character&#39;s right is F cross world-up (0, 1, 0)</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">R</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+
+<span class="c1"># 2. Compute stable 3D centroids using only frames available in reconstruction</span>
+<span class="c1"># recon.frame_indices = [0, 5, 10, 14, 19, 24, 29, 34, 38, 43, 48, 53, 58, 62, 67]</span>
+<span class="n">start_indices</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="c1"># [0, 5, 10]</span>
+<span class="n">end_indices</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">frame_indices</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span>   <span class="c1"># [58, 62, 67]</span>
+
+<span class="n">p_starts</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">start_indices</span><span class="p">:</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">get_centroid_3d</span><span class="p">(</span><span class="n">recon</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">fi</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">p_starts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+<span class="n">p_ends</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">end_indices</span><span class="p">:</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">seg</span><span class="o">.</span><span class="n">get_centroid_3d</span><span class="p">(</span><span class="n">recon</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">fi</span><span class="p">,</span> <span class="nb">object</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">p</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">p_ends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+<span class="n">p_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">p_starts</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">p_end</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">p_ends</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">displacement</span> <span class="o">=</span> <span class="n">p_end</span> <span class="o">-</span> <span class="n">p_start</span>
+
+<span class="c1"># 3. Project displacement onto local axes</span>
+<span class="n">fwd_comp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">displacement</span><span class="p">,</span> <span class="n">F</span><span class="p">)</span>
+<span class="n">right_comp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">displacement</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Displacement vector: </span><span class="si">{</span><span class="n">displacement</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Forward component: </span><span class="si">{</span><span class="n">fwd_comp</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> m&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Right component: </span><span class="si">{</span><span class="n">right_comp</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> m&quot;</span><span class="p">)</span>
+
+<span class="c1"># 4. Visual Cross-Validation with BEV</span>
+<span class="n">bev</span> <span class="o">=</span> <span class="n">recon</span><span class="o">.</span><span class="n">render_bev</span><span class="p">(</span><span class="n">masks</span><span class="o">=</span><span class="n">seg</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;character&quot;</span><span class="p">])</span>
+<span class="n">show</span><span class="p">(</span><span class="n">bev</span><span class="p">)</span>
+
+<span class="c1"># Determine dominant direction</span>
+<span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">fwd_comp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">right_comp</span><span class="p">):</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;Forward&quot;</span> <span class="k">if</span> <span class="n">fwd_comp</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;Backward&quot;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="s2">&quot;Right&quot;</span> <span class="k">if</span> <span class="n">right_comp</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s2">&quot;Left&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Dominant direction: </span><span class="si">{</span><span class="n">direction</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">Displacement vector: [ 2.736119  -0.9868499 15.079381 ]
+Forward component: 15.079 m
+Right component: -2.736 m
+ [image: show_0002] 
+Dominant direction: Forward
+</pre><div class="label">show_0002</div><div class="img-row"><img loading="lazy" src="../../../assets/dsibench/gemma3vl/reverse__row_000109/show_0002_img_0.jpg" alt=""></div></div><div class="tl-sub tl-feedback"><div class="kind">Feedback</div><pre class="out">=== Step 3 Execution Feedback ===
+
+[SUCCESS] Code executed in 3.17s.
+
+[Output]
+Displacement vector: [ 2.736119  -0.9868499 15.079381 ]
+Forward component: 15.079 m
+Right component: -2.736 m
+
+Dominant direction: Forward
+
+[Variables] New/changed:
+  pose_0: ndarray, shape=(4, 4), dtype=float64
+  cam_fwd: ndarray, shape=(3,), dtype=float64
+  F: ndarray, shape=(3,), dtype=float64
+  R: ndarray, shape=(3,), dtype=float64
+  start_indices: list, len=3
+  end_indices: list, len=3
+  p_ends: list, len=3
+  p_start: ndarray, shape=(3,), dtype=float32
+  p_end: ndarray, shape=(3,), dtype=float32
+  displacement: ndarray, shape=(3,), dtype=float32
+  fwd_comp: float64, shape=(), dtype=float64
+  right_comp: float64, shape=(), dtype=float64
+  bev: VisualFeedback
+  direction: str
+  p_starts: list, len=3
+
+[Inline Images] 1 image(s) attached below.
+  Labels: bev
+[show() budget] 243/250 images remaining.</pre></div></div>
+</div>
+<div class="tl-group">
+  <div class="group-head">Step 4</div>
+  <div class="group-body"><div class="tl-sub tl-llm"><div class="kind">LLM</div><div class="label">Purpose</div><div class="body prose">Finalize the motion analysis and determine the character&#x27;s movement direction relative to their starting orientation.</div><div class="label">Reasoning</div><div class="body prose">1.  **Starting Orientation**: The VLM confirmed that in the first frame, the character is facing the camera. Therefore, the character&#x27;s local &quot;Forward&quot; direction is toward the camera.
+2.  **Observed Motion**: 
+    *   The BEV plot shows the character&#x27;s trajectory (purple line) starting at approximately $(0, 20)$ and ending at $(15, 40)$ on the &quot;Camera 0 Forward&quot; axis.
+    *   The axis labels explicitly state that the top of the plot is &quot;FORWARD (away from camera)&quot; and the bottom is &quot;BEHIND (toward camera)&quot;.
+    *   Since the character moves from $Y=20$ to $Y=40$, they are moving further away from the camera.
+3.  **Relative Direction**: 
+    *   Character&#x27;s local Forward $\rightarrow$ Toward Camera.
+    *   Actual Movement $\rightarrow$ Away from Camera.
+    *   Movement opposite to the local Forward direction is **Backward**.
+
+Although the previous code&#x27;s dot-product result was positive (likely due to a mismatch between the reconstruction&#x27;s world-Z axis and the BEV&#x27;s Y-axis projection), the visual evidence from the BEV plot with its explicit labels is unambiguous: the character is moving away from the camera. Given they started facing the camera, this motion is backward.</div><div class="label">Next Goal</div><div class="body prose">Return the final answer.</div></div><div class="tl-sub tl-exec"><div class="kind">Execute</div><div class="label">Code</div><pre class="code py-hl"><span class="n">ReturnAnswer</span><span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">)</span>
+</pre><div class="label">Output</div><pre class="out">[ReturnAnswer] Answer submitted: A
+</pre></div></div>
+</div>
+<div class="tl-step tl-answer">
+  <div class="kind">Answer</div>
+  <div class="body prose">A</div>
+</div>
+<div class="tl-step tl-evaluation">
+  <div class="kind">Evaluation</div>
+  <div class="body">Ground truth: <strong>A</strong> · Agent: <strong>A</strong></div>
+</div></div>
+</div>
+</div>
+
+  </main>
+  <footer class="site-footer">SpatialClaw — Supplementary Material</footer>
+  <script src="../../../static/app.js"></script>
+</body>
+</html>
