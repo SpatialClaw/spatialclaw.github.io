@@ -158,6 +158,11 @@ code:not(pre code){font-family:var(--font-mono);font-size:.85em;background:var(-
 .hero-title .nm{color:var(--accent);display:inline-flex;align-items:center;gap:.16em;}
 .hero-title .title-eye{height:1.18em;width:auto;flex:0 0 auto;position:relative;top:.1em;}
 .hero-title .rest{display:block;color:var(--ink);font-size:clamp(1.6rem,4.4vw,3.3rem);line-height:1.02;letter-spacing:-0.025em;margin-top:.5rem;}
+.hero-venue{
+  display:inline-block;margin:0;padding:.35rem .85rem;
+  border:1px solid var(--accent);border-radius:999px;background:var(--accent-wash);
+  color:var(--accent-ink);font-size:1rem;font-weight:700;letter-spacing:.03em;
+}
 .hero-thesis{font-size:clamp(1.15rem,2vw,1.55rem);line-height:1.5;color:var(--ink-2);max-width:30ch;margin:1.8rem 0 0;}
 .hero-thesis strong{color:var(--ink);font-weight:600;}
 
